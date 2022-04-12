@@ -32,3 +32,13 @@ The data output format is defined in the following table.
 
 ### Data readout
 We have prepared a simple python script for reading and logging data from SPACEDOS03A spectrograph. 
+
+
+## Technical details
+Device is composed from modules where each modul do the individual function. And they are interconnected with wires. 
+ * [USTSIPIN01](modules/USTSIPIN01/)
+ * [USBRS232](https://github.com/mlab-modules/USB232R02)
+
+
+### Interconnection
+TODO
