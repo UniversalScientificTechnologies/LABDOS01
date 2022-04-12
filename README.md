@@ -25,6 +25,10 @@ If you need a fully automatic device (with internal logging, backup power supply
 
 
 ## Connection
-
+Connecting the device is very simple. Simply connect the device to your computers USB-2.0 port using a USB A-B cable. The device should appear as a virtual serial line on your computer. On a Linux computer, the device should connect itself. For computers with windows, you will need to install a driver for [FTDI USB]() converter.
 
 ## Output protocol
+The data output format is defined in the following table. 
+
+### Data readout
+We have prepared a simple python script for reading and logging data from SPACEDOS03A spectrograph. 
