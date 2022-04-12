@@ -14,7 +14,7 @@ SPACEDOS03A is not able to function on its own. It does not contain any internal
  * Energy measurement resolution < 50 keV/channel
  * Power supply 5V (trought USB port)
  * Integration time 15 s
- * Interface - USB B connector
+ * Interface - USB 2.0, USB-B connector
  * Dimensions - 
  * Weight - 
 
