@@ -1,2 +1,3 @@
 # SPACEDOS03
-Silicon diode dosimeter with USB interface
+
+SPACEDOS03A is an open-source dosimeter (spectrometer) based on silicone PIN diode. 
