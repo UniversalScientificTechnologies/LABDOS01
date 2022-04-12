@@ -4,4 +4,4 @@ SPACEDOS03A is an open-source spectrometer-dosimeter based on silicone PIN diode
 
 SPACEDOS03A is not able to function on its own. It does not contain any internal datalogger. It requires a computer to log/visualize the measured data.
 
-If you need a fully automatic device (with internal logging, backup power supply, ..), you can look at [GEODOS01](https://github.com/UniversalScientificTechnologies/GEODOS01) or contact us by email [support@ust.cz](mailto:support@ust.cz). We can agree on the development of equipment according to your requirements.
+If you need a fully automatic device (with internal logging, backup power supply, ..) or device designed for outdoor use without the possibility of connecting power and network you can look at [GEODOS01](https://github.com/UniversalScientificTechnologies/GEODOS01) or contact us by email [support@ust.cz](mailto:support@ust.cz). We can agree on the development of equipment according to your requirements.
