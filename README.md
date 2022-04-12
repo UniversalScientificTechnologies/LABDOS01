@@ -19,6 +19,6 @@ SPACEDOS03A is not able to function on its own. It does not contain any internal
  * Weight - 
 
 
-The device is designed as open-source hardware and software and is released under the GPLv3 license. The device is developed and maintained by [UST (Universal Scientific Technologies)](www.ust.cz) company, which sells it commercially and offers technical support.
+The device is designed as open-source hardware and software and is released under the GPLv3 license. The device is originlly developed and maintained by [UST (Universal Scientific Technologies)](www.ust.cz) company, which sells it commercially and offers technical support.
 
 If you need a fully automatic device (with internal logging, backup power supply, ..) or device designed for outdoor use without the possibility of connecting power and network you can look at [GEODOS01](https://github.com/UniversalScientificTechnologies/GEODOS01) or contact us by email [support@ust.cz](mailto:support@ust.cz). We can agree on the development of equipment according to your requirements.
