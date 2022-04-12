@@ -1,0 +1,3 @@
+[submodule "modules/USTSIPIN01"]
+	path = modules/USTSIPIN01
+	url = git@github.com:ust-modules/USTSIPIN01.git
