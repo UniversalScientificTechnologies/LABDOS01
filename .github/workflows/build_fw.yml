@@ -18,7 +18,7 @@ jobs:
         - name: Run arduino-builder
           uses: Legion2/arduino-builder-action@v2.0.0
           with:
-            sketchDirectory: sw
+            sketchDirectory: ./sw/
             board: MightyCore:avr:1284 # optional, default is arduino:avr:uno
             # Directory containing Arduino libraries.
             # Use this directory to install required 3rd-party libraries.
