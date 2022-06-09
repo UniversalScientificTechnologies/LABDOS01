@@ -23,3 +23,9 @@ jobs:
           with:
             arduino-board-fqbn: MightyCore:avr:1284
             platform-url: https://mcudude.github.io/MightyCore/package_MCUdude_MightyCore_index.json
+            
+        - name: Store data
+          uses: actions/upload-artifact@v3
+          with:
+            name: fw
+            path: sw
