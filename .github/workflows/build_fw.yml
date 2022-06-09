@@ -18,14 +18,8 @@ jobs:
         - name: Checkout
           uses: actions/checkout@v2
 
-        - name: Run arduino-builder
-          uses: Legion2/arduino-builder-action@v2.0.0
+        - name: Compile all examples
+          uses: ArminJo/arduino-test-compile@v3
           with:
-            sketchDirectory: ./sw/
-            board: MightyCore:avr:1284 # optional, default is arduino:avr:uno
-            # Directory containing Arduino libraries.
-            # Use this directory to install required 3rd-party libraries.
-            # 
-            # libraries: # optional, default is libraries
-            # Directory containing Arduino platforms
-            #hardware: # optional, default is hardware
+            arduino-board-fqbn: MightyCore:avr:1284
+            platform-url: https://mcudude.github.io/MightyCore/package_MCUdude_MightyCore_index.json
