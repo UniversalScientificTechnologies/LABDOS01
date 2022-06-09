@@ -1,3 +1,3 @@
-[submodule "modules/USTSIPIN01"]
-	path = modules/USTSIPIN01
-	url = git@github.com:ust-modules/USTSIPIN01.git
+[submodule "modules/USTSIPIN02"]
+	path = modules/USTSIPIN02
+	url = git@github.com:ust-modules/USTSIPIN02.git
