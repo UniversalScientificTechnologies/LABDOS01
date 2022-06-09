@@ -1,0 +1,30 @@
+name: Build firmware
+
+on:
+  # Triggers the workflow on push or pull request events but only for the "SPACEDOS03A" branch
+  push:
+    branches: [ "SPACEDOS03A" ]
+  pull_request:
+    branches: [ "SPACEDOS03A" ]
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+- name: Run arduino-builder
+  uses: Legion2/arduino-builder-action@v2.0.0
+  with:
+    sketchDirectory: sw
+    board: MightyCore:ATmega1284 # optional, default is arduino:avr:uno
+    # Directory containing Arduino libraries.
+    # Use this directory to install required 3rd-party libraries.
+    # 
+    # libraries: # optional, default is libraries
+    # Directory containing Arduino platforms
+    #hardware: # optional, default is hardware
