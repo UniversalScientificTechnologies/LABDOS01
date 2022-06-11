@@ -26,9 +26,9 @@
      showgrid="false"
      showguides="true"
      inkscape:guide-bbox="true"
-     inkscape:zoom="1.6835865"
-     inkscape:cx="149.97745"
-     inkscape:cy="132.15835"
+     inkscape:zoom="1.5862247"
+     inkscape:cx="212.13892"
+     inkscape:cy="103.70536"
      inkscape:window-width="1848"
      inkscape:window-height="1016"
      inkscape:window-x="72"
@@ -454,30 +454,30 @@
        stroke-width="0.5"
        id="path1222-2"
        sodipodi:nodetypes="ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"
-       style="display:inline;stroke-width:0.6;stroke-miterlimit:4;stroke-dasharray:none;fill:#dfdfdf;fill-opacity:0.45233089" />
+       style="display:inline;stroke-width:0.6;stroke-miterlimit:4;stroke-dasharray:none;fill:#dfdfdf;fill-opacity:1" />
     <text
        xml:space="preserve"
        style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:7.43432px;line-height:1.25;font-family:Cabin;-inkscape-font-specification:Cabin;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.253442"
        x="-54.921661"
-       y="58.549347"
+       y="55.903511"
        id="text9452"
        transform="rotate(-90)"><tspan
          sodipodi:role="line"
          id="tspan9450"
          style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:7.43432px;font-family:Cabin;-inkscape-font-specification:'Cabin Bold';stroke-width:0.253442"
          x="-54.921661"
-         y="58.549347">SPACEDOS03</tspan></text>
+         y="55.903511">SPACEDOS03</tspan></text>
     <text
        xml:space="preserve"
        style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:3.88056px;line-height:1.25;font-family:Cabin;-inkscape-font-specification:Cabin;letter-spacing:0px;word-spacing:0px;fill:#515151;fill-opacity:1;stroke:none;stroke-width:0.264583"
        x="-34.205753"
-       y="119.29025"
+       y="120.16756"
        id="text13046"
        transform="rotate(-90)"><tspan
          sodipodi:role="line"
-         style="font-size:3.88056px;stroke-width:0.264583;fill:#515151;fill-opacity:1"
+         style="font-size:3.88056px;fill:#515151;fill-opacity:1;stroke-width:0.264583"
          x="-34.205753"
-         y="119.29025"
+         y="120.16756"
          id="tspan20725">UART</tspan></text>
     <text
        xml:space="preserve"
@@ -495,25 +495,25 @@
        xml:space="preserve"
        style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:3.88056px;line-height:1.25;font-family:Cabin;-inkscape-font-specification:Cabin;letter-spacing:0px;word-spacing:0px;display:inline;fill:#515151;fill-opacity:1;stroke:none;stroke-width:0.264583"
        x="-18.727322"
-       y="119.05881"
+       y="120.18308"
        id="text13046-1"
        transform="rotate(-90)"><tspan
          sodipodi:role="line"
-         style="font-size:3.88056px;stroke-width:0.264583;fill:#515151;fill-opacity:1"
+         style="font-size:3.88056px;fill:#515151;fill-opacity:1;stroke-width:0.264583"
          x="-18.727322"
-         y="119.05881"
-         id="tspan20077">Auxal.</tspan></text>
+         y="120.18308"
+         id="tspan20077">Auxil.</tspan></text>
     <text
        xml:space="preserve"
        style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:3.88056px;line-height:1.25;font-family:Cabin;-inkscape-font-specification:Cabin;letter-spacing:0px;word-spacing:0px;display:inline;fill:#515151;fill-opacity:1;stroke:none;stroke-width:0.264583"
        x="-45.276627"
-       y="119.84818"
+       y="120.16756"
        id="text13046-7"
        transform="rotate(-90)"><tspan
          sodipodi:role="line"
-         style="font-size:3.88056px;stroke-width:0.264583;fill:#515151;fill-opacity:1"
+         style="font-size:3.88056px;fill:#515151;fill-opacity:1;stroke-width:0.264583"
          x="-45.276627"
-         y="119.84818"
+         y="120.16756"
          id="tspan18143-6">3v3</tspan></text>
     <text
        xml:space="preserve"
@@ -629,7 +629,7 @@
     <g
        style="clip-rule:evenodd;fill-rule:evenodd;image-rendering:optimizeQuality;shape-rendering:geometricPrecision;text-rendering:geometricPrecision"
        id="g57919"
-       transform="matrix(0,-0.00150377,0.00150377,0,66.001157,27.896117)">
+       transform="matrix(0,-0.00150377,0.00150377,0,64.942823,27.896117)">
       <g
          id="g3105"
          transform="matrix(3.4241021,0,0,3.4241021,-22190.745,-41583.38)"><path
@@ -713,7 +713,7 @@
     <path
        id="rect71643"
        style="fill:#ffffff;fill-opacity:0;stroke:#000000;stroke-width:0.11323;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:5.1;stroke-dasharray:none;stroke-dashoffset:1.51181;stroke-opacity:1"
-       d="M 115.52258,42.203262 H 106.3413 V 21.892223 l 3.57515,-3.575732 h 5.60613"
+       d="m 115.52259,42.203262 h -7.06461 V 21.892223 l 3.57515,-3.575732 h 3.48946"
        sodipodi:nodetypes="ccccc" />
     <path
        style="fill:none;stroke:#313131;stroke-width:0.1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
@@ -1600,6 +1600,23 @@ AQ8BJyj7BgIIIIAAAggggAACCCCAAAIRAv8PKy6fXN0sQVMAAAAASUVORK5CYII=
        x="-28.573586"
        y="75.570107"
        transform="rotate(-90)" />
+    <text
+       xml:space="preserve"
+       style="font-size:1.24689px;line-height:1.25;font-family:Cabin;-inkscape-font-specification:Cabin;letter-spacing:0px;word-spacing:0px;stroke-width:0.103907"
+       x="22.312778"
+       y="84.068977"
+       id="text106824"
+       transform="rotate(-90)"><tspan
+         sodipodi:role="line"
+         id="tspan106822"
+         style="stroke-width:0.103907"
+         x="22.312778"
+         y="84.068977">Reffer manual for operation</tspan><tspan
+         sodipodi:role="line"
+         style="stroke-width:0.103907"
+         x="22.312778"
+         y="85.627586"
+         id="tspan108964">instuctions and connecting</tspan></text>
   </g>
   <g
      inkscape:groupmode="layer"
