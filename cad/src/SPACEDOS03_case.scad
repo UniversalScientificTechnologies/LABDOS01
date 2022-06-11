@@ -213,3 +213,11 @@ difference(){
 
 bot();
 translate([0, -60, 0]) top();
+
+
+
+module label(){
+projection(cut= true)
+    translate([0, 0, -9+0.3])
+        top();
+}
