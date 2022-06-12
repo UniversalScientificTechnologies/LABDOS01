@@ -1,10 +1,10 @@
 # SPACEDOS03
 
-SPACEDOS03A is an open-source spectrometer-dosimeter based on silicone PIN diode and is intended for scientific and research purposes. Power and communication is secured by USB port. The device can be used statically (located in a specific place) or in mobile applications (such as cars). The spectrograph is housed in an aluminum box that secures mechanical resistance. 
+SPACEDOS03A is an open-source spectrometer-dosimeter based on silicone PIN diode and is intended for scientific and research purposes. Power and communication is secured (optionally) by USB port. The device can be used statically (located in a specific place) or in mobile applications (such as cars). The spectrometer is housed in a 3D printed box that secures mechanical resistance. 
 
 The aim of SPACEDOS03 is to make the accesible, high quality, reliable and simple measuring device - radiation energy spectrometer for sientific comunity. 
 
-SPACEDOS03A is not able to function on its own. It does not contain any internal datalogger. It requires a computer to log/visualize the measured data. The device is not intended for outdoor use (not waterproof). For these needs, look at [GEODOS01](https://github.com/UniversalScientificTechnologies/GEODOS01).
+SPACEDOS03A is not able to function on its own. It requires a computer to log/visualize the measured data. At least some powering unit. The device is not intended for outdoor use (not waterproof). For these needs, look at [GEODOS01](https://github.com/UniversalScientificTechnologies/GEODOS01).
 
 ## Parameters
 
