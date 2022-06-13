@@ -1,31 +1,35 @@
-# SPACEDOS03
+# LABDOS01 - Experimental silicon based ionising radiation spectrometer
 
-SPACEDOS03A is an open-source spectrometer-dosimeter based on silicone PIN diode and is intended for scientific and research purposes. Power and communication is secured (optionally) by USB port. The device can be used statically (located in a specific place) or in mobile applications (such as cars). The spectrometer is housed in a 3D printed box that secures mechanical resistance. 
+LABDOS01 is an open-source spectrometer-dosimeter based on silicone PIN diode and is intended for scientific and research purposes. Power and communication is secured by USB-C port or JST-GH connector. The device can be used statically (located in a specific place e.g. laboratory or base) or in mobile applications (such as cars or UAV). The spectrometer is housed in a 3D printed box that mechanical resistance and allows future development of user enclosures and integrations. 
 
-The aim of SPACEDOS03 is to make the accesible, high quality, reliable and simple measuring device - radiation energy spectrometer for sientific comunity. 
+The aim of LABDOS01 is to make the open-source, accesible, high quality, reliable and simple measuring device - radiation energy spectrometer for sientific comunity. 
 
-SPACEDOS03A is not able to function on its own. It requires a computer to log/visualize the measured data. At least some powering unit. The device is not intended for outdoor use (not waterproof). For these needs, look at [GEODOS01](https://github.com/UniversalScientificTechnologies/GEODOS01).
+LABDOS01 to function on its own. It requires a computer to visualize recorded measured data. At least it requires an external powering unit. The device is not intended for outdoor use (is not waterproof). 
+Intead of that it is intended to be used as experimentel device with the exactly the same internals as its application specific variants like: 
+
+ * [GEODOS01](https://github.com/UniversalScientificTechnologies/GEODOS01) - Outdoor and stand-alone onizing radiation detector
+ * [AIRDOS02](https://github.com/UniversalScientificTechnologies/AIRDOS02) - Airborne cosmic radiation dosimeter with GPS
+ * [SPACEDOS02](https://github.com/UniversalScientificTechnologies/SPACEDOS02) - PIN diode dosimeter for manned spacecraft 
+ * [SPACEDOS01](https://github.com/UniversalScientificTechnologies/SPACEDOS01) - cubesat cosmic radiation dosimeter and spectrometer
 
 ## Parameters
 
  * Silicon PIN diode detector with 12.5 mm³ detection volume
- * Number of energy channels 250
+ * Number of energy channels 250, but configurable by firmware in range
  * Deposited energy range from 200 keV to 12 MeV
- * Energy measurement resolution < 50 keV/channel
+ * Energy measurement resolution up  to 50 keV/channel but exact value depends on firmware and analog front-end setup.
  * Power supply 5V (trought USB port)
- * Integration time 15 s
- * Interface - USB 2.0, USB-B connector
+ * Integration time depends on firmware setup
+ * Interface - USB 2.0, USB-C connector
  * Dimensions - 
  * Weight - 
 
 
-The device is designed as open-source hardware and software and is released under the GPLv3 license. The device is originlly developed and maintained by [UST (Universal Scientific Technologies)](www.ust.cz) company, which sells it commercially and offers technical support.
+The device is designed as open-source hardware and software and is released under the GPLv3 license. The device is originaly developed and maintained by [UST (Universal Scientific Technologies s.r.o.)](www.ust.cz) company, which sells it commercially and offers technical support.
 
-If you need a fully automatic device (with internal logging, backup power supply, ..) or device designed for outdoor use without the possibility of connecting power and network you can look at [GEODOS01](https://github.com/UniversalScientificTechnologies/GEODOS01) or contact us by email [support@ust.cz](mailto:support@ust.cz). We can agree on the development of equipment according to your requirements.
+## PC Connection
 
-
-## Connection
-Connecting the device is very simple. Simply connect the device to your computers USB-2.0 port using a USB A-B cable. The device should appear as a virtual serial line on your computer. On a Linux computer, the device should connect itself. For computers with windows, you will need to install a driver for [FTDI USB]() converter.
+Simply connect the device to your computer USB port using a USB A-C cable. The device should appear as a virtual serial line on your computer. On a Linux computer, the device should connect itself. For computers with windows, you will need to install a driver for [FTDI USB](https://ftdichip.com/drivers/) converter.
 
 ## Output protocol
 The data output format is defined in the following table. 
@@ -35,10 +39,4 @@ We have prepared a simple python script for reading and logging data from SPACED
 
 
 ## Technical details
-Device is composed from modules where each modul do the individual function. And they are interconnected with wires. 
- * [USTSIPIN01](modules/USTSIPIN01/)
- * [USBRS232](https://github.com/mlab-modules/USB232R02)
-
-
-### Interconnection
-TODO
+Device uses [USTSIPIN02](https://github.com/ust-modules/USTSIPIN02) which is core of range of UST dosimeters specialized to specific applicaion like AIRDOS or SPACEDOS. 
