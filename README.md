@@ -20,9 +20,9 @@ LABDOS01 is therefore all-in-one solution for generic semiconductor based ionisi
  * Number of energy channels 250, but configurable by firmware in range
  * Deposited energy range from 200 keV to 12 MeV
  * Energy measurement resolution up  to 50 keV/channel but exact value depends on firmware and analog front-end setup.
- * Power supply 5V (trought USB port)
+ * Power supply 5V (by using USB port or JST-GH connectors)
  * Integration time depends on firmware setup
- * Interface - USB 2.0, USB-C connector
+ * Interface - USB 2.0, USB-C connector or 3.3V UART link on JST-GH connector.
  * Dimensions - 
  * Weight - 
 
