@@ -12,6 +12,8 @@ Intead of that it is intended to be used as experimentel device with the exactly
  * [SPACEDOS02](https://github.com/UniversalScientificTechnologies/SPACEDOS02) - PIN diode dosimeter for manned spacecraft 
  * [SPACEDOS01](https://github.com/UniversalScientificTechnologies/SPACEDOS01) - cubesat cosmic radiation dosimeter and spectrometer
 
+LABDOS01 is therefore all-in-one solution for generic semiconductor based ionising radiation measurement. It should be used as universal testing device prior using an application specific design. 
+
 ## Parameters
 
  * Silicon PIN diode detector with 12.5 mm³ detection volume
@@ -31,12 +33,17 @@ The device is designed as open-source hardware and software and is released unde
 
 Simply connect the device to your computer USB port using a USB A-C cable. The device should appear as a virtual serial line on your computer. On a Linux computer, the device should connect itself. For computers with windows, you will need to install a driver for [FTDI USB](https://ftdichip.com/drivers/) converter.
 
-## Output protocol
+This mode is especially suitable for interactive testing of silicon-based detector setup. E.g. experiments on accelerators, short-term flights or balloon or UAV experiments where external logging unit is available. 
+
+### Output data format
 The data output format is defined in the following table. 
 
 ### Data readout
-We have prepared a simple python script for reading and logging data from SPACEDOS03A spectrograph. 
+We have prepared a simple python script for interactive reading and logging data from LABDOS01 spectrograph during an experiment.  
 
+## Stand-alone use
+Device contains SDcard, which could be used do data logging in stand-alone use. In that case the LABDOS01 needs an external power supply. 
+That mode could be used for short-term demonstrating of SPACEDOS, AIRDOS or GEODOS variants of that device.  
 
 ## Technical details
 Device uses [USTSIPIN02](https://github.com/ust-modules/USTSIPIN02) which is core of range of UST dosimeters specialized to specific applicaion like AIRDOS or SPACEDOS. 
