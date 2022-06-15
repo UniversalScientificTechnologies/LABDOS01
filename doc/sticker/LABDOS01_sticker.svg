@@ -26,9 +26,9 @@
      showgrid="false"
      showguides="true"
      inkscape:guide-bbox="true"
-     inkscape:zoom="2.0366726"
-     inkscape:cx="175.53141"
-     inkscape:cy="171.11243"
+     inkscape:zoom="1.3549005"
+     inkscape:cx="119.93501"
+     inkscape:cy="60.890081"
      inkscape:window-width="1848"
      inkscape:window-height="1016"
      inkscape:window-x="72"
@@ -54,7 +54,7 @@
        id="linearGradient34912"
        inkscape:swatch="solid">
       <stop
-         style="stop-color:#131313;stop-opacity:1;"
+         style="stop-color:#515151;stop-opacity:1;"
          offset="0"
          id="stop34910" />
     </linearGradient>
@@ -62,7 +62,7 @@
        id="linearGradient32002"
        inkscape:swatch="solid">
       <stop
-         style="stop-color:#ededed;stop-opacity:1;"
+         style="stop-color:#515151;stop-opacity:0;"
          offset="0"
          id="stop32000" />
     </linearGradient>
