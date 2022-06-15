@@ -29,22 +29,23 @@
      fit-margin-right="5"
      fit-margin-bottom="5"
      units="mm"
-     inkscape:zoom="0.35245713"
-     inkscape:cx="353.23445"
-     inkscape:cy="347.56"
+     inkscape:zoom="0.76880612"
+     inkscape:cx="561.25984"
+     inkscape:cy="397.36937"
      inkscape:window-width="1848"
      inkscape:window-height="1016"
      inkscape:window-x="72"
      inkscape:window-y="27"
      inkscape:window-maximized="1"
-     inkscape:current-layer="layer1" />
+     inkscape:current-layer="svg1528" />
   <defs
      id="defs1525" />
   <g
      inkscape:label="Vrstva 1"
      inkscape:groupmode="layer"
      id="layer1"
-     transform="translate(-2370.3159,5454.7769)">
+     transform="translate(-2370.3159,5454.7769)"
+     style="display:inline">
     <rect
        style="fill:#515151;stroke:#515151;stroke-width:0.0380187;stroke-linecap:round;stroke-linejoin:round;stroke-dashoffset:0.302362"
        id="rect3991"

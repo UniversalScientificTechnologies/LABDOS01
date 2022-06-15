@@ -26,9 +26,9 @@
      showgrid="false"
      showguides="true"
      inkscape:guide-bbox="true"
-     inkscape:zoom="2.2172403"
-     inkscape:cx="198.21938"
-     inkscape:cy="143.64704"
+     inkscape:zoom="2.0366726"
+     inkscape:cx="175.53141"
+     inkscape:cy="171.11243"
      inkscape:window-width="1848"
      inkscape:window-height="1016"
      inkscape:window-x="72"
@@ -551,7 +551,7 @@
          style="font-size:3.88056px;fill:#515151;fill-opacity:1;stroke-width:0.264583"
          x="-20.314823"
          y="120.18308"
-         id="tspan20077">Aux. IO.</tspan></text>
+         id="tspan20077">Aux IO</tspan></text>
     <text
        xml:space="preserve"
        style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:3.88056px;line-height:1.25;font-family:Cabin;-inkscape-font-specification:Cabin;letter-spacing:0px;word-spacing:0px;display:inline;fill:#515151;fill-opacity:1;stroke:none;stroke-width:0.264583"
@@ -718,17 +718,13 @@
        d="M 78.648705,55.034226 H 88.648706"
        id="path76692" />
     <path
-       style="display:inline;fill:none;stroke:#313131;stroke-width:0.142118;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-       d="M 48.385905,25.430774 V 45.62829"
-       id="path76692-8" />
-    <path
        style="fill:none;stroke:#515151;stroke-width:0.1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
        d="m 93.648707,55.034226 h 5 v 0"
        id="path76694" />
     <rect
        style="fill:#ffffff;fill-opacity:0;stroke:#e1e1e1;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0.302362;stroke-opacity:1"
        id="rect77207"
-       width="14.042097"
+       width="14.042"
        height="26.842098"
        x="35.277409"
        y="20.637022" />
@@ -741,16 +737,16 @@
        y="25.50329" />
     <text
        xml:space="preserve"
-       style="font-size:2.82222px;line-height:1.25;font-family:Cabin;-inkscape-font-specification:Cabin;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke-width:0.17001"
-       x="-40.949863"
-       y="50.775135"
+       style="font-size:2.82222px;line-height:1.25;font-family:Cabin;-inkscape-font-specification:Cabin;letter-spacing:0px;word-spacing:0px;fill:#515151;fill-opacity:1;stroke-width:0.17001"
+       x="-40.420696"
+       y="49.716801"
        id="text79352"
        transform="rotate(-90)"><tspan
          sodipodi:role="line"
          id="tspan79350"
-         style="font-size:2.82222px;fill:#000000;fill-opacity:1;stroke-width:0.17001"
-         x="-40.949863"
-         y="50.775135">Sensing area</tspan></text>
+         style="font-size:2.82222px;fill:#515151;fill-opacity:1;stroke-width:0.17001"
+         x="-40.420696"
+         y="49.716801">Sensing area</tspan></text>
   </g>
   <g
      inkscape:groupmode="layer"
