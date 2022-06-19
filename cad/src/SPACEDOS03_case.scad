@@ -221,3 +221,9 @@ projection(cut= true)
     translate([0, 0, -9+0.3])
         top();
 }
+
+module label2(){
+projection(cut= true)
+    translate([0, 0, 10])
+        bot();
+}
