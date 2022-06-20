@@ -73,8 +73,17 @@ $CANDY,47,521,46077,0,256,0,1,45922,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 * `rele` - Rele status of resetitko FW (Debug value)
 * `energetic channels` - All remaining values indicate a certain energy channel. From the smallest to the largest
 
-### Data readout
-We have prepared a simple python script for interactive reading and logging data from LABDOS01 spectrograph during an experiment.  
+### Data logging
+The data is sent according to a very simple protocol, which is sent in text form.
+
+
+#### Linux
+
+
+#### Windows
+In the case of windows, the situation is a bit more complicated, because standard serial line logging tools do not work here. For example, a [putty](https://www.putty.org/) program can be used for logging.
+
+One of the tutorials on how to set up data logging using putty is here, [here](https://my.kualo.com/knowledgebase/?kbcat=0&article=888) for example. 
 
 ## Stand-alone use
 Device contains SDcard, which could be used do data logging in stand-alone use. In that case the LABDOS01 needs an external power supply. 
