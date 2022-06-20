@@ -36,7 +36,42 @@ Simply connect the device to your computer USB port using a USB A-C cable. The d
 This mode is especially suitable for interactive testing of silicon-based detector setup. E.g. experiments on accelerators, short-term flights or balloon or UAV experiments where external logging unit is available. 
 
 ### Output data format
-The data output format is defined in the following table. 
+The data output format is defined in the following table.
+
+#### Initial message
+
+```
+#Hmmm...
+```
+The initial message is sent as soon as the processor is restarted, and reading it correctly indicates that the connection is well set up.
+
+#### About message
+As a second message, when turned on, a string is sent that uniquely identifies the device.
+
+```
+$LABDOS,R2,256,379276a,1290c00806a200914056a000a0000086
+```
+* `$` is first character of message string
+* Name of device. In this case it is LABDOS
+* FW version
+* ZERO string (I dont know, what is it... Probably it is something related with minimal energy field)
+* Hash of commit with of this firmware
+* Unique serial namber of LABDOS dosemeters
+
+#### Data message
+
+```
+$CANDY,47,521,46077,0,256,0,1,45922,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+```
+
+* `$CANDY` - Marking a message with data
+* `count` - Message number since restart or power-up
+* `time` - Time in seconds from power-up
+* `suppress`
+* `dose` - Number of detected particles
+* `offset` -
+* `rele` - Rele status of resetitko FW (Debug value)
+* `energetic channels` - All remaining values indicate a certain energy channel. From the smallest to the largest
 
 ### Data readout
 We have prepared a simple python script for interactive reading and logging data from LABDOS01 spectrograph during an experiment.  
