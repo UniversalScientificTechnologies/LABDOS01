@@ -99,6 +99,12 @@ uint16_t u_sensor, maximum;
 struct RTCx::tm tm;
 
 
+uint8_t mavlink_info[25];
+// [0:6] - git hash 
+// [7] - 0
+// [8:24] - serial_number
+
+
 // Read Analog Differential without gain (read datashet of ATMega1280 and ATMega2560 for refference)
 // Use analogReadDiff(NUM)
 //   NUM  | POS PIN             | NEG PIN           |   GAIN
@@ -124,14 +130,23 @@ uint8_t analog_reference = INTERNAL2V56; // DEFAULT, INTERNAL, INTERNAL1V1, INTE
 HardwareSerial &hs = Serial;
 
 
+void SendTunnelData(uint8_t *payload_data, uint8_t payload_length, uint8_t payload_type = 0, uint8_t sysid = 0, uint8_t compid = 0){
+  
+  mavlink_message_t msgtn;
+  mavlink_tunnel_t tunnel;
+  uint8_t buftn[MAVLINK_MAX_PACKET_LEN];
+  mavlink_msg_tunnel_pack(1, 10, &msgtn, sysid, compid, payload_type, payload_length, payload_data);
+  uint16_t lentn = mavlink_msg_to_send_buffer(buftn, &msgtn);
+  hs.write(buftn, lentn);
+
+  return;
+}
+
 void setup()
 {
+  memset(mavlink_info, 0, sizeof(mavlink_info));
 
-  // Open serial communications and wait for port to open:
-  //Serial.begin(115200);
-
-  //Serial.println("#Cvak...");
-
+  //hs.begin(115200);
   hs.begin(57600);
 
   ADMUX = (analog_reference << 6) | ((PIN | 0x10) & 0x1F);
@@ -144,12 +159,28 @@ void setup()
   sbi(ADCSRA, 0);        
 
   pinMode(RESET, OUTPUT);   // reset for peak detetor
+
+  DDRB = 0b10011110;
+  PORTB = 0b00000000;  // SDcard Power OFF
+
+  DDRA = 0b11111100;
+  PORTA = 0b00000000;  // SDcard Power OFF
+  DDRC = 0b11101100;
+  PORTC = 0b00000000;  // SDcard Power OFF
+  DDRD = 0b11111100;
+  PORTD = 0b10000000;  // SDcard Power OFF
+
+  pinMode(RELE_ON, OUTPUT);
+  pinMode(RELE_OFF, OUTPUT);
+  digitalWrite(RELE_ON, LOW);  
+  digitalWrite(RELE_OFF, HIGH); 
   delay(100); 
-  digitalWrite(RESET, LOW);  
+  digitalWrite(RELE_OFF, LOW);  
+  digitalWrite(RESET, LOW); 
   
   Wire.setClock(100000);
 
-  hs.write("#Hmmm...");
+  //hs.write("#Hmmm...");
   // make a string for device identification output
   String dataString = "$AIRDOS," + FWversion + "," + String(ZERO) + "," + githash + ","; // FW version and Git hash
   
@@ -161,6 +192,7 @@ void setup()
   for (int8_t reg=0; reg<16; reg++)
   { 
     uint8_t serialbyte = Wire.read(); // receive a byte
+    mavlink_info[8+reg] = serialbyte;
     if (serialbyte<0x10) dataString += "0";
     dataString += String(serialbyte,HEX);    
     serialhash += serialbyte;
@@ -200,30 +232,18 @@ void setup()
   // Initiates RTC
   rtc.autoprobe();
   rtc.resetClock();
+
+  SendTunnelData(mavlink_info, sizeof(mavlink_info), 32768+0, 0, 0);
+
 }
 
-
-void SendTunnelData(uint8_t *payload_data, uint8_t payload_length, uint8_t payload_type = 0, uint8_t sysid = 0, uint8_t compid = 0){
-  
-  Serial.println("Sending Tunnel data...");
-  mavlink_message_t msgtn;
-  mavlink_tunnel_t tunnel;
-  uint8_t buftn[MAVLINK_MAX_PACKET_LEN];
-  mavlink_msg_tunnel_pack(1, 10, &msgtn, sysid, compid, payload_type, payload_length, payload_data);
-  uint16_t lentn = mavlink_msg_to_send_buffer(buftn, &msgtn);
-  hs.write(buftn, lentn);
-
-  return;
-}
 
 void loop()
 {
   uint16_t histogram[CHANNELS];
-  uint8_t mavlink_buffer_1[128];
+  uint8_t mavlink_buffer_1[20];
   uint8_t mavlink_buffer_2[128];
   uint8_t mavlink_buffer_3[128];
- 
-  
   
   memset(histogram, 0, sizeof(histogram));  // clear array
   memset(mavlink_buffer_1, 0, sizeof(mavlink_buffer_1));
@@ -267,7 +287,6 @@ void loop()
   sbi(ADCSRA, ADIF);        // reset interrupt flag from ADC
 
   uint16_t suppress = 0;
-  uint16_t dose = 0;  
     
   while (bit_is_clear(ADCSRA, ADIF)); // wait for dummy conversion 
   DDRB = 0b10011111;                  // Reset peak detector
@@ -281,7 +300,7 @@ void loop()
   
   // dosimeter integration
   //for (uint32_t i=0; i<(2 * 46000); i++)    // cca 10 s
-  for (uint32_t i=0; i<(2 * 4600); i++)    // cca 1 s
+  for (uint32_t i=0; i<(46000); i++)    // cca 5 s
   {
     while (bit_is_clear(ADCSRA, ADIF)); // wait for end of conversion 
     delayMicroseconds(24);            // 24 us wait for 1.5 cycle of 62.5 kHz ADC clock for sample/hold for next conversion
@@ -333,37 +352,55 @@ void loop()
     RTCx::time_t t = RTCx::mktime(&tm);
 
     uint16_t noise = base_offset+4;
+    uint32_t dose=0;
     #define RANGE 252
 
     for(int n=noise; n<(base_offset+RANGE); n++)  
     {
       dose += histogram[n]; 
-      if(n < 128){
-        mavlink_buffer_2[n] = (uint8_t) histogram[n];
-      } else {
-        mavlink_buffer_3[n-128] = (uint8_t) histogram[n];
-      }
     }
 
-  mavlink_buffer_1[0] = (uint8_t) dose >> 8;
-  mavlink_buffer_1[1] = (uint8_t) dose & 0xff;
-  mavlink_buffer_1[2] = (uint8_t) suppress >> 8;
-  mavlink_buffer_1[3] = (uint8_t) suppress & 0xff;
-  mavlink_buffer_1[4] = (uint8_t) offset;
+  mavlink_buffer_1[0] = (count & 0xff00) >> 8;
+  mavlink_buffer_1[1] = (count & 0x00ff);
+  mavlink_buffer_1[2] = (dose& 0xff000000) >> 24;
+  mavlink_buffer_1[3] = (dose& 0x00ff0000) >> 16;
+  mavlink_buffer_1[4] = (dose& 0x0000ff00) >> 8;
+  mavlink_buffer_1[5] = (dose& 0x000000ff);
+  mavlink_buffer_1[6] = (suppress & 0xff00) >> 8;
+  mavlink_buffer_1[7] = (suppress & 0x00ff);
+  mavlink_buffer_1[8] = (offset & 0xff00) >> 8;
+  mavlink_buffer_1[9] = (offset & 0x00ff);
+  mavlink_buffer_1[10] = 0;
+  mavlink_buffer_1[11] = 0;
 
     
   count++;
 
+  for(int n=base_offset; n<(128+base_offset); n++)  
+  {
+    mavlink_buffer_2[n-base_offset];
+  }
+  for(int n=128+base_offset; n<(base_offset+RANGE); n++)  
+  {
+    mavlink_buffer_3[n-128-base_offset];
+  }
 
   digitalWrite(LED1, (count % 2) == 0);
+  digitalWrite(LED2, (count % 2) != 0);
 
-
-  SendTunnelData(mavlink_buffer_2, sizeof(mavlink_buffer_2), 10, 0, 0);
-  delayMicroseconds(200000000); 
-  SendTunnelData(mavlink_buffer_3, sizeof(mavlink_buffer_3), 11, 0, 0);
-  delayMicroseconds(200000000); 
-  SendTunnelData(mavlink_buffer_1, sizeof(mavlink_buffer_1), 9, 0, 0);
-
+  //String dataString = "";
+    
+  digitalWrite(LED3, 1);
+  if((count % 5) != 0)
+  {SendTunnelData(mavlink_info, sizeof(mavlink_info), 10+0, 0, 0);}
+  //delay(1000);
+  SendTunnelData(mavlink_buffer_3, sizeof(mavlink_buffer_3), 10+2, 0, 0);
+  //delay(1000);
+  SendTunnelData(mavlink_buffer_2, sizeof(mavlink_buffer_2), 10+3, 0, 0);
+  //delay(1000);
+  SendTunnelData(mavlink_buffer_1, sizeof(mavlink_buffer_1), 10+1, 0, 0);
+  //delay(1000);
+  digitalWrite(LED3, 0);
   }
 
 
