@@ -2,6 +2,7 @@ String githash = "379276a";
 String FWversion = "R2"; // 16 MHz crystal
 #define ZERO 255  // 5th channel is channel 1 (column 10 from 0, ussually DCoffset or DCoffset+1)
 
+
 /*
   SPACEDOS with Resetitko for RT
  
@@ -66,6 +67,9 @@ boolean SDClass::begin(uint32_t clock, uint8_t csPin) {
 #include "wiring_private.h"
 #include <Wire.h>           
 #include "src/RTCx/RTCx.h"  // Modified version included
+#include "src/c_library_v2/common/mavlink.h" 
+#include <HardwareSerial.h>
+
 
 //#define LED_yellow  23   // PC7
 #define RESET       0    // PB0
@@ -79,6 +83,9 @@ boolean SDClass::begin(uint32_t clock, uint8_t csPin) {
 #define INT         20   // PC4
 #define RELE_ON     19   // PC3
 #define RELE_OFF    23   // PC7
+#define LED1     21   // 
+#define LED2    22   // 
+#define LED3    23   // 
 #define ANALOG_ON   15   // PD7
 
 #define CHANNELS 512 // number of channels in buffer for histogram, including negative numbers
@@ -90,6 +97,7 @@ uint16_t base_offset = ZERO - 1;
 uint8_t lo, hi;
 uint16_t u_sensor, maximum;
 struct RTCx::tm tm;
+
 
 // Read Analog Differential without gain (read datashet of ATMega1280 and ATMega2560 for refference)
 // Use analogReadDiff(NUM)
@@ -113,14 +121,19 @@ struct RTCx::tm tm;
 #define PIN 0
 uint8_t analog_reference = INTERNAL2V56; // DEFAULT, INTERNAL, INTERNAL1V1, INTERNAL2V56, or EXTERNAL
 
+HardwareSerial &hs = Serial;
+
+
 void setup()
 {
 
   // Open serial communications and wait for port to open:
-  Serial.begin(115200);
+  //Serial.begin(115200);
 
-  Serial.println("#Cvak...");
-  
+  //Serial.println("#Cvak...");
+
+  hs.begin(57600);
+
   ADMUX = (analog_reference << 6) | ((PIN | 0x10) & 0x1F);
   
   ADCSRB = 0;               // Switching ADC to Free Running mode
@@ -131,37 +144,12 @@ void setup()
   sbi(ADCSRA, 0);        
 
   pinMode(RESET, OUTPUT);   // reset for peak detetor
-
-  //pinMode(SDpower1, OUTPUT);  // SDcard interface
-  //pinMode(SDpower2, OUTPUT);     
-  //pinMode(SDpower3, OUTPUT);     
-  //pinMode(SS, OUTPUT);     
-  //pinMode(MOSI, INPUT);     
-  //pinMode(MISO, INPUT);     
-  //pinMode(SCK, OUTPUT);  
-
-  DDRB = 0b10011110;
-  PORTB = 0b00000000;  // SDcard Power OFF
-
-  DDRA = 0b11111100;
-  PORTA = 0b00000000;  // SDcard Power OFF
-  DDRC = 0b11101100;
-  PORTC = 0b00000000;  // SDcard Power OFF
-  DDRD = 0b11111100;
-  PORTD = 0b10000000;  // SDcard Power OFF
-
-  pinMode(RELE_ON, OUTPUT);
-  pinMode(RELE_OFF, OUTPUT);
-  digitalWrite(RELE_ON, LOW);  
-  digitalWrite(RELE_OFF, HIGH); 
   delay(100); 
-  digitalWrite(RELE_OFF, LOW);  
   digitalWrite(RESET, LOW);  
   
   Wire.setClock(100000);
 
-  Serial.println("#Hmmm...");
-
+  hs.write("#Hmmm...");
   // make a string for device identification output
   String dataString = "$AIRDOS," + FWversion + "," + String(ZERO) + "," + githash + ","; // FW version and Git hash
   
@@ -177,10 +165,7 @@ void setup()
     dataString += String(serialbyte,HEX);    
     serialhash += serialbyte;
   }
-
-  {
-    Serial.println(dataString);  // print SN to terminal 
-  }    
+  
 
   // measurement of ADC offset
   ADMUX = (analog_reference << 6) | 0b10001; // Select +A1,-A1 for offset correction
@@ -217,27 +202,33 @@ void setup()
   rtc.resetClock();
 }
 
-bool rele_on = false; 
-bool rele_off = false; 
+
+void SendTunnelData(uint8_t *payload_data, uint8_t payload_length, uint8_t payload_type = 0, uint8_t sysid = 0, uint8_t compid = 0){
+  
+  Serial.println("Sending Tunnel data...");
+  mavlink_message_t msgtn;
+  mavlink_tunnel_t tunnel;
+  uint8_t buftn[MAVLINK_MAX_PACKET_LEN];
+  mavlink_msg_tunnel_pack(1, 10, &msgtn, sysid, compid, payload_type, payload_length, payload_data);
+  uint16_t lentn = mavlink_msg_to_send_buffer(buftn, &msgtn);
+  hs.write(buftn, lentn);
+
+  return;
+}
 
 void loop()
 {
   uint16_t histogram[CHANNELS];
+  uint8_t mavlink_buffer_1[128];
+  uint8_t mavlink_buffer_2[128];
+  uint8_t mavlink_buffer_3[128];
  
-  if (rele_on)
-  {
-      digitalWrite(RELE_OFF, LOW);  // switch on rele     
-      digitalWrite(RELE_ON, HIGH);  
-      delay(100); 
-      digitalWrite(RELE_ON, LOW);
-      rele_on = false;
-      rele_off = true;  
-  }
   
-  for(int n=0; n<CHANNELS; n++)
-  {
-    histogram[n]=0;
-  }
+  
+  memset(histogram, 0, sizeof(histogram));  // clear array
+  memset(mavlink_buffer_1, 0, sizeof(mavlink_buffer_1));
+  memset(mavlink_buffer_2, 0, sizeof(mavlink_buffer_2));
+  memset(mavlink_buffer_3, 0, sizeof(mavlink_buffer_3));
 
   // measurement of ADC offset
   ADMUX = (analog_reference << 6) | 0b10001; // Select +A1,-A1 for offset correction
@@ -275,7 +266,8 @@ void loop()
 
   sbi(ADCSRA, ADIF);        // reset interrupt flag from ADC
 
-  uint16_t suppress = 0;      
+  uint16_t suppress = 0;
+  uint16_t dose = 0;  
     
   while (bit_is_clear(ADCSRA, ADIF)); // wait for dummy conversion 
   DDRB = 0b10011111;                  // Reset peak detector
@@ -288,7 +280,8 @@ void loop()
   sbi(ADCSRA, ADIF);                  // reset interrupt flag from ADC
   
   // dosimeter integration
-  for (uint32_t i=0; i<(2 * 46000); i++)    // cca 10 s
+  //for (uint32_t i=0; i<(2 * 46000); i++)    // cca 10 s
+  for (uint32_t i=0; i<(2 * 4600); i++)    // cca 1 s
   {
     while (bit_is_clear(ADCSRA, ADIF)); // wait for end of conversion 
     delayMicroseconds(24);            // 24 us wait for 1.5 cycle of 62.5 kHz ADC clock for sample/hold for next conversion
@@ -340,60 +333,38 @@ void loop()
     RTCx::time_t t = RTCx::mktime(&tm);
 
     uint16_t noise = base_offset+4;
-    uint32_t dose=0;
     #define RANGE 252
 
     for(int n=noise; n<(base_offset+RANGE); n++)  
     {
       dose += histogram[n]; 
-    }
-
-    // make a string for assembling the data to log:
-    String dataString = "";
-    
-    // make a string for assembling the data to log:
-    dataString += "$CANDY,";
-    dataString += String(count); 
-    dataString += ",";  
-    dataString += String(t-946684800); 
-    dataString += ",";
-    dataString += String(suppress);
-    dataString += ",";
-    dataString += String(dose);
-    dataString += ",";
-    dataString += String(offset);
-    dataString += ",";
-    if (rele_off) {dataString += '1';} else {dataString += "0";} 
-    
-    for(int n=base_offset; n<(base_offset+RANGE); n++)  
-    {
-      dataString += ",";
-      dataString += String(histogram[n]); 
-    }
-    
-    count++;
-
-    while (Serial.available()) 
-    {
-      char cvak = Serial.read();
-      if (cvak=='r') 
-      {
-        rele_on = true;
-        rele_off = false;
+      if(n < 128){
+        mavlink_buffer_2[n] = (uint8_t) histogram[n];
+      } else {
+        mavlink_buffer_3[n-128] = (uint8_t) histogram[n];
       }
     }
-  
-    if (rele_off)
-    {
-      digitalWrite(RELE_ON, LOW);     // switch off rele  
-      digitalWrite(RELE_OFF, HIGH);  
-      delay(100); 
-      digitalWrite(RELE_OFF, LOW);
-      rele_off = false;  
-    }
 
-    {
-      Serial.println(dataString);  // print to terminal (additional 700 ms in DEBUG mode)
-    }          
-  }    
+  mavlink_buffer_1[0] = (uint8_t) dose >> 8;
+  mavlink_buffer_1[1] = (uint8_t) dose & 0xff;
+  mavlink_buffer_1[2] = (uint8_t) suppress >> 8;
+  mavlink_buffer_1[3] = (uint8_t) suppress & 0xff;
+  mavlink_buffer_1[4] = (uint8_t) offset;
+
+    
+  count++;
+
+
+  digitalWrite(LED1, (count % 2) == 0);
+
+
+  SendTunnelData(mavlink_buffer_2, sizeof(mavlink_buffer_2), 10, 0, 0);
+  delayMicroseconds(200000000); 
+  SendTunnelData(mavlink_buffer_3, sizeof(mavlink_buffer_3), 11, 0, 0);
+  delayMicroseconds(200000000); 
+  SendTunnelData(mavlink_buffer_1, sizeof(mavlink_buffer_1), 9, 0, 0);
+
+  }
+
+
 }
