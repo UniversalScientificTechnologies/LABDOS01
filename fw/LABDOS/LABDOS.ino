@@ -1,12 +1,6 @@
-<<<<<<< HEAD
 String githash = "379276a";
 String FWversion = "L01"; // 16 MHz crystal
 #define ZERO 256 // 5th channel is channel 1 (column 10 from 0, ussually DCoffset or DCoffset+1)
-=======
-String githash = "xxxxxxx";
-String FWversion = "01"; // 16 MHz crystal
-#define ZERO 255  // 5th channel is channel 1 (column 10 from 0, ussually DCoffset or DCoffset+1)
->>>>>>> 871f854f5ca0a16a263b31c14870fc5a47b9f1c7
 
 /*
   SPACEDOS with Resetitko for RT
@@ -83,13 +77,6 @@ boolean SDClass::begin(uint32_t clock, uint8_t csPin) {
 #define MISO        6    // PB6
 #define SCK         7    // PB7
 #define INT         20   // PC4
-<<<<<<< HEAD
-//#define RELE_ON     19   // PC3
-//#define RELE_OFF    23   // PC7
-=======
-// #define RELE_ON     19   // PC3
-// #define RELE_OFF    23   // PC7
->>>>>>> 871f854f5ca0a16a263b31c14870fc5a47b9f1c7
 #define ANALOG_ON   15   // PD7
 #define LED1        21 // PC5
 #define LED2        22 // PC6
@@ -163,12 +150,6 @@ void setup()
   DDRD = 0b11111100;
   PORTD = 0b10000000;  // SDcard Power OFF
 
-<<<<<<< HEAD
-=======
-  delay(100); 
-  digitalWrite(RESET, LOW);  
-  
->>>>>>> 871f854f5ca0a16a263b31c14870fc5a47b9f1c7
   Wire.setClock(100000);
 
   Serial.println("#Hmmm...");
@@ -252,11 +233,6 @@ void setup()
 void loop()
 {
   uint16_t histogram[CHANNELS];
-<<<<<<< HEAD
-   
-=======
- 
->>>>>>> 871f854f5ca0a16a263b31c14870fc5a47b9f1c7
   for(int n=0; n<CHANNELS; n++)
   {
     histogram[n]=0;
@@ -383,7 +359,6 @@ void loop()
       dataString += String(histogram[n]); 
     }
     
-<<<<<<< HEAD
     /* calibration
     uint16_t maxener=0; 
     uint16_t maxch=0;     
@@ -401,8 +376,6 @@ void loop()
     dataString += String(maxener); 
     */
     
-=======
->>>>>>> 871f854f5ca0a16a263b31c14870fc5a47b9f1c7
     count++;
 
     {
