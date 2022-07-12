@@ -1,6 +1,12 @@
+<<<<<<< HEAD
 String githash = "379276a";
 String FWversion = "L01"; // 16 MHz crystal
 #define ZERO 256 // 5th channel is channel 1 (column 10 from 0, ussually DCoffset or DCoffset+1)
+=======
+String githash = "xxxxxxx";
+String FWversion = "01"; // 16 MHz crystal
+#define ZERO 255  // 5th channel is channel 1 (column 10 from 0, ussually DCoffset or DCoffset+1)
+>>>>>>> 871f854f5ca0a16a263b31c14870fc5a47b9f1c7
 
 /*
   SPACEDOS with Resetitko for RT
@@ -77,8 +83,13 @@ boolean SDClass::begin(uint32_t clock, uint8_t csPin) {
 #define MISO        6    // PB6
 #define SCK         7    // PB7
 #define INT         20   // PC4
+<<<<<<< HEAD
 //#define RELE_ON     19   // PC3
 //#define RELE_OFF    23   // PC7
+=======
+// #define RELE_ON     19   // PC3
+// #define RELE_OFF    23   // PC7
+>>>>>>> 871f854f5ca0a16a263b31c14870fc5a47b9f1c7
 #define ANALOG_ON   15   // PD7
 #define LED1        21 // PC5
 #define LED2        22 // PC6
@@ -152,12 +163,18 @@ void setup()
   DDRD = 0b11111100;
   PORTD = 0b10000000;  // SDcard Power OFF
 
+<<<<<<< HEAD
+=======
+  delay(100); 
+  digitalWrite(RESET, LOW);  
+  
+>>>>>>> 871f854f5ca0a16a263b31c14870fc5a47b9f1c7
   Wire.setClock(100000);
 
   Serial.println("#Hmmm...");
 
   // make a string for device identification output
-  String dataString = "$AIRDOS," + FWversion + "," + String(ZERO) + "," + githash + ","; // FW version and Git hash
+  String dataString = "$DOS,LABDOS01A," + FWversion + "," + String(ZERO) + "," + githash + ","; // FW version and Git hash
   
   Wire.beginTransmission(0x58);                   // request SN from EEPROM
   Wire.write((int)0x08); // MSB
@@ -231,13 +248,15 @@ void setup()
   rtc.resetClock();
 }
 
-bool rele_on = false; 
-bool rele_off = false; 
 
 void loop()
 {
   uint16_t histogram[CHANNELS];
+<<<<<<< HEAD
    
+=======
+ 
+>>>>>>> 871f854f5ca0a16a263b31c14870fc5a47b9f1c7
   for(int n=0; n<CHANNELS; n++)
   {
     histogram[n]=0;
@@ -347,7 +366,7 @@ void loop()
     String dataString = "";
     
     // make a string for assembling the data to log:
-    dataString += "$CANDY,";
+    dataString += "$HIST,";
     dataString += String(count); 
     dataString += ",";  
     dataString += String(t-946684800); 
@@ -357,8 +376,6 @@ void loop()
     dataString += String(dose);
     dataString += ",";
     dataString += String(offset);
-    dataString += ",";
-    if (rele_off) {dataString += '1';} else {dataString += "0";} 
     
     for(int n=base_offset; n<(base_offset+RANGE); n++)  
     {
@@ -366,6 +383,7 @@ void loop()
       dataString += String(histogram[n]); 
     }
     
+<<<<<<< HEAD
     /* calibration
     uint16_t maxener=0; 
     uint16_t maxch=0;     
@@ -383,6 +401,8 @@ void loop()
     dataString += String(maxener); 
     */
     
+=======
+>>>>>>> 871f854f5ca0a16a263b31c14870fc5a47b9f1c7
     count++;
 
     {
