@@ -1,6 +1,6 @@
 String githash = "379276a";
-String FWversion = "R2"; // 16 MHz crystal
-#define ZERO 255  // 5th channel is channel 1 (column 10 from 0, ussually DCoffset or DCoffset+1)
+String FWversion = "L01"; // 16 MHz crystal
+#define ZERO 256 // 5th channel is channel 1 (column 10 from 0, ussually DCoffset or DCoffset+1)
 
 /*
   SPACEDOS with Resetitko for RT
@@ -77,9 +77,12 @@ boolean SDClass::begin(uint32_t clock, uint8_t csPin) {
 #define MISO        6    // PB6
 #define SCK         7    // PB7
 #define INT         20   // PC4
-#define RELE_ON     19   // PC3
-#define RELE_OFF    23   // PC7
+//#define RELE_ON     19   // PC3
+//#define RELE_OFF    23   // PC7
 #define ANALOG_ON   15   // PD7
+#define LED1        21 // PC5
+#define LED2        22 // PC6
+#define LED3        23 // PC7
 
 #define CHANNELS 512 // number of channels in buffer for histogram, including negative numbers
 
@@ -122,7 +125,6 @@ void setup()
   Serial.println("#Cvak...");
   
   ADMUX = (analog_reference << 6) | ((PIN | 0x10) & 0x1F);
-  
   ADCSRB = 0;               // Switching ADC to Free Running mode
   sbi(ADCSRA, ADATE);       // ADC autotrigger enable (mandatory for free running mode)
   sbi(ADCSRA, ADSC);        // ADC start the first conversions
@@ -150,14 +152,6 @@ void setup()
   DDRD = 0b11111100;
   PORTD = 0b10000000;  // SDcard Power OFF
 
-  pinMode(RELE_ON, OUTPUT);
-  pinMode(RELE_OFF, OUTPUT);
-  digitalWrite(RELE_ON, LOW);  
-  digitalWrite(RELE_OFF, HIGH); 
-  delay(100); 
-  digitalWrite(RELE_OFF, LOW);  
-  digitalWrite(RESET, LOW);  
-  
   Wire.setClock(100000);
 
   Serial.println("#Hmmm...");
@@ -212,6 +206,26 @@ void setup()
     u_sensor -= (CHANNELS / 2);
   }
 
+  pinMode(LED1, OUTPUT); 
+  digitalWrite(LED1, HIGH); 
+  delay(50);  
+  pinMode(LED2, OUTPUT); 
+  digitalWrite(LED2, HIGH); 
+  delay(50);  
+  pinMode(LED3, OUTPUT); 
+  digitalWrite(LED3, HIGH); 
+  delay(50);  
+  pinMode(LED1, OUTPUT); 
+  digitalWrite(LED1, LOW); 
+  delay(50);  
+  pinMode(LED2, OUTPUT); 
+  digitalWrite(LED2, LOW); 
+  delay(50);  
+  pinMode(LED3, OUTPUT); 
+  digitalWrite(LED3, LOW); 
+  delay(50);  
+
+
   // Initiates RTC
   rtc.autoprobe();
   rtc.resetClock();
@@ -223,17 +237,7 @@ bool rele_off = false;
 void loop()
 {
   uint16_t histogram[CHANNELS];
- 
-  if (rele_on)
-  {
-      digitalWrite(RELE_OFF, LOW);  // switch on rele     
-      digitalWrite(RELE_ON, HIGH);  
-      delay(100); 
-      digitalWrite(RELE_ON, LOW);
-      rele_on = false;
-      rele_off = true;  
-  }
-  
+   
   for(int n=0; n<CHANNELS; n++)
   {
     histogram[n]=0;
@@ -288,24 +292,13 @@ void loop()
   sbi(ADCSRA, ADIF);                  // reset interrupt flag from ADC
   
   // dosimeter integration
-  for (uint32_t i=0; i<(2 * 46000); i++)    // cca 10 s
+  for (uint16_t i=0; i<(46000); i++)    // cca 10 s
   {
     while (bit_is_clear(ADCSRA, ADIF)); // wait for end of conversion 
-    delayMicroseconds(24);            // 24 us wait for 1.5 cycle of 62.5 kHz ADC clock for sample/hold for next conversion
-    //asm("NOP");                         // cca 8 us after loop
-    //asm("NOP");                         
-    //asm("NOP");                         
-    //asm("NOP");                         
-    //asm("NOP");                         
-    //asm("NOP");                         
+    delayMicroseconds(150);            // 12 us wait for 1.5 cycle of 125 kHz ADC clock for sample/hold for next conversion
     
     DDRB = 0b10011111;                  // Reset peak detector
-    delayMicroseconds(7);
-    //asm("NOP");                         // cca 7 us for 2k2 resistor and 100n capacitor in peak detector
-    //asm("NOP");                         
-    //asm("NOP");                         
-    //asm("NOP");                         
-    //asm("NOP");                         
+    delayMicroseconds(7);               // cca 7 us for 2k2 resistor and 100n capacitor in peak detector
     DDRB = 0b10011110;
     sbi(ADCSRA, ADIF);                  // reset interrupt flag from ADC
 
@@ -339,7 +332,7 @@ void loop()
     rtc.readClock(tm);
     RTCx::time_t t = RTCx::mktime(&tm);
 
-    uint16_t noise = base_offset+4;
+    uint16_t noise = base_offset+5;
     uint32_t dose=0;
     #define RANGE 252
 
@@ -347,6 +340,8 @@ void loop()
     {
       dose += histogram[n]; 
     }
+
+    digitalWrite(LED1, HIGH); 
 
     // make a string for assembling the data to log:
     String dataString = "";
@@ -371,29 +366,28 @@ void loop()
       dataString += String(histogram[n]); 
     }
     
-    count++;
-
-    while (Serial.available()) 
+    /* calibration
+    uint16_t maxener=0; 
+    uint16_t maxch=0;     
+    for(int n=noise+3; n<(511); n++)  
     {
-      char cvak = Serial.read();
-      if (cvak=='r') 
+      if (histogram[n]>maxener) 
       {
-        rele_on = true;
-        rele_off = false;
+        maxener = histogram[n];
+        maxch = n; 
       }
     }
-  
-    if (rele_off)
-    {
-      digitalWrite(RELE_ON, LOW);     // switch off rele  
-      digitalWrite(RELE_OFF, HIGH);  
-      delay(100); 
-      digitalWrite(RELE_OFF, LOW);
-      rele_off = false;  
-    }
+    dataString += "#";
+    dataString += String(int(maxch-noise+3)); 
+    dataString += ",";
+    dataString += String(maxener); 
+    */
+    
+    count++;
 
     {
       Serial.println(dataString);  // print to terminal (additional 700 ms in DEBUG mode)
+      digitalWrite(LED1, LOW); 
     }          
   }    
 }
