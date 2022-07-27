@@ -1,10 +1,10 @@
-# LABDOS01 - Experimental silicon based ionising radiation spectrometer
+# LABDOS01 - Scientific, semiconductor based ionising radiation spectrometer
 
-LABDOS01 is an open-source spectrometer-dosimeter based on silicone PIN diode and is intended for scientific and research purposes. Power and communication is secured by USB-C port or JST-GH connector. The device can be used statically (located in a specific place e.g. laboratory or base) or in mobile applications (such as cars or UAV). The spectrometer is housed in a 3D printed box that mechanical resistance and allows future development of user enclosures and integrations. 
+LABDOS01 is an open-source spectrometer-dosimeter based on silicon PIN diode and is intended for scientific research and experimental purposes. Power and communication is secured by USB-C port or JST-GH connector. The device can be used statically (located in a specific place e.g. laboratory or base) or in mobile applications (such as cars or UAV). The spectrometer is housed in a 3D printed box, which brings basic mechanical resistance and allows future development of user enclosures and integrations. 
 
 The aim of LABDOS01 is to make the open-source, accesible, high quality, reliable and simple measuring device - radiation energy spectrometer for sientific comunity. 
 
-LABDOS01 to function on its own. It requires a computer to visualize recorded measured data. At least it requires an external powering unit. The device is not intended for outdoor use (is not waterproof). 
+LABDOS01 to function on its own. It requires a computer to visualize recorded measured data. At least it requires an external powering unit. The device is not intended for outdoor use (it is not waterproof). 
 Intead of that it is intended to be used as experimentel device with the exactly the same internals as its application specific variants like: 
 
  * [GEODOS01](https://github.com/UniversalScientificTechnologies/GEODOS01) - Outdoor and stand-alone onizing radiation detector
