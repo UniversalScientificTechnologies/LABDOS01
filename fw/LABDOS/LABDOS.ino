@@ -1,6 +1,6 @@
 String githash = "379276a";
-String FWversion = "L01"; // 16 MHz crystal
-#define ZERO 256 // 5th channel is channel 1 (column 10 from 0, ussually DCoffset or DCoffset+1)
+String FWversion = "L02"; // 16 MHz crystal
+#define ZERO 256 // 3th channel is channel 1 (ussually DCoffset or DCoffset+1, for version with noise reduction transistor)
 
 /*
   SPACEDOS with Resetitko for RT
@@ -86,8 +86,7 @@ boolean SDClass::begin(uint32_t clock, uint8_t csPin) {
 
 uint16_t count = 0;
 uint32_t serialhash = 0;
-uint16_t offset;
-uint16_t base_offset = ZERO - 1;
+uint16_t base_offset = ZERO;
 uint8_t lo, hi;
 uint16_t u_sensor, maximum;
 struct RTCx::tm tm;
@@ -116,6 +115,9 @@ uint8_t analog_reference = INTERNAL2V56; // DEFAULT, INTERNAL, INTERNAL1V1, INTE
 
 void setup()
 {
+  pinMode(LED1, OUTPUT); 
+  digitalWrite(LED1, HIGH); 
+  delay(100);  
 
   // Open serial communications and wait for port to open:
   Serial.begin(115200);
@@ -152,10 +154,47 @@ void setup()
 
   Wire.setClock(100000);
 
+  pinMode(LED1, OUTPUT); 
+  digitalWrite(LED1, HIGH); 
+  delay(100);  
   Serial.println("#Hmmm...");
+  pinMode(LED2, OUTPUT); 
+  digitalWrite(LED2, HIGH); 
+  delay(100);  
 
+  {
+    uint16_t DCoffset;
+    for (uint8_t n=0; n<8; n++) 
+    { 
+      // measurement of ADC offset
+      ADMUX = (analog_reference << 6) | 0b10001; // Select +A1,-A1 for offset correction
+      delay(50);
+      ADCSRB = 0;               // Switching ADC to Free Running mode
+      sbi(ADCSRA, ADATE);       // ADC autotrigger enable (mandatory for free running mode)
+      sbi(ADCSRA, ADSC);        // ADC start the first conversions
+      sbi(ADCSRA, 2);           // 0x111 = clock divided by 128
+      sbi(ADCSRA, 1);        
+      sbi(ADCSRA, 0);        
+      sbi(ADCSRA, ADIF);                  // reset interrupt flag from ADC
+      while (bit_is_clear(ADCSRA, ADIF)); // wait for the first conversion 
+      sbi(ADCSRA, ADIF);                  // reset interrupt flag from ADC
+      lo = ADCL;
+      hi = ADCH;
+      // combine the two bytes
+      u_sensor = (hi << 7) | (lo >> 1);
+      // manage negative values
+      if (u_sensor <= (CHANNELS/2)-1 ) {u_sensor += (CHANNELS/2);} else {u_sensor -= (CHANNELS/2);}
+      DCoffset += u_sensor;
+    }
+    base_offset = DCoffset >> 3; // Calculate mean of 8 measurements
+  }
+
+  pinMode(LED3, OUTPUT); 
+  digitalWrite(LED3, HIGH); 
+  delay(100);  
+  
   // make a string for device identification output
-  String dataString = "$DOS,LABDOS01A," + FWversion + "," + String(ZERO) + "," + githash + ","; // FW version and Git hash
+  String dataString = "$DOS,LABDOS01A," + FWversion + "," + String(base_offset) + "," + githash + ","; // FW version and Git hash
   
   Wire.beginTransmission(0x58);                   // request SN from EEPROM
   Wire.write((int)0x08); // MSB
@@ -174,54 +213,16 @@ void setup()
     Serial.println(dataString);  // print SN to terminal 
   }    
 
-  // measurement of ADC offset
-  ADMUX = (analog_reference << 6) | 0b10001; // Select +A1,-A1 for offset correction
-  delay(200);
-  ADCSRB = 0;               // Switching ADC to Free Running mode
-  sbi(ADCSRA, ADATE);       // ADC autotrigger enable (mandatory for free running mode)
-  sbi(ADCSRA, ADSC);        // ADC start the first conversions
-  sbi(ADCSRA, 2);           // 0x111 = clock divided by 128
-  sbi(ADCSRA, 1);
-  sbi(ADCSRA, 0);
-  sbi(ADCSRA, ADIF);                  // reset interrupt flag from ADC
-  while (bit_is_clear(ADCSRA, ADIF)); // wait for the first conversion
-  sbi(ADCSRA, ADIF);                  // reset interrupt flag from ADC
-  lo = ADCL;
-  hi = ADCH;
-  ADMUX = (analog_reference << 6) | 0b10000; // Select +A0,-A1 for measurement
-  ADCSRB = 0;               // Switching ADC to Free Running mode
-  sbi(ADCSRA, ADATE);       // ADC autotrigger enable (mandatory for free running mode)
-  sbi(ADCSRA, ADSC);        // ADC start the first conversions
-  sbi(ADCSRA, 2);           // 0x111 = clock divided by 128
-  sbi(ADCSRA, 1);
-  sbi(ADCSRA, 0);
-  // combine the two bytes
-  u_sensor = (hi << 7) | (lo >> 1);
-  // manage negative values
-  if (u_sensor <= (CHANNELS / 2) - 1 ) {
-    u_sensor += (CHANNELS / 2);
-  } else {
-    u_sensor -= (CHANNELS / 2);
-  }
-
-  pinMode(LED1, OUTPUT); 
-  digitalWrite(LED1, HIGH); 
-  delay(50);  
-  pinMode(LED2, OUTPUT); 
-  digitalWrite(LED2, HIGH); 
-  delay(50);  
-  pinMode(LED3, OUTPUT); 
-  digitalWrite(LED3, HIGH); 
-  delay(50);  
+  
   pinMode(LED1, OUTPUT); 
   digitalWrite(LED1, LOW); 
-  delay(50);  
+  delay(100);  
   pinMode(LED2, OUTPUT); 
   digitalWrite(LED2, LOW); 
-  delay(50);  
+  delay(100);  
   pinMode(LED3, OUTPUT); 
   digitalWrite(LED3, LOW); 
-  delay(50);  
+  delay(100);  
 
 
   // Initiates RTC
@@ -238,20 +239,7 @@ void loop()
     histogram[n]=0;
   }
 
-  // measurement of ADC offset
-  ADMUX = (analog_reference << 6) | 0b10001; // Select +A1,-A1 for offset correction
-  delay(50);
-  ADCSRB = 0;               // Switching ADC to Free Running mode
-  sbi(ADCSRA, ADATE);       // ADC autotrigger enable (mandatory for free running mode)
-  sbi(ADCSRA, ADSC);        // ADC start the first conversions
-  sbi(ADCSRA, 2);           // 0x111 = clock divided by 128
-  sbi(ADCSRA, 1);        
-  sbi(ADCSRA, 0);        
-  sbi(ADCSRA, ADIF);                  // reset interrupt flag from ADC
-  while (bit_is_clear(ADCSRA, ADIF)); // wait for the first conversion 
-  sbi(ADCSRA, ADIF);                  // reset interrupt flag from ADC
-  lo = ADCL;
-  hi = ADCH;
+  // dummy conversion
   ADMUX = (analog_reference << 6) | 0b10000; // Select +A0,-A1 for measurement
   ADCSRB = 0;               // Switching ADC to Free Running mode
   sbi(ADCSRA, ADATE);       // ADC autotrigger enable (mandatory for free running mode)
@@ -259,11 +247,6 @@ void loop()
   sbi(ADCSRA, 2);           // 0x111 = clock divided by 128
   sbi(ADCSRA, 1);        
   sbi(ADCSRA, 0);        
-  // combine the two bytes
-  u_sensor = (hi << 7) | (lo >> 1);
-  // manage negative values
-  if (u_sensor <= (CHANNELS/2)-1 ) {u_sensor += (CHANNELS/2);} else {u_sensor -= (CHANNELS/2);}
-  offset = u_sensor;
   
   PORTB = 1;                          // Set reset output for peak detector to H
   sbi(ADCSRA, ADIF);                  // reset interrupt flag from ADC
@@ -327,7 +310,7 @@ void loop()
     rtc.readClock(tm);
     RTCx::time_t t = RTCx::mktime(&tm);
 
-    uint16_t noise = base_offset+5;
+    uint16_t noise = base_offset+2;
     uint32_t dose=0;
     #define RANGE 252
 
@@ -336,7 +319,7 @@ void loop()
       dose += histogram[n]; 
     }
 
-    digitalWrite(LED1, HIGH); 
+    digitalWrite(LED3, HIGH); 
 
     // make a string for assembling the data to log:
     String dataString = "";
@@ -350,10 +333,8 @@ void loop()
     dataString += String(suppress);
     dataString += ",";
     dataString += String(dose);
-    dataString += ",";
-    dataString += String(offset);
     
-    for(int n=base_offset; n<(base_offset+RANGE); n++)  
+    for(int n=base_offset-1; n<(base_offset-1+RANGE); n++)  
     {
       dataString += ",";
       dataString += String(histogram[n]); 
@@ -380,7 +361,7 @@ void loop()
 
     {
       Serial.println(dataString);  // print to terminal (additional 700 ms in DEBUG mode)
-      digitalWrite(LED1, LOW); 
+      digitalWrite(LED3, LOW); 
     }          
   }    
 }
