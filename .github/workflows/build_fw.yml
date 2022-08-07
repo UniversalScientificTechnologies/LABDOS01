@@ -3,9 +3,9 @@ name: Build firmware
 on:
   # Triggers the workflow on push or pull request events but only for the "SPACEDOS03A" branch
   push:
-    branches: [ "SPACEDOS03A" ]
+    branches: [ "LABDOS01A" ]
   pull_request:
-    branches: [ "SPACEDOS03A" ]
+    branches: [ "LABDOS01A" ]
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
@@ -17,6 +17,11 @@ jobs:
     steps:    
         - name: Checkout
           uses: actions/checkout@v2
+        
+        - name: Update git hash
+          run: |
+            echo "// This file is overwritten by github actions, do not update it manually" > fw/LABDOS/githash.h
+            echo "String githash = \"${{ github.sha }}\";" >> ${{ github.sha }}
 
         - name: Compile all examples
           uses: ArminJo/arduino-test-compile@v3
