@@ -1,4 +1,3 @@
-String githash = "379276a";
 String FWversion = "L02"; // 16 MHz crystal
 #define ZERO 256 // 3th channel is channel 1 (ussually DCoffset or DCoffset+1, for version with noise reduction transistor)
 
@@ -66,6 +65,7 @@ boolean SDClass::begin(uint32_t clock, uint8_t csPin) {
 #include "wiring_private.h"
 #include <Wire.h>           
 #include "src/RTCx/RTCx.h"  // Modified version included
+#include "githash.h"
 
 //#define LED_yellow  23   // PC7
 #define RESET       0    // PB0
