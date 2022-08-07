@@ -34,6 +34,7 @@ jobs:
           with:
             name: fw
             path: fw
+            retention-days: 1
             
         - uses: EndBug/add-and-commit@v9
           with:
