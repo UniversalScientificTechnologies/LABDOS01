@@ -23,7 +23,7 @@ LABDOS01 is therefore all-in-one solution for generic semiconductor based ionisi
  * Power supply 5V (by using USB port or JST-GH connectors)
  * Integration time depends on firmware setup
  * Interface - USB 2.0, USB-C connector or 3.3V UART link on JST-GH connector.
- * Dimensions - 
+ * Dimensions - 61 x 55 x 30 mm
  * Weight - 
 
 
