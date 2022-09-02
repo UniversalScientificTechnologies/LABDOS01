@@ -54,17 +54,14 @@ TX1/INT1 (D 11) PD3 17|        |24 PC2 (D 18) TCK
 */
 
 /*
-// Compiled with: Arduino 1.8.9
-// MightyCore 2.0.2 https://mcudude.github.io/MightyCore/package_MCUdude_MightyCore_index.json
-Fix old bug in Mighty SD library
-~/.arduino15/packages/MightyCore/hardware/avr/2.0.2/libraries/SD/src/SD.cpp:
-boolean SDClass::begin(uint32_t clock, uint8_t csPin) {
-  if(root.isOpen()) root.close();
+// Compiled with: 
+// MightyCore
 */
 
 #include "wiring_private.h"
 #include <Wire.h>           
-#include "githash.h"
+#include "../githash.h"
+#include "src/mavlink/common/mavlink.h" 
 
 //#define LED_yellow  23   // PC7
 #define RESET       0    // PB0
@@ -82,6 +79,7 @@ boolean SDClass::begin(uint32_t clock, uint8_t csPin) {
 #define LED3        23 // PC7
 
 #define CHANNELS 512 // number of channels in buffer for histogram, including negative numbers
+uint8_t mavlink_info[25];
 
 uint16_t count = 0;
 uint32_t serialhash = 0;
@@ -111,11 +109,28 @@ uint16_t u_sensor, maximum;
 #define PIN 0
 uint8_t analog_reference = INTERNAL2V56; // DEFAULT, INTERNAL, INTERNAL1V1, INTERNAL2V56, or EXTERNAL
 
+
+HardwareSerial &hs = Serial;
+
+void SendTunnelData(uint8_t *payload_data, uint8_t payload_length, uint8_t payload_type = 0, uint8_t sysid = 0, uint8_t compid = 0){
+  
+  mavlink_message_t msgtn;
+  mavlink_tunnel_t tunnel;
+  uint8_t buftn[MAVLINK_MAX_PACKET_LEN];
+  mavlink_msg_tunnel_pack(1, 10, &msgtn, sysid, compid, payload_type, payload_length, payload_data);
+  uint16_t lentn = mavlink_msg_to_send_buffer(buftn, &msgtn);
+  hs.write(buftn, lentn);
+
+  return;
+}
+
 void setup()
 {
   pinMode(LED1, OUTPUT); 
   digitalWrite(LED1, HIGH); 
-  delay(100);  
+  delay(100);
+
+  memset(mavlink_info, 0, sizeof(mavlink_info));
 
   // Open serial communications and wait for port to open:
   Serial.begin(115200);
@@ -230,10 +245,14 @@ void setup()
 void loop()
 {
   uint16_t histogram[CHANNELS];
-  for(int n=0; n<CHANNELS; n++)
-  {
-    histogram[n]=0;
-  }
+  uint8_t mavlink_buffer_1[128];
+  uint8_t mavlink_buffer_2[128];
+  uint8_t mavlink_buffer_3[128];
+  
+  memset(histogram, 0, sizeof(histogram));  // clear array
+  memset(mavlink_buffer_1, 0, sizeof(mavlink_buffer_1));
+  memset(mavlink_buffer_2, 0, sizeof(mavlink_buffer_2));
+  memset(mavlink_buffer_3, 0, sizeof(mavlink_buffer_3));
 
   // dummy conversion
   ADMUX = (analog_reference << 6) | 0b10000; // Select +A0,-A1 for measurement
@@ -266,7 +285,8 @@ void loop()
   sbi(ADCSRA, ADIF);                  // reset interrupt flag from ADC
   
   // dosimeter integration
-  for (uint16_t i=0; i<(46000); i++)    // cca 10 s
+  //for (uint16_t i=0; i<(46000); i++)    // cca 10 s
+  for (uint16_t i=0; i<(4600*2); i++)    // cca 2 s
   {
     while (bit_is_clear(ADCSRA, ADIF)); // wait for end of conversion 
     delayMicroseconds(150);            // 12 us wait for 1.5 cycle of 125 kHz ADC clock for sample/hold for next conversion
@@ -314,22 +334,45 @@ void loop()
 
     digitalWrite(LED3, HIGH); 
 
-    // make a string for assembling the data to log:
-    String dataString = "";
-    
-    // make a string for assembling the data to log:
-    dataString += "$HIST,";
-    dataString += String(count); 
-    dataString += ",";  
-    dataString += String(suppress);
-    dataString += ",";
-    dataString += String(dose);
-    
-    for(int n=base_offset-1; n<(base_offset-1+RANGE); n++)  
+    mavlink_buffer_1[0] = (count & 0xff00) >> 8;
+    mavlink_buffer_1[1] = (count & 0x00ff);
+    mavlink_buffer_1[2] = (dose& 0xff000000) >> 24;
+    mavlink_buffer_1[3] = (dose& 0x00ff0000) >> 16;
+    mavlink_buffer_1[4] = (dose& 0x0000ff00) >> 8;
+    mavlink_buffer_1[5] = (dose& 0x000000ff);
+    mavlink_buffer_1[6] = (suppress & 0xff00) >> 8;
+    mavlink_buffer_1[7] = (suppress & 0x00ff);
+    mavlink_buffer_1[8] = (base_offset & 0xff00) >> 8;
+    mavlink_buffer_1[9] = (base_offset & 0x00ff);
+    mavlink_buffer_1[10] = 0;
+    mavlink_buffer_1[11] = 0;
+
+
+    for(int n=base_offset; n<(128+base_offset); n++)  
     {
-      dataString += ",";
-      dataString += String(histogram[n]); 
+      mavlink_buffer_2[n-base_offset];
     }
+    for(int n=128+base_offset; n<(base_offset+RANGE); n++)  
+    {
+      mavlink_buffer_3[n-128-base_offset];
+    }
+
+    // // make a string for assembling the data to log:
+    // String dataString = "";
+    
+    // // make a string for assembling the data to log:
+    // dataString += "$HIST,";
+    // dataString += String(count); 
+    // dataString += ",";  
+    // dataString += String(suppress);
+    // dataString += ",";
+    // dataString += String(dose);
+    
+    // for(int n=base_offset-1; n<(base_offset-1+RANGE); n++)  
+    // {
+    //   dataString += ",";
+    //   dataString += String(histogram[n]); 
+    // }
     
     /* calibration
     uint16_t maxener=0; 
@@ -351,7 +394,10 @@ void loop()
     count++;
 
     {
-      Serial.println(dataString);  // print to terminal (additional 700 ms in DEBUG mode)
+      //SendTunnelData(mavlink_info, sizeof(mavlink_info), 10+0, 0, 0);
+      SendTunnelData(mavlink_buffer_1, sizeof(mavlink_buffer_1), 10+1, 0, 0);
+      SendTunnelData(mavlink_buffer_2, sizeof(mavlink_buffer_2), 10+2, 0, 0);
+      SendTunnelData(mavlink_buffer_3, sizeof(mavlink_buffer_3), 10+3, 0, 0);
       digitalWrite(LED3, LOW); 
     }          
   }    

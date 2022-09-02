@@ -1,3 +1,6 @@
 [submodule "modules/USTSIPIN02"]
 	path = modules/USTSIPIN02
 	url = git@github.com:ust-modules/USTSIPIN02.git
+[submodule "fw/UAVDOS/src/mavlink"]
+	path = fw/UAVDOS/src/mavlink
+	url = git@github.com:mavlink/c_library_v2.git
