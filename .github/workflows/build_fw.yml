@@ -17,7 +17,9 @@ jobs:
       matrix:
         include:
           - type: LABDOS
+            fqbn: :clock=16MHz_external
           - type: LABDOS512
+            fqbn: :clock=16MHz_external
           - type: UAVDOS
             fqbn: :clock=8MHz_external
  
@@ -52,3 +54,4 @@ jobs:
             message: 'Add build files'
             add: '*.hex'
             fetch: false
+            pull: '--rebase --autostash'
