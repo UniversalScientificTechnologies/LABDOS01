@@ -44,3 +44,4 @@ jobs:
           with:
             message: 'Add build files'
             add: '*.hex'
+            fetch: false
