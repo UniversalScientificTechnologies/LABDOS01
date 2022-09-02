@@ -38,13 +38,13 @@ jobs:
           with:
             arduino-board-fqbn: MightyCore:avr:1284|${{ matrix.fqbn }}
             platform-url: https://mcudude.github.io/MightyCore/package_MCUdude_MightyCore_index.json
-            sketch-names-find-start: fw
+            sketch-names-find-start: fw/${{ matrix.type }}
             
         - name: Store data
           uses: actions/upload-artifact@v3
           with:
             name: fw
-            path: fw
+            path: fw/${{ matrix.type }}
             retention-days: 1
             
         - uses: EndBug/add-and-commit@v9
