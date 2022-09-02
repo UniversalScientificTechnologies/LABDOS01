@@ -43,7 +43,7 @@ jobs:
         - name: Store data
           uses: actions/upload-artifact@v3
           with:
-            name: fw
+            name: fw/${{ matrix.fqbn }}
             path: fw/${{ matrix.type }}
             retention-days: 1
             
