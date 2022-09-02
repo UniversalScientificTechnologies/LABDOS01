@@ -49,9 +49,12 @@ jobs:
             path: fw/${{ matrix.type }}
             retention-days: 1
             
+        - name: Push
+          run: |
+            git pull
+            
         - uses: EndBug/add-and-commit@v9
           with:
             message: 'Add build files'
             add: '*.hex'
             fetch: false
-            pull: '--rebase --autostash'
