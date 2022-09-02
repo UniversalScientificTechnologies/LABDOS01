@@ -19,7 +19,7 @@ jobs:
           - type: LABDOS
           - type: LABDOS512
           - type: UAVDOS
-            fqbn: clock=8MHz_external
+            fqbn: :clock=8MHz_external
  
     steps:    
         - name: Checkout
@@ -36,14 +36,14 @@ jobs:
         - name: Compile all examples
           uses: ArminJo/arduino-test-compile@v3
           with:
-            arduino-board-fqbn: MightyCore:avr:1284|${{ matrix.fqbn }}
+            arduino-board-fqbn: MightyCore:avr:1284${{ matrix.fqbn }}
             platform-url: https://mcudude.github.io/MightyCore/package_MCUdude_MightyCore_index.json
             sketch-names-find-start: fw/${{ matrix.type }}
             
         - name: Store data
           uses: actions/upload-artifact@v3
           with:
-            name: fw_${{ matrix.fqbn }}
+            name: fw_${{ matrix.type }}
             path: fw/${{ matrix.type }}
             retention-days: 1
             
