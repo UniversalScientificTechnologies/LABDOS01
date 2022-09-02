@@ -49,7 +49,7 @@ jobs:
             path: fw/${{ matrix.type }}
             retention-days: 1
             
-        - name: Push
+        - name: Update repository
           run: |
             git pull --no-recurse-submodules
             
