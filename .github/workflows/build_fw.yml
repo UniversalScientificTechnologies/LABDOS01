@@ -13,7 +13,16 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-
+    strategy:
+      matrix:
+        include:
+          - type: LABDOS
+            fqbn: :clock=16MHz_external
+          - type: LABDOS512
+            fqbn: :clock=16MHz_external
+          - type: UAVDOS
+            fqbn: :clock=8MHz_external
+ 
     steps:    
         - name: Checkout
           uses: actions/checkout@v2
@@ -29,16 +38,20 @@ jobs:
         - name: Compile all examples
           uses: ArminJo/arduino-test-compile@v3
           with:
-            arduino-board-fqbn: MightyCore:avr:1284
+            arduino-board-fqbn: MightyCore:avr:1284${{ matrix.fqbn }}
             platform-url: https://mcudude.github.io/MightyCore/package_MCUdude_MightyCore_index.json
-            sketch-names-find-start: fw
+            sketch-names-find-start: fw/${{ matrix.type }}
             
         - name: Store data
           uses: actions/upload-artifact@v3
           with:
-            name: fw
-            path: fw
+            name: fw_${{ matrix.type }}
+            path: fw/${{ matrix.type }}
             retention-days: 1
+            
+        - name: Update repository
+          run: |
+            git pull --no-recurse-submodules
             
         - uses: EndBug/add-and-commit@v9
           with:
