@@ -14,6 +14,10 @@ Intead of that it is intended to be used as experimentel device with the exactly
 
 LABDOS01 is therefore all-in-one solution for generic semiconductor based ionising radiation measurement. It should be used as universal testing device prior using an application specific design. 
 
+## Where to get it?
+
+LABDOS01 is commercially available from [Universal Scientific Technologies s.r.o.](https://www.ust.cz/), write an email to sale@ust.cz or shop at [Tindie store](https://www.tindie.com/products/ust/labdos01-open-source-laboratory-dosimeter/).
+
 ## Parameters
 
  * Silicon PIN diode detector with 12.5 mm³ detection volume
