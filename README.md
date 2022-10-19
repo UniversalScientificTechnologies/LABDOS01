@@ -86,7 +86,7 @@ $HIST,47,521,46077,0,256,0,45922,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 
 ### Data logging
 
-The data is sent according to a very simple protocol, which is sent in text form. Other option is lagging to integrated SDcard see "Stand-alone use" section.
+The data is sent according to a very simple protocol, which is sent in text form. Other option is logging to integrated SDcard see "Stand-alone use" section.
 
 #### Linux
 
