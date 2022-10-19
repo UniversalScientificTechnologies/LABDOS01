@@ -1,5 +1,7 @@
 # LABDOS01 - Scientific, semiconductor based ionising radiation spectrometer
 
+![LABDOS01 back panel](/doc/LABDOS01.jpg "LABDOS01A on table")
+
 LABDOS01 is an open-source spectrometer-dosimeter based on silicon PIN diode and is intended for scientific research and experimental purposes. Power and communication is secured by USB-C port or JST-GH connector. The device can be used statically (located in a specific place e.g. laboratory or base) or in mobile applications (such as cars or UAV). The spectrometer is housed in a 3D printed box, which brings basic mechanical resistance and allows future development of user enclosures and integrations. 
 
 The aim of LABDOS01 is to make the open-source, accesible, high quality, reliable and simple measuring device - radiation energy spectrometer for sientific comunity. 
@@ -33,14 +35,19 @@ LABDOS01 is commercially available from [Universal Scientific Technologies s.r.o
 
 The device is designed as open-source hardware and software and is released under the GPLv3 license. The device is originaly developed and maintained by [UST (Universal Scientific Technologies s.r.o.)](www.ust.cz) company, which sells it commercially and offers technical support.
 
-## PC Connection
+## Connection
 
-Simply connect the device to your computer USB port using a USB A-C cable. The device should appear as a virtual serial line on your computer. On a Linux computer, the device should connect itself. For computers with windows, you will need to install a driver for [FTDI USB](https://ftdichip.com/drivers/) converter.
+Simply plug-in the LABDOS01A to your computer or tablet USB port using a USB-C cable. The device should appear as a virtual serial line. On a Linux computer, the device should connect without any external drivers. For computers with windows, you will need to install a driver for [FTDI USB](https://ftdichip.com/drivers/) converter.
 
-This mode is especially suitable for interactive testing of silicon-based detector setup. E.g. experiments on accelerators, short-term flights or balloon or UAV experiments where external logging unit is available. 
+
+![LABDOS01 smartphone connection](/doc/LABDOS01A_smartphone-tablet_connection.jpg
+ "LABDOS01A connected to a smartphone")
+
+This usage case is especially suitable for interactive testing of silicon-based detector setup. E.g. experiments on accelerators, short-term flights or balloon or UAV experiments where external logging unit is available. 
 
 ### Output data format
-The data output format is defined in the following table.
+
+Te output message types are described in following paragraphs. The exact format of each message depends on application-specific firmware. The firmware could be tunned to specific usage case by modifying the [arduino code](https://github.com/UniversalScientificTechnologies/LABDOS01/tree/LABDOS01A/fw). The firmware itself could be updated using the bootloader. 
 
 #### Initial message
 
@@ -50,17 +57,18 @@ The data output format is defined in the following table.
 The initial message is sent as soon as the processor is restarted, and reading it correctly indicates that the connection is well set up.
 
 #### About message
+
 As a second message, when turned on, a string is sent that uniquely identifies the device.
 
 ```
 $LABDOS,R2,256,379276a,1290c00806a200914056a000a0000086
 ```
-* `$` is first character of message string
-* Name of device. In this case it is LABDOS
-* FW version
+* `$` - is first character of message string
+* `LABDOS` - Name of device. In this case it is LABDOS
+* `R2`- FW version
 * ZERO string (I dont know, what is it... Probably it is something related with minimal energy field)
-* Hash of commit with of this firmware
-* Unique serial namber of LABDOS dosemeters
+* `379276a` - Hash of commit with of this firmware
+* `1290c00806a200914056a000a0000086` - Unique serial namber of LABDOS dosemeters
 
 #### Data message
 
@@ -78,13 +86,14 @@ $CANDY,47,521,46077,0,256,0,1,45922,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 * `energetic channels` - All remaining values indicate a certain energy channel. From the smallest to the largest
 
 ### Data logging
-The data is sent according to a very simple protocol, which is sent in text form.
 
+The data is sent according to a very simple protocol, which is sent in text form. Other option is lagging to integrated SDcard. 
 
 #### Linux
 
 
 #### Windows
+
 In the case of windows, the situation is a bit more complicated, because standard serial line logging tools do not work here. For example, a [putty](https://www.putty.org/) program can be used for logging.
 
 One of the tutorials on how to set up data logging using putty is here, [here](https://my.kualo.com/knowledgebase/?kbcat=0&article=888) for example. 
