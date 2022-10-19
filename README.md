@@ -7,7 +7,7 @@ LABDOS01 is an open-source spectrometer-dosimeter based on silicon PIN diode and
 The aim of LABDOS01 is to make the open-source, accesible, high quality, reliable and simple measuring device - radiation energy spectrometer for sientific comunity. 
 
 LABDOS01 to function on its own. It requires a computer to visualize recorded measured data. At least it requires an external powering unit. The device is not intended for outdoor use (it is not waterproof). 
-Intead of that it is intended to be used as experimentel device with the exactly the same internals as its application specific variants like: 
+Intead of that it is intended to be used as experimental device with the exactly the same internals as its application specific variants like: 
 
  * [GEODOS01](https://github.com/UniversalScientificTechnologies/GEODOS01) - Outdoor and stand-alone onizing radiation detector
  * [AIRDOS02](https://github.com/UniversalScientificTechnologies/AIRDOS02) - Airborne cosmic radiation dosimeter with GPS
@@ -18,7 +18,8 @@ LABDOS01 is therefore all-in-one solution for generic semiconductor based ionisi
 
 ## Where to get it?
 
-LABDOS01 is commercially available from [Universal Scientific Technologies s.r.o.](https://www.ust.cz/), write an email to sale@ust.cz or shop at [Tindie store](https://www.tindie.com/products/ust/labdos01-open-source-laboratory-dosimeter/).
+LABDOS01 is commercially available from [Universal Scientific Technologies s.r.o.](https://www.ust.cz/), write an email to sale@ust.cz or shop at [Tindie store](https://www.tindie.com/products/ust/labdos01-open-source-laboratory-dosimeter/). 
+The device is designed as open-source hardware and software and is released under the GPLv3 license. The device is originaly developed and maintained by [UST (Universal Scientific Technologies s.r.o.)](www.ust.cz) company, which sells it commercially and offers technical support.
 
 ## Parameters
 
@@ -32,8 +33,7 @@ LABDOS01 is commercially available from [Universal Scientific Technologies s.r.o
  * Dimensions - 91 x 55 x 30 mm
  * Weight - 
 
-
-The device is designed as open-source hardware and software and is released under the GPLv3 license. The device is originaly developed and maintained by [UST (Universal Scientific Technologies s.r.o.)](www.ust.cz) company, which sells it commercially and offers technical support.
+Device uses [USTSIPIN02](https://github.com/ust-modules/USTSIPIN02) which is core of range of UST dosimeters specialized to specific applicaion like AIRDOS or SPACEDOS. 
 
 ## Connection
 
@@ -83,11 +83,11 @@ $CANDY,47,521,46077,0,256,0,1,45922,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 * `dose` - Number of detected particles
 * `offset` -
 * `rele` - Rele status of resetitko FW (Debug value)
-* `energetic channels` - All remaining values indicate a certain energy channel. From the smallest to the largest
+* `energy channels` - All remaining values indicate a certain energy channel. From the smallest to the largest
 
 ### Data logging
 
-The data is sent according to a very simple protocol, which is sent in text form. Other option is lagging to integrated SDcard. 
+The data is sent according to a very simple protocol, which is sent in text form. Other option is lagging to integrated SDcard see "Stand-alone use" section. 
 
 #### Linux
 
@@ -98,9 +98,8 @@ In the case of windows, the situation is a bit more complicated, because standar
 
 One of the tutorials on how to set up data logging using putty is here, [here](https://my.kualo.com/knowledgebase/?kbcat=0&article=888) for example. 
 
-## Stand-alone use
+#### Stand-alone use
+
 Device contains SDcard, which could be used do data logging in stand-alone use. In that case the LABDOS01 needs an external power supply. 
 That mode could be used for short-term demonstrating of SPACEDOS, AIRDOS or GEODOS variants of that device.  
 
-## Technical details
-Device uses [USTSIPIN02](https://github.com/ust-modules/USTSIPIN02) which is core of range of UST dosimeters specialized to specific applicaion like AIRDOS or SPACEDOS. 
