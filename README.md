@@ -82,7 +82,7 @@ $HIST,47,521,46077,0,256,0,45922,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 * `suppress` - 
 * `dose` - Number of detected particles
 * `offset` - ADC offset. Specifies the zero channel position.
-* `energetic channels` - All remaining values indicate a certain energy channel. From the smallest to the largest
+* `energetic channels` - All remaining values indicate a certain energy channel. From the smallest to the largest. Third value is 1st channel. 
 
 ### Data logging
 
