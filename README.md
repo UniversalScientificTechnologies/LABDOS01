@@ -88,12 +88,13 @@ $HIST,47,521,46077,0,256,0,45922,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 
 The data is sent according to a very simple protocol, which is sent in text form. Other option is logging to integrated SDcard see "Stand-alone use" section.
 
-#### Linux
+#### Linux/Android
 
+The device should appear as a virtual serial line without any external drivers. There are many serial logging tools which could be used to log the LABDOS output, as example picocom or minicom. 
 
 #### Windows
 
-In the case of windows, the situation is a bit more complicated, because standard serial line logging tools do not work here. For example, a [putty](https://www.putty.org/) program can be used for logging.
+For computers with windows, you will need to install a driver for [FTDI USB](https://ftdichip.com/drivers/) converter. Then you    because standard serial line logging tools do not work here. For example, a [putty](https://www.putty.org/) program can be used for logging.
 
 One of the tutorials on how to set up data logging using putty is here, [here](https://my.kualo.com/knowledgebase/?kbcat=0&article=888) for example.
 
