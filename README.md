@@ -94,9 +94,7 @@ The device should appear as a virtual serial line without any external drivers. 
 
 #### Windows
 
-For computers with windows, you will need to install a driver for [FTDI USB](https://ftdichip.com/drivers/) converter. Then you    because standard serial line logging tools do not work here. For example, a [putty](https://www.putty.org/) program can be used for logging.
-
-One of the tutorials on how to set up data logging using putty is here, [here](https://my.kualo.com/knowledgebase/?kbcat=0&article=888) for example.
+For computers with windows, you will need to install a driver for [FTDI USB](https://ftdichip.com/drivers/) converter. Then you could use the [putty](https://www.putty.org/) which is a program can be used for logging. One of the tutorials on how to set up data logging using putty is [here](https://my.kualo.com/knowledgebase/?kbcat=0&article=888) for example.
 
 #### Stand-alone use
 
