@@ -30,7 +30,7 @@ The device is designed as open-source hardware and software and is released unde
  * Power supply 5V (by using USB port or JST-GH connectors)
  * Integration time depends on firmware setup
  * Interface - USB 2.0, USB-C connector or 3.3V UART link on JST-GH connector ([Pixhawk telemetry port](https://github.com/pixhawk/Pixhawk-Standards/blob/master/DS-009%20Pixhawk%20Connector%20Standard.pdf)).
- * Dimensions - 91 x 55 x 30 mm
+ * Dimensions - 96 x 56 x 19 mm
  * Weight -
 
 Device uses [USTSIPIN02](https://github.com/ust-modules/USTSIPIN02) which is core of range of UST dosimeters specialized to specific applicaion like AIRDOS or SPACEDOS.
