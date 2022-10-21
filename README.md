@@ -90,7 +90,7 @@ The data is sent according to a very simple protocol, which is sent in text form
 
 #### Linux/Android
 
-The device should appear as a virtual serial line without any external drivers. There are many serial logging tools which could be used to log the LABDOS output, as example picocom or minicom. 
+The device should appear as a virtual serial line without any external drivers. There are many serial logging tools which could be used to log the LABDOS output, as example picocom or minicom. Look to [LABDOS01A/sw](https://github.com/UniversalScientificTechnologies/LABDOS01/tree/LABDOS01A/sw) for details. 
 
 #### Windows
 
