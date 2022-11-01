@@ -13,18 +13,37 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
-      - name: Build
-        uses: crazy-max/ghaction-xgo@v2
+#       - name: Build
+#         uses: crazy-max/ghaction-xgo@v2
+#         with:
+#           xgo_version: latest
+#           go_version: latest
+#           dest: /sw/golog/build
+#           pkg: /sw/golog
+#           prefix: golog
+#           targets: linux/amd64,linux/arm64,darwin/arm64
+#           v: true
+#           x: false
+#           race: false
+#           ldflags: -s -w
+#           buildmode: default
+#           trimpath: true
+          
+          
+      - name: Set up Go
+        uses: actions/setup-go@v3
         with:
-          xgo_version: latest
-          go_version: latest
-          dest: /sw/golog/build
-          pkg: /sw/golog
-          prefix: golog
-          targets: linux/amd64,linux/arm64,darwin/arm64
-          v: true
-          x: false
-          race: false
-          ldflags: -s -w
-          buildmode: default
-          trimpath: true
+          go-version: 1.15
+
+      - name: Build
+        run: |
+          cd sw/golog/src
+          go get .
+          go build -v .
+
+
+      - name: Upload Go test results
+        uses: actions/upload-artifact@v3
+        with:
+          name: Go-results-${{ matrix.go-version }}
+          path: sw/golog/
