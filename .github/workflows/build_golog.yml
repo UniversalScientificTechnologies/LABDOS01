@@ -37,6 +37,7 @@ jobs:
           sudo tar -C /usr/local -xzf go1.19.3.linux-amd64.tar.gz
           rm -f go1.19.3.linux-amd64.tar.gz
           cd sw/golog/src
+          sudo apt-get install gcc-multilib gcc-mingw-w64
 
       - name: Build
         run: |
