@@ -36,11 +36,11 @@ jobs:
           sudo rm -rf /usr/local/go
           sudo tar -C /usr/local -xzf go1.19.3.linux-amd64.tar.gz
           rm -f go1.19.3.linux-amd64.tar.gz
-          cd sw/golog/src
           sudo apt-get install gcc-multilib gcc-mingw-w64
 
       - name: Build
         run: |
+          cd sw/golog/src
           /usr/local/go/bin/go build .
           GOOS=windows GOARCH=amd64 CGO_ENABLED=1 CC=x86_64-w64-mingw32-gcc /usr/local/go/bin/go build .
 
