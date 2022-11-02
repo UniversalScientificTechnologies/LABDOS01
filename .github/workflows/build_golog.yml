@@ -28,18 +28,20 @@ jobs:
 #           ldflags: -s -w
 #           buildmode: default
 #           trimpath: true
-          
+      
           
       - name: Set up Go
-        uses: actions/setup-go@v3
-        with:
-          go-version: 1.15
+        run: |
+          wget https://go.dev/dl/go1.19.3.linux-amd64.tar.gz
+          rm -rf /usr/local/go
+          tar -C /usr/local -xzf go1.19.3.linux-amd64.tar.gz
+          rm -f go1.19.3.linux-amd64.tar.gz
+          cd sw/golog/src
 
       - name: Build
         run: |
-          cd sw/golog/src
-          go get .
-          go build -v .
+          go build .
+          GOOS=windows GOARCH=amd64 CGO_ENABLED=1 CC=x86_64-w64-mingw32-gcc go build .
 
 
       - name: Upload Go test results
