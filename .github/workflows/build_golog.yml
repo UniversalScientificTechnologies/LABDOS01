@@ -40,8 +40,8 @@ jobs:
 
       - name: Build
         run: |
-          go build .
-          GOOS=windows GOARCH=amd64 CGO_ENABLED=1 CC=x86_64-w64-mingw32-gcc go build .
+          /usr/local/go/bin/go build .
+          GOOS=windows GOARCH=amd64 CGO_ENABLED=1 CC=x86_64-w64-mingw32-gcc /usr/local/go/bin/go build .
 
 
       - name: Upload Go test results
