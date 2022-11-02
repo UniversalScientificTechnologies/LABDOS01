@@ -33,4 +33,4 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: LABDOS01_GOLOG
-          path: sw/golog/build
+          path: sw/golog/
