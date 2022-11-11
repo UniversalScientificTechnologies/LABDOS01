@@ -19,7 +19,7 @@ LABDOS01 is therefore all-in-one solution for generic semiconductor based ionisi
 ## Where to get it?
 
 LABDOS01 is commercially available from [Universal Scientific Technologies s.r.o.](https://www.ust.cz/), write an email to sale@ust.cz or shop at [Tindie store](https://www.tindie.com/products/ust/labdos01-open-source-laboratory-dosimeter/).
-The device is designed as open-source hardware and software and is released under the GPLv3 license. The device is originaly developed and maintained by [UST (Universal Scientific Technologies s.r.o.)](www.ust.cz) company, which sells it commercially and offers technical support.
+The device is designed as open-source hardware and software and is released under the GPLv3 license. The device is originaly developed and maintained by [UST (Universal Scientific Technologies s.r.o.)](https://www.ust.cz) company, which sells it commercially and offers technical support.
 
 ## Parameters
 
