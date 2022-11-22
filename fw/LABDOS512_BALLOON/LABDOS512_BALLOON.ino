@@ -1,9 +1,9 @@
-String githash = "379276a";
-String FWversion = "L512_02"; // 16 MHz crystal
+String githash = "aaaaaaa";
+String FWversion = "B512_01"; // 16 MHz crystal
 #define ZERO 512 // 3th channel is channel 1 (ussually DCoffset or DCoffset+1, for version with noise reduction transistor)
 
 /*
-  SPACEDOS with Resetitko for RT
+  LABDOS for balloon Fik-9
  
 ISP
 ---
@@ -65,7 +65,7 @@ boolean SDClass::begin(uint32_t clock, uint8_t csPin) {
 
 #include "wiring_private.h"
 #include <Wire.h>           
-#include "src/RTCx/RTCx.h"  // Modified version included
+#include <SD.h>
 
 //#define LED_yellow  23   // PC7
 #define RESET       0    // PB0
@@ -89,7 +89,8 @@ uint32_t serialhash = 0;
 uint16_t base_offset = ZERO;
 uint8_t lo, hi;
 uint16_t u_sensor, maximum;
-struct RTCx::tm tm;
+uint32_t tm, tm_old;
+
 
 // Read Analog Differential without gain (read datashet of ATMega1280 and ATMega2560 for refference)
 // Use analogReadDiff(NUM)
@@ -112,6 +113,29 @@ struct RTCx::tm tm;
 //  15  | A15     | A9      | 1x
 #define PIN 0
 uint8_t analog_reference = INTERNAL2V56; // DEFAULT, INTERNAL, INTERNAL1V1, INTERNAL2V56, or EXTERNAL
+
+uint8_t bcdToDec(uint8_t b)
+{
+  return ( ((b >> 4)*10) + (b%16) );
+}
+
+void readRTC()
+{
+  Wire.beginTransmission(0x51);
+  Wire.write(0);
+  Wire.endTransmission();
+  
+  Wire.requestFrom(0x51, 6);
+  Wire.read();
+  //tm_s100 = bcdToDec(Wire.read());
+  uint8_t tm_sec = bcdToDec(Wire.read() & 0x7f);
+  uint8_t tm_min = bcdToDec(Wire.read() & 0x7f);
+  tm = bcdToDec(Wire.read());
+  tm += bcdToDec(Wire.read()) * 100;
+  tm += bcdToDec(Wire.read()) * 10000;
+  tm = tm * 60 * 60 + tm_min * 60 + tm_sec;
+}
+
 
 void setup()
 {
@@ -154,6 +178,36 @@ void setup()
 
   Wire.setClock(100000);
 
+  // Initiation of RTC
+  Wire.beginTransmission(0x51); // init clock
+  Wire.write((uint8_t)0x23); // Start register
+  Wire.write((uint8_t)0x00); // 0x23
+  Wire.write((uint8_t)0x00); // 0x24 Two's complement offset value
+  Wire.write((uint8_t)0b00000101); // 0x25 Normal offset correction, disable low-jitter mode, set load caps to 6 pF
+  Wire.write((uint8_t)0x00); // 0x26 Battery switch reg, same as after a reset
+  Wire.write((uint8_t)0x00); // 0x27 Enable CLK pin, using bits set in reg 0x28
+  Wire.write((uint8_t)0x97); // 0x28 stop watch mode, no periodic interrupts, CLK pin off
+  Wire.write((uint8_t)0x00); // 0x29
+  Wire.write((uint8_t)0x00); // 0x2a
+  Wire.endTransmission();
+  Wire.beginTransmission(0x51); // reset clock
+  Wire.write(0x2f); 
+  Wire.write(0x2c);
+  Wire.endTransmission();
+  Wire.beginTransmission(0x51); // start stop-watch
+  Wire.write(0x28); 
+  Wire.write(0x97);
+  Wire.endTransmission();
+  Wire.beginTransmission(0x51); // reset stop-watch
+  Wire.write((uint8_t)0x00); // Start register
+  Wire.write((uint8_t)0x00); // 0x00
+  Wire.write((uint8_t)0x00); // 0x01 
+  Wire.write((uint8_t)0x00); // 0x02 
+  Wire.write((uint8_t)0x00); // 0x03
+  Wire.write((uint8_t)0x00); // 0x04
+  Wire.write((uint8_t)0x00); // 0x05
+  Wire.endTransmission();
+  
   pinMode(LED1, OUTPUT); 
   digitalWrite(LED1, HIGH); 
   delay(100);  
@@ -210,6 +264,20 @@ void setup()
   }
 
   {
+    DDRB = 0b10111110;
+    PORTB = 0b00001111;  // SDcard Power ON
+    if (SD.begin(SS)) 
+    {
+      // open the file. note that only one file can be open at a time,
+      // so you have to close this one before opening another.
+      File dataFile = SD.open("DATALOG.TXT", FILE_WRITE);
+      // if the file is available, write to it:
+      if (dataFile) 
+      {
+        dataFile.println(dataString);  // write to SDcard (800 ms) 
+        dataFile.close();
+      }  
+    }  
     Serial.println(dataString);  // print SN to terminal 
   }    
 
@@ -223,11 +291,6 @@ void setup()
   pinMode(LED3, OUTPUT); 
   digitalWrite(LED3, LOW); 
   delay(100);  
-
-
-  // Initiates RTC
-  rtc.autoprobe();
-  rtc.resetClock();
 }
 
 
@@ -310,8 +373,7 @@ void loop()
   
   // Data out
   {
-    rtc.readClock(tm);
-    RTCx::time_t t = RTCx::mktime(&tm);
+    readRTC();
 
     uint16_t noise = base_offset+3;
     uint32_t dose=0;
@@ -331,7 +393,7 @@ void loop()
     dataString += "$HIST,";
     dataString += String(count); 
     dataString += ",";  
-    dataString += String(t-946684800); 
+    dataString += String(tm); 
     dataString += ",";
     dataString += String(suppress);
     dataString += ",";
@@ -361,6 +423,21 @@ void loop()
     */
     
     count++;
+
+    DDRB = 0b10111110;
+    PORTB = 0b00001111;  // SDcard Power ON
+    if (SD.begin(SS)) 
+    {
+      // open the file. note that only one file can be open at a time,
+      // so you have to close this one before opening another.
+      File dataFile = SD.open("DATALOG.TXT", FILE_WRITE);
+      // if the file is available, write to it:
+      if (dataFile) 
+      {
+        dataFile.println(dataString);  // write to SDcard (800 ms) 
+        dataFile.close();
+      }  
+    }  
 
     {
       Serial.println(dataString);  // print to terminal (additional 700 ms in DEBUG mode)
