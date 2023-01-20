@@ -29,8 +29,6 @@ jobs:
         - name: Checkout
           uses: actions/checkout@v3
           continue-on-error: true
-          with:
-            submodules: recursive
 
         - name: Update git hash
           run: |
