@@ -17,13 +17,13 @@ jobs:
       matrix:
         include:
           - type: LABDOS
-            fqbn: :clock=8MHz_external
+            fqbn: clock=8MHz_external
           - type: LABDOS512
-            fqbn: :clock=8MHz_external
+            fqbn: clock=8MHz_external
           - type: LABDOS512_SD
-            fqbn: :clock=8MHz_external
+            fqbn: clock=8MHz_external
           - type: UAVDOS
-            fqbn: :clock=8MHz_external
+            fqbn: clock=8MHz_external
 
     steps:
         - name: Checkout
@@ -40,7 +40,7 @@ jobs:
         - name: Compile all examples
           uses: ArminJo/arduino-test-compile@v3
           with:
-            arduino-board-fqbn: MightyCore:avr:1284:Variant=1284P${{ matrix.fqbn }}
+            arduino-board-fqbn: MightyCore:avr:1284:BOD=disabled,LTO=Os,${{ matrix.fqbn }},variant=modelP
             platform-url: https://mcudude.github.io/MightyCore/package_MCUdude_MightyCore_index.json
             sketch-names-find-start: fw/${{ matrix.type }}
 
