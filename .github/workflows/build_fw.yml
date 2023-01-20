@@ -17,19 +17,21 @@ jobs:
       matrix:
         include:
           - type: LABDOS
-            fqbn: :clock=16MHz_external
+            fqbn: :clock=8MHz_external
           - type: LABDOS512
-            fqbn: :clock=16MHz_external
+            fqbn: :clock=8MHz_external
+          - type: LABDOS512_SD
+            fqbn: :clock=8MHz_external
           - type: UAVDOS
             fqbn: :clock=8MHz_external
- 
-    steps:    
+
+    steps:
         - name: Checkout
           uses: actions/checkout@v2
           continue-on-error: true
           with:
             submodules: recursive
-        
+
         - name: Update git hash
           run: |
             echo "// This file is overwritten by github actions, do not update it manually" > fw/githash.h
@@ -41,18 +43,18 @@ jobs:
             arduino-board-fqbn: MightyCore:avr:1284${{ matrix.fqbn }}
             platform-url: https://mcudude.github.io/MightyCore/package_MCUdude_MightyCore_index.json
             sketch-names-find-start: fw/${{ matrix.type }}
-            
+
         - name: Store data
           uses: actions/upload-artifact@v3
           with:
             name: fw_${{ matrix.type }}
             path: fw/${{ matrix.type }}
             retention-days: 1
-            
+
         - name: Update repository
           run: |
             git pull --no-recurse-submodules
-            
+
         - uses: EndBug/add-and-commit@v9
           with:
             message: 'Add build files'
