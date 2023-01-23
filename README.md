@@ -48,6 +48,7 @@ This usage case is especially suitable for interactive testing of silicon-based 
 ### Output data format
 
 The output message types are described in the following paragraphs. The exact format of each message depends on application-specific firmware. The firmware could be tuned to specific usage cases by modifying the [arduino code](https://github.com/UniversalScientificTechnologies/LABDOS01/tree/LABDOS01A/fw). The firmware itself could be updated using the bootloader.
+The baudrate used by USB port by default is 115200. 
 
 #### Initial message
 
