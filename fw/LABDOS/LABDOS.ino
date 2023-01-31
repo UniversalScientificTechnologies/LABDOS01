@@ -157,7 +157,7 @@ void setup()
   pinMode(LED1, OUTPUT); 
   digitalWrite(LED1, HIGH); 
   delay(100);  
-  Serial.println("#Hmmm...");
+  Serial.println("#Tralala...");
   pinMode(LED2, OUTPUT); 
   digitalWrite(LED2, HIGH); 
   delay(100);  
@@ -325,19 +325,19 @@ void loop()
     String dataString = "";
     
     // make a string for assembling the data to log:
-    dataString += "$HIST,";
+    /*dataString += "$HIST,";
     dataString += String(count); 
     dataString += ",";  
     dataString += String(t-946684800); 
     dataString += ",";
     dataString += String(suppress);
     dataString += ",";
-    dataString += String(dose);
+    dataString += String(dose);*/
     
-    for(int n=base_offset-1; n<(base_offset-1+RANGE); n++)  
+    for(int n=base_offset-1+3; n<(base_offset-1+RANGE); n++)  
     {
+      dataString += String(histogram[n]);
       dataString += ",";
-      dataString += String(histogram[n]); 
     }
     
     /* calibration
