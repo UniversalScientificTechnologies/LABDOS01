@@ -3,9 +3,9 @@ name: Build firmware
 on:
   # Triggers the workflow on push or pull request events but only for the "SPACEDOS03A" branch
   push:
-    branches: [ "LABDOS01A" ]
+    branches: [ "LABDOS01A", "vitek" ]
   pull_request:
-    branches: [ "LABDOS01A" ]
+    branches: [ "LABDOS01A", "vitek" ]
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
