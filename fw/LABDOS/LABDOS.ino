@@ -122,7 +122,7 @@ void setup()
   // Open serial communications and wait for port to open:
   Serial.begin(115200);
 
-  Serial.println("#Cvak...");
+  //Serial.println("#Cvak...");
   
   ADMUX = (analog_reference << 6) | ((PIN | 0x10) & 0x1F);
   ADCSRB = 0;               // Switching ADC to Free Running mode
@@ -157,7 +157,7 @@ void setup()
   pinMode(LED1, OUTPUT); 
   digitalWrite(LED1, HIGH); 
   delay(100);  
-  Serial.println("#Tralala...");
+  //Serial.println("#Tralala, tramtararaaa...");
   pinMode(LED2, OUTPUT); 
   digitalWrite(LED2, HIGH); 
   delay(100);  
@@ -210,7 +210,7 @@ void setup()
   }
 
   {
-    Serial.println(dataString);  // print SN to terminal 
+    //Serial.println(dataString);  // print SN to terminal 
   }    
 
   
