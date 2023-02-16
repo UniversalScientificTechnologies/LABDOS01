@@ -64,7 +64,7 @@ jobs:
           uses: actions/upload-artifact@v3
           with:
             name: fw_${{ matrix.type }}_${{ matrix.name }}
-            path: fw/${{ matrix.type }}/build
+            path: fw/${{ matrix.type }}/build/*.hex
             retention-days: 1
 
   commit:
