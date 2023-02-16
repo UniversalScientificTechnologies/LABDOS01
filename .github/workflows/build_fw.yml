@@ -4,8 +4,8 @@ on:
   # Triggers the workflow on push or pull request events but only for the "SPACEDOS03A" branch
   push:
     #branches: [ "LABDOS01A" ]
-    #paths:
-    #- 'fw/**'
+    paths:
+    - 'fw/**'
 
 workflow_dispatch:
 
@@ -83,7 +83,7 @@ jobs:
       - name: Download a Build Artifact
         uses: actions/download-artifact@v3.0.2
         with:
-          path: 'fw/build/
+          path: 'fw/build/'
 
       - uses: EndBug/add-and-commit@v9
         with:
