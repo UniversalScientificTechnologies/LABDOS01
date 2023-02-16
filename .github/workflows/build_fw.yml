@@ -3,7 +3,7 @@ name: Build firmware
 on:
   # Triggers the workflow on push or pull request events but only for the "SPACEDOS03A" branch
   push:
-    branches: [ "LABDOS01A" ]
+    #branches: [ "LABDOS01A" ]
     paths:
     - 'fw/**'
 
@@ -16,13 +16,24 @@ jobs:
     strategy:
       matrix:
         include:
-          - type: LABDOS
+          - name: LABDOS
+            type: LABDOS
             fqbn: clock=8MHz_external
-          - type: LABDOS512
+            
+          - name: LABDOS_16Mhz
+            type: LABDOS
+            fqbn: clock=16MHz_external
+            
+          - name: LABDOS512
+            type: LABDOS512
             fqbn: clock=8MHz_external
-          - type: LABDOS512_SD
+            
+          - name: LABDOS512_SD
+            type: LABDOS512_SD
             fqbn: clock=8MHz_external
-          - type: UAVDOS
+            
+          - name: UAVDOS
+            type: UAVDOS
             fqbn: clock=8MHz_external
 
     steps:
@@ -43,6 +54,7 @@ jobs:
             arduino-board-fqbn: MightyCore:avr:1284:BOD=disabled,LTO=Os,${{ matrix.fqbn }},variant=modelP
             platform-url:  https://mcudude.github.io/MiniCore/package_MCUdude_MiniCore_index.json https://mcudude.github.io/MightyCore/package_MCUdude_MightyCore_index.json
             sketch-names-find-start: fw/${{ matrix.type }}
+            set-build-path: build/${{ matrix.name }}
 
         - name: Store data
           uses: actions/upload-artifact@v3
