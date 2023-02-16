@@ -271,7 +271,6 @@ void loop()
   
   uint8_t previous_sample = 1; // ignore the first ADC
   // dosimeter integration
-  //for (uint16_t i=0; i<(46000); i++)    // cca 10 s
   for (uint16_t i=0; i<(46000); i++)    // cca 10 s
   {
     while (bit_is_clear(ADCSRA, ADIF)); // wait for end of conversion 
