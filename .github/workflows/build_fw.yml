@@ -101,6 +101,6 @@ jobs:
         with:
           commit_message: ${{ steps.last-commit-message.outputs.msg }}, extended build
           file_pattern: 'fw/build/*'
-          commit_options: '--amend --no-edit'
-          push_options: '--force'
-          skip_fetch: false
+          #commit_options: '--amend --no-edit'
+          #push_options: '--force'
+          skip_fetch: true
