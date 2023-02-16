@@ -19,10 +19,10 @@ jobs:
           - name: LABDOS
             type: LABDOS
             fqbn: clock=8MHz_external
-            
+    
           - name: LABDOS_16Mhz
             type: LABDOS
-            fqbn: clock=16MHz_external
+            fqbn: clock=16MHz_externl
             
           - name: LABDOS512
             type: LABDOS512
@@ -54,8 +54,12 @@ jobs:
             arduino-board-fqbn: MightyCore:avr:1284:BOD=disabled,LTO=Os,${{ matrix.fqbn }},variant=modelP
             platform-url:  https://mcudude.github.io/MiniCore/package_MCUdude_MiniCore_index.json https://mcudude.github.io/MightyCore/package_MCUdude_MightyCore_index.json
             sketch-names-find-start: fw/${{ matrix.type }}
-            extra-arduino-cli-args: --build-path '${{ github.workspace }}/fw/${{ matrix.type }}/build_${{ matrix.name }}'
             set-build-path: true
+        
+        - name: Move to right place
+          run: |
+            mkdir fw/${{ matrix.type }}/build_${{ matrix.name }}
+            mv fw/${{ matrix.type }}/build/* fw/${{ matrix.type }}/build_${{ matrix.name }}/
 
         - name: Store data
           uses: actions/upload-artifact@v3
