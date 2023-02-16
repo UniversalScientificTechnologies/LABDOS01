@@ -1,0 +1,32 @@
+[
+  {
+    "Sourcefile": null,
+    "Include": "",
+    "Includepath": "/home/runner/.arduino15/packages/MightyCore/hardware/avr/2.2.1/cores/MCUdude_corefiles"
+  },
+  {
+    "Sourcefile": null,
+    "Include": "",
+    "Includepath": "/home/runner/.arduino15/packages/MightyCore/hardware/avr/2.2.1/variants/standard"
+  },
+  {
+    "Sourcefile": "/home/runner/work/LABDOS01/LABDOS01/fw/UAVDOS/build/sketch/UAVDOS.ino.cpp",
+    "Include": "Wire.h",
+    "Includepath": "/home/runner/.arduino15/packages/MightyCore/hardware/avr/2.2.1/libraries/Wire/src"
+  },
+  {
+    "Sourcefile": "/home/runner/work/LABDOS01/LABDOS01/fw/UAVDOS/build/sketch/UAVDOS.ino.cpp",
+    "Include": "",
+    "Includepath": null
+  },
+  {
+    "Sourcefile": "/home/runner/.arduino15/packages/MightyCore/hardware/avr/2.2.1/libraries/Wire/src/Wire.cpp",
+    "Include": "",
+    "Includepath": null
+  },
+  {
+    "Sourcefile": "/home/runner/.arduino15/packages/MightyCore/hardware/avr/2.2.1/libraries/Wire/src/utility/twi.c",
+    "Include": "",
+    "Includepath": null
+  }
+]
