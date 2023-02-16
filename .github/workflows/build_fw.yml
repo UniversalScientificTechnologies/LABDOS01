@@ -22,7 +22,7 @@ jobs:
     
           - name: LABDOS_16Mhz
             type: LABDOS
-            fqbn: clock=16MHz_externl
+            fqbn: clock=16MHz_external
             
           - name: LABDOS512
             type: LABDOS512
