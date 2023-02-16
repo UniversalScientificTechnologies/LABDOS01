@@ -54,7 +54,7 @@ jobs:
             arduino-board-fqbn: MightyCore:avr:1284:BOD=disabled,LTO=Os,${{ matrix.fqbn }},variant=modelP
             platform-url:  https://mcudude.github.io/MiniCore/package_MCUdude_MiniCore_index.json https://mcudude.github.io/MightyCore/package_MCUdude_MightyCore_index.json
             sketch-names-find-start: fw/${{ matrix.type }}
-            extra-arduino-cli-args: --build-path 'build/${{ matrix.name }}'
+            extra-arduino-cli-args: --build-path '${{ github.workspace }}/fw/%{{ matrix.type }}/build/${{ matrix.name }}'
             set-build-path: true
 
         - name: Store data
@@ -72,4 +72,4 @@ jobs:
           with:
             message: 'Add build files'
             add: '*.hex'
-            fetch: true
+            fetch: false
