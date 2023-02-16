@@ -1,4 +1,4 @@
-String FWversion = "L02"; // 16 MHz crystal
+String FWversion = "L03"; // 16 MHz crystal
 #define ZERO 256 // 3th channel is channel 1 (ussually DCoffset or DCoffset+1, for version with noise reduction transistor)
 
 /*
@@ -269,10 +269,13 @@ void loop()
   DDRB = 0b10011110;
   sbi(ADCSRA, ADIF);                  // reset interrupt flag from ADC
   
+  uint8_t previous_sample = 1; // ignore the first ADC
   // dosimeter integration
+  //for (uint16_t i=0; i<(46000); i++)    // cca 10 s
   for (uint16_t i=0; i<(46000); i++)    // cca 10 s
   {
     while (bit_is_clear(ADCSRA, ADIF)); // wait for end of conversion 
+    uint8_t raising_edge = PINB; // peak of pulse was before S/H? H = raising edge; L = falling edge
     delayMicroseconds(150);            // 12 us wait for 1.5 cycle of 125 kHz ADC clock for sample/hold for next conversion
     
     DDRB = 0b10011111;                  // Reset peak detector
@@ -293,16 +296,17 @@ void loop()
     // manage negative values
     if (u_sensor <= (CHANNELS/2)-1 ) {u_sensor += (CHANNELS/2);} else {u_sensor -= (CHANNELS/2);}
               
-    if (u_sensor > maximum) // filter double detection for pulses between two samples
+    if (previous_sample & 1) 
+    //if (false) 
     {
-      maximum = u_sensor;
       suppress++;
     }
     else
     {
-      histogram[maximum]++;
-      maximum = 0;
+      histogram[u_sensor]++;
     }
+
+    previous_sample = raising_edge;
   }  
   
   // Data out
