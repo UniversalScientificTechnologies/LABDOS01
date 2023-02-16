@@ -55,25 +55,41 @@ jobs:
             platform-url:  https://mcudude.github.io/MiniCore/package_MCUdude_MiniCore_index.json https://mcudude.github.io/MightyCore/package_MCUdude_MightyCore_index.json
             sketch-names-find-start: fw/${{ matrix.type }}
             set-build-path: true
-        
-        - name: Move to right place
-          run: |
-            mkdir fw/${{ matrix.type }}/build_${{ matrix.name }}
-            mv fw/${{ matrix.type }}/build/* fw/${{ matrix.type }}/build_${{ matrix.name }}/
+  
+        #- name: Move to right place
+        # # run: |
+        #    mkdir fw/${{ matrix.type }}/build_${{ matrix.name }}
+        #    mv fw/${{ matrix.type }}/build/* fw/${{ matrix.type }}/build_${{ matrix.name }}/
 
         - name: Store data
           uses: actions/upload-artifact@v3
           with:
-            name: fw_${{ matrix.name }}
+            name: fw_${{ matrix.type }}_${{ matrix.name }}
             path: fw/${{ matrix.type }}
             retention-days: 1
 
-        - name: Update repository
-          run: |
-            git pull --no-recurse-submodules
+  commit:
+    runs-on: ubuntu-latest
+    steps:
 
-        - uses: EndBug/add-and-commit@v9
-          with:
-            message: 'Add build files'
-            add: '*.hex'
-            fetch: false
+      - name: Checkout
+        uses: actions/checkout@v3
+        continue-on-error: true
+        with:
+          submodules: True
+          
+      - run: |
+          rm fw/build -r || true
+          mkdir fw/build
+
+      - name: Download a Build Artifact
+        uses: actions/download-artifact@v3.0.2
+        with:
+          path: 'fw/build/
+
+      - uses: EndBug/add-and-commit@v9
+        with:
+          message: 'Add build files'
+          add: '*.hex'
+          fetch: false
+      
