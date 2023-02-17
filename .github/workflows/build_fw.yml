@@ -18,11 +18,7 @@ jobs:
           - name: LABDOS
             type: LABDOS
             fqbn: clock=8MHz_external
-<<<<<<< HEAD
-            
-=======
     
->>>>>>> 2eeaaa05a6cb71bd484abbdc0aef990df700de62
           - name: LABDOS_16Mhz
             type: LABDOS
             fqbn: clock=16MHz_external
@@ -50,35 +46,24 @@ jobs:
           run: |
             echo "// This file is overwritten by github actions, do not update it manually" > fw/githash.h
             echo "String githash = "\""${{ github.sha }}"\"";" >> fw/githash.h
-
         - name: Compile all examples
           uses: ArminJo/arduino-test-compile@v3
           with:
             arduino-board-fqbn: MightyCore:avr:1284:BOD=disabled,LTO=Os,${{ matrix.fqbn }},variant=modelP
             platform-url:  https://mcudude.github.io/MiniCore/package_MCUdude_MiniCore_index.json https://mcudude.github.io/MightyCore/package_MCUdude_MightyCore_index.json
             sketch-names-find-start: fw/${{ matrix.type }}
-<<<<<<< HEAD
-            extra-arduino-cli-args: --build-path 'build/${{ matrix.name }}'
-            set-build-path: true
-=======
             set-build-path: true
   
         #- name: Move to right place
         # # run: |
         #    mkdir fw/${{ matrix.type }}/build_${{ matrix.name }}
         #    mv fw/${{ matrix.type }}/build/* fw/${{ matrix.type }}/build_${{ matrix.name }}/
->>>>>>> 2eeaaa05a6cb71bd484abbdc0aef990df700de62
 
         - name: Store data
           uses: actions/upload-artifact@v3
           with:
-<<<<<<< HEAD
-            name: fw_${{ matrix.name }}
-            path: fw/${{ matrix.type }}
-=======
             name: fw_${{ matrix.type }}_${{ matrix.name }}
             path: fw/${{ matrix.type }}/build/*.hex
->>>>>>> 2eeaaa05a6cb71bd484abbdc0aef990df700de62
             retention-days: 1
 
   commit:
@@ -94,14 +79,6 @@ jobs:
       - run: |
           rm fw/build -r || true
           mkdir fw/build
-
-<<<<<<< HEAD
-        - uses: EndBug/add-and-commit@v9
-          with:
-            message: 'Add build files'
-            add: '*.hex'
-            fetch: true
-=======
       - name: Download a Build Artifact
         uses: actions/download-artifact@v3.0.2
         with:
@@ -117,7 +94,6 @@ jobs:
         id: last-commit-message
         run: |
           echo "msg=$(git log -1 --pretty=%s)" >> $GITHUB_OUTPUT
-
       - uses: stefanzweifel/git-auto-commit-action@v4
         with:
           commit_message: ${{ steps.last-commit-message.outputs.msg }}, extended build
@@ -125,4 +101,3 @@ jobs:
           #commit_options: '--amend --no-edit'
           #push_options: '--force'
           skip_fetch: true
->>>>>>> 2eeaaa05a6cb71bd484abbdc0aef990df700de62
