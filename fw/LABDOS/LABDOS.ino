@@ -1,5 +1,7 @@
-String FWversion = "L03"; // 16 MHz crystal
-#define ZERO 256 // 3th channel is channel 1 (ussually DCoffset or DCoffset+1, for version with noise reduction transistor)
+String FWversion = "L512_03"; // 16 MHz crystal
+#define CHANNELS 1024 // number of channels in buffer for histogram, including negative numbers (512 or 1024)
+#define ZERO CHANNELS/2 // 3th channel is channel 1 (ussually DCoffset or DCoffset+1, for version with noise reduction transistor)
+#define RANGE ZERO-10
 
 /*
   SPACEDOS with Resetitko for RT
@@ -81,8 +83,6 @@ boolean SDClass::begin(uint32_t clock, uint8_t csPin) {
 #define LED1        21 // PC5
 #define LED2        22 // PC6
 #define LED3        23 // PC7
-
-#define CHANNELS 512 // number of channels in buffer for histogram, including negative numbers
 
 uint16_t count = 0;
 uint32_t serialhash = 0;
@@ -180,8 +180,14 @@ void setup()
       sbi(ADCSRA, ADIF);                  // reset interrupt flag from ADC
       lo = ADCL;
       hi = ADCH;
+
       // combine the two bytes
-      u_sensor = (hi << 7) | (lo >> 1);
+      #if CHANNELS==1024
+        u_sensor = (hi << 8) | (lo);
+      #else
+        u_sensor = (hi << 7) | (lo >> 1);    
+      #endif
+      
       // manage negative values
       if (u_sensor <= (CHANNELS/2)-1 ) {u_sensor += (CHANNELS/2);} else {u_sensor -= (CHANNELS/2);}
       DCoffset += u_sensor;
@@ -212,7 +218,6 @@ void setup()
   {
     Serial.println(dataString);  // print SN to terminal 
   }    
-
   
   pinMode(LED1, OUTPUT); 
   digitalWrite(LED1, LOW); 
@@ -223,7 +228,6 @@ void setup()
   pinMode(LED3, OUTPUT); 
   digitalWrite(LED3, LOW); 
   delay(100);  
-
 
   // Initiates RTC
   rtc.autoprobe();
@@ -290,8 +294,11 @@ void loop()
     hi = ADCH;
 
     // combine the two bytes
-    u_sensor = (hi << 7) | (lo >> 1);
-
+    #if CHANNELS==1024
+      u_sensor = (hi << 8) | (lo);
+    #else
+      u_sensor = (hi << 7) | (lo >> 1);    
+    #endif
     // manage negative values
     if (u_sensor <= (CHANNELS/2)-1 ) {u_sensor += (CHANNELS/2);} else {u_sensor -= (CHANNELS/2);}
               
@@ -314,12 +321,11 @@ void loop()
     RTCx::time_t t = RTCx::mktime(&tm);
 
     uint16_t noise = base_offset+2;
-    uint32_t dose=0;
-    #define RANGE 252
+    uint32_t flux=0;
 
     for(int n=noise; n<(base_offset+RANGE); n++)  
     {
-      dose += histogram[n]; 
+      flux += histogram[n]; 
     }
 
     digitalWrite(LED3, HIGH); 
@@ -335,7 +341,7 @@ void loop()
     dataString += ",";
     dataString += String(suppress);
     dataString += ",";
-    dataString += String(dose);
+    dataString += String(flux);
     
     for(int n=base_offset-1; n<(base_offset-1+RANGE); n++)  
     {
@@ -343,7 +349,7 @@ void loop()
       dataString += String(histogram[n]); 
     }
     
-    /* calibration
+    /* calibration helper code
     uint16_t maxener=0; 
     uint16_t maxch=0;     
     for(int n=noise+3; n<(511); n++)  
