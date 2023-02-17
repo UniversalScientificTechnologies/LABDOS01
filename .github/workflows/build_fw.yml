@@ -3,11 +3,10 @@ name: Build firmware
 on:
   # Triggers the workflow on push or pull request events but only for the "SPACEDOS03A" branch
   push:
-    branches: [ "LABDOS01A" ]
-  pull_request:
-    branches: [ "LABDOS01A" ]
+    #branches: [ "LABDOS01A" ]
+    paths:
+    - 'fw/**'
 
-  # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 
 jobs:
@@ -16,13 +15,24 @@ jobs:
     strategy:
       matrix:
         include:
-          - type: LABDOS
+          - name: LABDOS
+            type: LABDOS
             fqbn: clock=8MHz_external
-          - type: LABDOS512
+    
+          - name: LABDOS_16Mhz
+            type: LABDOS
+            fqbn: clock=16MHz_external
+            
+          - name: LABDOS512
+            type: LABDOS512
             fqbn: clock=8MHz_external
-          - type: LABDOS512_SD
+            
+          - name: LABDOS512_SD
+            type: LABDOS512_SD
             fqbn: clock=8MHz_external
-          - type: UAVDOS
+            
+          - name: UAVDOS
+            type: UAVDOS
             fqbn: clock=8MHz_external
 
     steps:
@@ -43,20 +53,54 @@ jobs:
             arduino-board-fqbn: MightyCore:avr:1284:BOD=disabled,LTO=Os,${{ matrix.fqbn }},variant=modelP
             platform-url:  https://mcudude.github.io/MiniCore/package_MCUdude_MiniCore_index.json https://mcudude.github.io/MightyCore/package_MCUdude_MightyCore_index.json
             sketch-names-find-start: fw/${{ matrix.type }}
+            set-build-path: true
+  
+        #- name: Move to right place
+        # # run: |
+        #    mkdir fw/${{ matrix.type }}/build_${{ matrix.name }}
+        #    mv fw/${{ matrix.type }}/build/* fw/${{ matrix.type }}/build_${{ matrix.name }}/
 
         - name: Store data
           uses: actions/upload-artifact@v3
           with:
-            name: fw_${{ matrix.type }}
-            path: fw/${{ matrix.type }}
+            name: fw_${{ matrix.type }}_${{ matrix.name }}
+            path: fw/${{ matrix.type }}/build/*.hex
             retention-days: 1
 
-        - name: Update repository
-          run: |
-            git pull --no-recurse-submodules
+  commit:
+    runs-on: ubuntu-latest
+    needs: [build]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        continue-on-error: true
+        with:
+          submodules: True
+          
+      - run: |
+          rm fw/build -r || true
+          mkdir fw/build
 
-        - uses: EndBug/add-and-commit@v9
-          with:
-            message: 'Add build files'
-            add: '*.hex'
-            fetch: false
+      - name: Download a Build Artifact
+        uses: actions/download-artifact@v3.0.2
+        with:
+          path: 'fw/build/'
+
+#       - uses: EndBug/add-and-commit@v9
+#         with:
+#           message: 'Add build files'
+#           add: 'fw/build/*'
+#           fetch: false
+      
+      - name: Get last commit message
+        id: last-commit-message
+        run: |
+          echo "msg=$(git log -1 --pretty=%s)" >> $GITHUB_OUTPUT
+
+      - uses: stefanzweifel/git-auto-commit-action@v4
+        with:
+          commit_message: ${{ steps.last-commit-message.outputs.msg }}, extended build
+          file_pattern: 'fw/build/*'
+          #commit_options: '--amend --no-edit'
+          #push_options: '--force'
+          skip_fetch: true
