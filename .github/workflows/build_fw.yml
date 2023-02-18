@@ -66,11 +66,11 @@ jobs:
         - name: Compile all examples
           uses: ArminJo/arduino-test-compile@v3
           with:
-            arduino-board-fqbn: MightyCore:avr:1284:BOD=disabled,LTO=Os,${{ matrix.fqbn }},variant=modelP #--build-property compiler.cpp.extra_flags="-DCHANNELS={{ matrix.channels }}"
+            arduino-board-fqbn: MightyCore:avr:1284:BOD=disabled,LTO=Os,${{ matrix.fqbn }},variant=modelP --build-property compiler.cpp.extra_flags="-DCHANNELS={{ matrix.channels }}"
             platform-url:  https://mcudude.github.io/MiniCore/package_MCUdude_MiniCore_index.json https://mcudude.github.io/MightyCore/package_MCUdude_MightyCore_index.json
             sketch-names-find-start: fw/${{ matrix.type }}
             set-build-path: true
-            build-properties: compiler.cpp.extra_flags="-DCHANNELS={{ matrix.channels }}"
+            # build-properties: compiler.cpp.extra_flags="-DCHANNELS={{ matrix.channels }}"
             # build-properties: "build.extra_flags=\"-DCHANNELS=100\"" .. tohle z nejakeho duvodu nefunguje, ackoliv by to mela byt spravna cesta
   
         #- name: Move to right place
