@@ -69,7 +69,7 @@ jobs:
             platform-url:  https://mcudude.github.io/MiniCore/package_MCUdude_MiniCore_index.json https://mcudude.github.io/MightyCore/package_MCUdude_MightyCore_index.json
             sketch-names-find-start: fw/${{ matrix.type }}
             set-build-path: true
-            build-properties: -DCHANNELS=${{ matrix.channels }}
+            build-properties: compiler.cpp.extra_flag=-DCHANNELS=${{ matrix.channels }}
   
         #- name: Move to right place
         # # run: |
