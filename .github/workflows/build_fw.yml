@@ -136,13 +136,12 @@ jobs:
           GITHUB_TOKEN: ${{ github.token }}
 
       - run: |
-          rm fw/build -r || true
-          mkdir fw/build
+          mkdir build
           
       - name: Download a Build Artifact
         uses: actions/download-artifact@v3.0.2
         with:
-          path: 'fw/build/'
+          path: 'build/'
     
       - name: Upload Release Asset
         id: upload-release-asset 
@@ -151,4 +150,4 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.get_release.outputs.upload_url }}
-          asset_path: fw/build/*
+          asset_path: build/*
