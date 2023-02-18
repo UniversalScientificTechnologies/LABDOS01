@@ -7,6 +7,7 @@ on:
     paths:
     - 'fw/**'
     - '*/*.yml'
+  release:
 
   workflow_dispatch:
 
@@ -123,6 +124,7 @@ jobs:
 
   release-job:
     name: Releasing
+    needs: [build]
     runs-on: ubuntu-latest
     if: github.event_name == 'release' #&& github.event.action == 'created'
     steps:
