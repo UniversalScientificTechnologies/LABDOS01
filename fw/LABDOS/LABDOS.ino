@@ -1,5 +1,7 @@
 String FWversion = "L500_03"; // 16 MHz crystal
+#ifndef CHANNELS
 #define CHANNELS 1024 // number of channels in buffer for histogram, including negative numbers (512 or 1024)
+#endif
 #define ZERO CHANNELS/2 // 3th channel is channel 1 (ussually DCoffset or DCoffset+1, for version with noise reduction transistor)
 #define RANGE ZERO-12
 
