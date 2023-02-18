@@ -142,6 +142,11 @@ jobs:
         uses: actions/download-artifact@v3.0.2
         with:
           path: 'build/'
+          
+      - run: |
+          cd build;
+          find -type f -exec bash -c 'mv $0 $(echo $0|sed "s/\//_/2")' {} \;
+          cd ..;
     
 #       - name: Upload Release Asset
 #         id: upload-release-asset 
@@ -157,4 +162,4 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           release_id: ${{ steps.get_release.outputs.upload_url }}
-          assets_path: build/**/*.hex
+          assets_path: build/*.hex
