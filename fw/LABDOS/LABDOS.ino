@@ -4,7 +4,7 @@ String FWversion = "L500_03"; // 16 MHz crystal
 #define RANGE ZERO-12
 
 /*
-  SPACEDOS with Resetitko for RT
+  LABDOS
  
 ISP
 ---
