@@ -45,7 +45,7 @@ jobs:
         - name: Update git hash
           run: |
             echo "// This file is overwritten by github actions, do not update it manually" > fw/githash.h
-            echo "String githash = "\""${{ github.sha }}"\"";CI_action;" >> fw/githash.h
+            echo "String githash = "\"${{ github.sha }};CI_action;\"" >> fw/githash.h
             
         - name: Compile all examples
           uses: ArminJo/arduino-test-compile@v3
