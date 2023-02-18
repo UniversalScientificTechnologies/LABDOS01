@@ -1,7 +1,15 @@
-String FWversion = "L500_03"; // 16 MHz crystal
-#define CHANNELS 1024 // number of channels in buffer for histogram, including negative numbers (512 or 1024)
+#define VERSION "03" // 16 MHz crystal
+#ifndef CHANNELS
+  #define CHANNELS 1024 // number of channels in buffer for histogram, including negative numbers (512 or 1024)
+#endif
 #define ZERO CHANNELS/2 // 3th channel is channel 1 (ussually DCoffset or DCoffset+1, for version with noise reduction transistor)
 #define RANGE ZERO-12
+
+#if CHANNELS==1024
+  String FWversion = "L500_"; // 500 effective channels for 1024 ADC channels
+#else
+  String FWversion = "L244_"; // 244 effective channels for 512 ADC channels
+#endif
 
 /*
   LABDOS
@@ -193,7 +201,7 @@ void setup()
   delay(100);  
   
   // make a string for device identification output
-  String dataString = "$DOS,LABDOS01A," + FWversion + "," + String(base_offset) + "," + githash + ","; // FW version and Git hash
+  String dataString = "$DOS,LABDOS01A," + FWversion + VERSION + "," + String(base_offset) + "," + githash + ","; // FW version and Git hash
   
   Wire.beginTransmission(0x58);                   // request SN from EEPROM
   Wire.write((int)0x08); // MSB
