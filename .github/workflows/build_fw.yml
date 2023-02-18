@@ -148,4 +148,4 @@ jobs:
         uses: NBTX/upload-release-assets@v1
         with:
           upload_url: ${{ steps.get_release.outputs.upload_url }}
-          targets: build/*
+          targets: build/**/*.hex
