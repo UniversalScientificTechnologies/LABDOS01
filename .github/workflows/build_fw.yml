@@ -70,7 +70,7 @@ jobs:
             sketch-names-find-start: fw/${{ matrix.type }}
             set-build-path: true
             # build-properties: -DCHANNELS=${{ matrix.channels }}
-            build-properties: "compiler.cpp.extra_flags='-DCHANNELS=${{ matrix.channels }}'"
+            build-properties: build.extra_flags='-DCHANNELS=${{ matrix.channels }}'
   
         #- name: Move to right place
         # # run: |
