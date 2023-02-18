@@ -55,21 +55,14 @@ TX1/INT1 (D 11) PD3 17|        |24 PC2 (D 18) TCK
                       +--------+
 */
 
-/*
 // Compiled with: Arduino 1.8.9
 // MightyCore 2.0.2 https://mcudude.github.io/MightyCore/package_MCUdude_MightyCore_index.json
-Fix old bug in Mighty SD library
-~/.arduino15/packages/MightyCore/hardware/avr/2.0.2/libraries/SD/src/SD.cpp:
-boolean SDClass::begin(uint32_t clock, uint8_t csPin) {
-  if(root.isOpen()) root.close();
-*/
 
 #include "wiring_private.h"
 #include <Wire.h>           
 #include "src/RTCx/RTCx.h"  // Modified version included
 #include "githash.h"
 
-//#define LED_yellow  23   // PC7
 #define RESET       0    // PB0
 #define SDpower1    1    // PB1
 #define SDpower2    2    // PB2
