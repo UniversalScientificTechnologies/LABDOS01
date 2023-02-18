@@ -25,10 +25,15 @@ jobs:
             channels: 1024
             fqbn: clock=8MHz_external
     
-          - name: LABDOS_16Mhz
+          - name: LABDOS_512_16Mhz
             type: LABDOS
             fqbn: clock=16MHz_external
-            channels: 0
+            channels: 512
+            
+          - name: LABDOS_1024_16Mhz
+            type: LABDOS
+            fqbn: clock=16MHz_external
+            channels: 1024
             
           - name: LABDOS512
             type: LABDOS512
