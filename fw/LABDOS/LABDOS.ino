@@ -1,4 +1,4 @@
-#define VERSION "03" // 16 MHz crystal
+#define VERSION "04" // 16 MHz crystal
 #ifndef CHANNELS
   #define CHANNELS 1024 // number of channels in buffer for histogram, including negative numbers (512 or 1024)
 #endif
