@@ -68,7 +68,7 @@ TX1/INT1 (D 11) PD3 17|        |24 PC2 (D 18) TCK
 
 #include "wiring_private.h"
 #include <Wire.h>           
-#include "src/RTCx/RTCx.h"  // Modified version included
+//#include "src/RTCx/RTCx.h"  // Modified version included
 #include "githash.h"
 
 #define RESET       0    // PB0
@@ -89,8 +89,7 @@ uint16_t count = 0;
 uint32_t serialhash = 0;
 uint16_t base_offset = ZERO;
 uint8_t lo, hi;
-uint16_t u_sensor, maximum;
-struct RTCx::tm tm;
+uint16_t u_sensor;
 
 // Read Analog Differential without gain (read datashet of ATMega1280 and ATMega2560 for refference)
 // Use analogReadDiff(NUM)
@@ -113,6 +112,31 @@ struct RTCx::tm tm;
 //  15  | A15     | A9      | 1x
 #define PIN 0
 uint8_t analog_reference = INTERNAL2V56; // DEFAULT, INTERNAL, INTERNAL1V1, INTERNAL2V56, or EXTERNAL
+
+
+uint8_t bcdToDec(uint8_t b)
+{
+  return ( ((b >> 4)*10) + (b%16) );
+}
+
+uint32_t tm;
+uint8_t tm_s100;
+
+void readRTC()
+{
+  Wire.beginTransmission(0x51);
+  Wire.write(0);
+  Wire.endTransmission();
+  
+  Wire.requestFrom(0x51, 6);
+  tm_s100 = bcdToDec(Wire.read());
+  uint8_t tm_sec = bcdToDec(Wire.read() & 0x7f);
+  uint8_t tm_min = bcdToDec(Wire.read() & 0x7f);
+  tm = bcdToDec(Wire.read());
+  tm += bcdToDec(Wire.read()) * 100;
+  tm += bcdToDec(Wire.read()) * 10000;
+  tm = tm * 60 * 60 + tm_min * 60 + tm_sec;
+}
 
 void setup()
 {
@@ -199,6 +223,36 @@ void setup()
   pinMode(LED3, OUTPUT); 
   digitalWrite(LED3, HIGH); 
   delay(100);  
+
+  // Initiation of RTC
+  Wire.beginTransmission(0x51); // init clock
+  Wire.write((uint8_t)0x23); // Start register
+  Wire.write((uint8_t)0x00); // 0x23
+  Wire.write((uint8_t)0x00); // 0x24 Two's complement offset value
+  Wire.write((uint8_t)0b00000101); // 0x25 Normal offset correction, disable low-jitter mode, set load caps to 6 pF
+  Wire.write((uint8_t)0x00); // 0x26 Battery switch reg, same as after a reset
+  Wire.write((uint8_t)0x00); // 0x27 Enable CLK pin, using bits set in reg 0x28
+  Wire.write((uint8_t)0x97); // 0x28 stop watch mode, no periodic interrupts, CLK pin off
+  Wire.write((uint8_t)0x00); // 0x29
+  Wire.write((uint8_t)0x00); // 0x2a
+  Wire.endTransmission();
+  Wire.beginTransmission(0x51); // reset clock
+  Wire.write(0x2f); 
+  Wire.write(0x2c);
+  Wire.endTransmission();
+  Wire.beginTransmission(0x51); // start stop-watch
+  Wire.write(0x28); 
+  Wire.write(0x97);
+  Wire.endTransmission();
+  Wire.beginTransmission(0x51); // reset stop-watch
+  Wire.write((uint8_t)0x00); // Start register
+  Wire.write((uint8_t)0x00); // 0x00
+  Wire.write((uint8_t)0x00); // 0x01 
+  Wire.write((uint8_t)0x00); // 0x02 
+  Wire.write((uint8_t)0x00); // 0x03
+  Wire.write((uint8_t)0x00); // 0x04
+  Wire.write((uint8_t)0x00); // 0x05
+  Wire.endTransmission();
   
   // make a string for device identification output
   String dataString = "$DOS,LABDOS01A," + FWversion + VERSION + "," + String(base_offset) + "," + githash + ","; // FW version and Git hash
@@ -229,10 +283,6 @@ void setup()
   pinMode(LED3, OUTPUT); 
   digitalWrite(LED3, LOW); 
   delay(100);  
-
-  // Initiates RTC
-  rtc.autoprobe();
-  rtc.resetClock();
 }
 
 
@@ -318,9 +368,6 @@ void loop()
   
   // Data out
   {
-    rtc.readClock(tm);
-    RTCx::time_t t = RTCx::mktime(&tm);
-
     uint16_t noise = base_offset+2;
     uint32_t flux=0;
 
@@ -333,12 +380,16 @@ void loop()
 
     // make a string for assembling the data to log:
     String dataString = "";
+
+    readRTC();
     
     // make a string for assembling the data to log:
     dataString += "$HIST,";
     dataString += String(count); 
     dataString += ",";  
-    dataString += String(t-946684800); 
+    dataString += String(tm); 
+    dataString += ".";
+    dataString += String(tm_s100); 
     dataString += ",";
     dataString += String(suppress);
     dataString += ",";
