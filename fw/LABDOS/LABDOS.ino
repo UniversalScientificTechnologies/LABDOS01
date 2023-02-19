@@ -11,6 +11,11 @@
   String FWversion = "L244_"; // 244 effective channels for 512 ADC channels
 #endif
 
+#define MAXFILESIZE MAX_MEASUREMENTS * BYTES_MEASUREMENT // in bytes, 4 MB per day, 28 MB per week, 122 MB per month
+#define MAX_MEASUREMENTS 11000ul // in measurement cycles, 5 500 per day
+#define BYTES_MEASUREMENT 531ul // number of bytes per one measurement
+#define MAXFILES 200 // maximal number of files on SD card
+
 /*
   LABDOS
  
@@ -68,7 +73,8 @@ TX1/INT1 (D 11) PD3 17|        |24 PC2 (D 18) TCK
 
 #include "wiring_private.h"
 #include <Wire.h>           
-//#include "src/RTCx/RTCx.h"  // Modified version included
+#include <SD.h>             
+#include <SPI.h>
 #include "githash.h"
 
 #define RESET       0    // PB0
@@ -85,11 +91,14 @@ TX1/INT1 (D 11) PD3 17|        |24 PC2 (D 18) TCK
 #define LED2        22 // PC6
 #define LED3        23 // PC7
 
+String filename = "";
+uint16_t fn;
 uint16_t count = 0;
 uint32_t serialhash = 0;
 uint16_t base_offset = ZERO;
 uint8_t lo, hi;
 uint16_t u_sensor;
+boolean SDinserted = true;
 
 // Read Analog Differential without gain (read datashet of ATMega1280 and ATMega2560 for refference)
 // Use analogReadDiff(NUM)
@@ -138,6 +147,29 @@ void readRTC()
   tm = tm * 60 * 60 + tm_min * 60 + tm_sec;
 }
 
+#define SD_ON     1
+#define SD_OFF    2
+
+void set_power(uint8_t state)
+{
+  switch(state)
+  {
+    case SD_ON:
+      pinMode(MISO, OUTPUT);     
+      pinMode(MOSI, OUTPUT);     
+      PORTB |= 0b00001110;
+      digitalWrite(SS, LOW);  
+      break;
+    case SD_OFF:
+      digitalWrite(SS, HIGH);  
+      PORTB &= 0b11110001;
+      break;
+    default:
+      delay(100);
+  }
+}
+
+
 void setup()
 {
   pinMode(LED1, OUTPUT); 
@@ -181,11 +213,7 @@ void setup()
 
   pinMode(LED1, OUTPUT); 
   digitalWrite(LED1, HIGH); 
-  delay(100);  
   Serial.println("#Hmmm...");
-  pinMode(LED2, OUTPUT); 
-  digitalWrite(LED2, HIGH); 
-  delay(100);  
 
   {
     uint16_t DCoffset;
@@ -219,10 +247,6 @@ void setup()
     }
     base_offset = DCoffset >> 3; // Calculate mean of 8 measurements
   }
-
-  pinMode(LED3, OUTPUT); 
-  digitalWrite(LED3, HIGH); 
-  delay(100);  
 
   // Initiation of RTC
   Wire.beginTransmission(0x51); // init clock
@@ -269,9 +293,60 @@ void setup()
     dataString += String(serialbyte,HEX);    
     serialhash += serialbyte;
   }
+  pinMode(LED2, OUTPUT); 
+  digitalWrite(LED2, HIGH); 
 
   {
+    set_power(SD_ON);
+     
+    // make sure that the default chip select pin is set to output
+    // see if the card is present and can be initialized:
+    if (!SD.begin(SS)) 
+    {
+      Serial.println("#SD init false");
+      SDinserted = false;
+    }
+    for (fn = 1; fn<MAXFILES; fn++) // find last file
+    {
+       filename = String(fn) + ".txt";
+       if (SD.exists(filename) == 0) break;
+    }
+    fn--;
+    filename = String(fn) + ".txt";
+    
+    // open the file. note that only one file can be open at a time,
+    // so you have to close this one before opening another.
+    File dataFile = SD.open(filename, FILE_WRITE);
+
+    uint32_t filesize = dataFile.size();
+    Serial.print("#Filesize,");
+    Serial.println(filesize); 
+    if (filesize > MAXFILESIZE)
+    {
+      dataFile.close();
+      fn++;
+      filename = String(fn) + ".txt";      
+      dataFile = SD.open(filename, FILE_WRITE);
+    }
+    Serial.print("#Filename,");
+    Serial.println(filename); 
+  
+    // if the file is available, write to it:
+    if (dataFile) 
+    {
+      pinMode(LED3, OUTPUT); 
+      digitalWrite(LED3, HIGH); 
+      dataFile.println(dataString);  // write to SDcard (800 ms)     
+      dataFile.close();  
+    }  
+    // if the file isn't open, pop up an error:
+    else 
+    {
+      Serial.println("#SD false");
+      SDinserted = false;
+    }
     Serial.println(dataString);  // print SN to terminal 
+    set_power(SD_OFF);
   }    
   
   pinMode(LED1, OUTPUT); 
@@ -400,29 +475,53 @@ void loop()
       dataString += ",";
       dataString += String(histogram[n]); 
     }
-    
-    /* calibration helper code
-    uint16_t maxener=0; 
-    uint16_t maxch=0;     
-    for(int n=noise+3; n<(511); n++)  
+
+    if (SDinserted)
     {
-      if (histogram[n]>maxener) 
+      set_power(SD_ON);
+
+      // make sure that the default chip select pin is set to output
+      // see if the card is present and can be initialized:
+      if (!SD.begin(SS)) 
       {
-        maxener = histogram[n];
-        maxch = n; 
+        Serial.println("#SD init false");
+        SDinserted = false;
+        // don't do anything more:
       }
-    }
-    dataString += "#";
-    dataString += String(int(maxch-noise+3)); 
-    dataString += ",";
-    dataString += String(maxener); 
-    */
+      else
+      {
+        // open the file. note that only one file can be open at a time,
+        // so you have to close this one before opening another.
+        File dataFile = SD.open(filename, FILE_WRITE);
+      
+        // if the file is available, write to it:
+        if (dataFile) 
+        {
+          digitalWrite(LED2, HIGH);     
+          dataFile.println(dataString);  // write to SDcard (800 ms)     
+          dataFile.close();
+          digitalWrite(LED2, LOW);     
+        }  
+        // if the file isn't open, pop up an error:
+        else 
+        {
+          Serial.println("#SD false");
+          SDinserted = false;
+        }
+      }  
+      set_power(SD_OFF);
+    }          
+    Serial.println(dataString);   // print to terminal 
+    digitalWrite(LED3, LOW);     
     
     count++;
-
+    if (count > MAX_MEASUREMENTS) 
     {
-      Serial.println(dataString);  // print to terminal (additional 700 ms in DEBUG mode)
-      digitalWrite(LED3, LOW); 
-    }          
+      count = 0;
+      fn++;
+      filename = String(fn) + ".txt";        
+      Serial.print("#Filename,"); 
+      Serial.println(filename); 
+    } 
   }    
 }
