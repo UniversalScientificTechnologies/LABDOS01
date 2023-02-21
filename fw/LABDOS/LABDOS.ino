@@ -1,4 +1,4 @@
-#define VERSION "05" // 16 MHz crystal
+#define VERSION "06" // 16 MHz crystal
 #ifndef CHANNELS
   #define CHANNELS 1024 // number of channels in buffer for histogram, including negative numbers (512 or 1024)
 #endif
@@ -401,11 +401,11 @@ void loop()
   
   uint8_t previous_sample = 1; // ignore the first ADC
   // dosimeter integration
-  for (uint16_t i=0; i<(46000); i++)    // cca 10 s
+  for (uint16_t i=0; i<(65535); i++)    // cca 7 s
   {
     while (bit_is_clear(ADCSRA, ADIF)); // wait for end of conversion 
-    uint8_t raising_edge = PINB; // peak of pulse was before S/H? H = raising edge; L = falling edge
     delayMicroseconds(12);            // 12 us wait for 1.5 cycle of 125 kHz ADC clock for sample/hold for next conversion
+    uint8_t raising_edge = PINB; // peak of pulse was before S/H? H = raising edge; L = falling edge
     
     DDRB = 0b10011111;                  // Reset peak detector
     delayMicroseconds(7);               // cca 7 us for 2k2 resistor and 100n capacitor in peak detector
@@ -429,7 +429,6 @@ void loop()
     if (u_sensor <= (CHANNELS/2)-1 ) {u_sensor += (CHANNELS/2);} else {u_sensor -= (CHANNELS/2);}
               
     if (previous_sample & 1) 
-    //if (false) 
     {
       suppress++;
     }
