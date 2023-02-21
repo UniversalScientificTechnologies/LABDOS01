@@ -405,7 +405,7 @@ void loop()
   {
     while (bit_is_clear(ADCSRA, ADIF)); // wait for end of conversion 
     uint8_t raising_edge = PINB; // peak of pulse was before S/H? H = raising edge; L = falling edge
-    delayMicroseconds(150);            // 12 us wait for 1.5 cycle of 125 kHz ADC clock for sample/hold for next conversion
+    delayMicroseconds(12);            // 12 us wait for 1.5 cycle of 125 kHz ADC clock for sample/hold for next conversion
     
     DDRB = 0b10011111;                  // Reset peak detector
     delayMicroseconds(7);               // cca 7 us for 2k2 resistor and 100n capacitor in peak detector
