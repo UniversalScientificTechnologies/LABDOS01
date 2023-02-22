@@ -217,21 +217,23 @@ void setup()
 
   {
     uint16_t DCoffset;
+    ADMUX = (analog_reference << 6) | 0b10001; // Select +A1,-A1 for offset correction
+    delay(50);
+    ADCSRB = 0;               // Switching ADC to Free Running mode
+    sbi(ADCSRA, ADATE);       // ADC autotrigger enable (mandatory for free running mode)
+    sbi(ADCSRA, ADSC);        // ADC start the first conversions
+    sbi(ADCSRA, 2);           // 0x111 = clock divided by 128
+    sbi(ADCSRA, 1);        
+    sbi(ADCSRA, 0);        
+    sbi(ADCSRA, ADIF);                  // reset interrupt flag from ADC
+    while (bit_is_clear(ADCSRA, ADIF)); // wait for the first conversion 
+    sbi(ADCSRA, ADIF);                  // reset interrupt flag from ADC
     for (uint8_t n=0; n<8; n++) 
     { 
       // measurement of ADC offset
-      ADMUX = (analog_reference << 6) | 0b10001; // Select +A1,-A1 for offset correction
-      delay(50);
-      ADCSRB = 0;               // Switching ADC to Free Running mode
-      sbi(ADCSRA, ADATE);       // ADC autotrigger enable (mandatory for free running mode)
-      sbi(ADCSRA, ADSC);        // ADC start the first conversions
-      sbi(ADCSRA, 2);           // 0x111 = clock divided by 128
-      sbi(ADCSRA, 1);        
-      sbi(ADCSRA, 0);        
-      sbi(ADCSRA, ADIF);                  // reset interrupt flag from ADC
       while (bit_is_clear(ADCSRA, ADIF)); // wait for the first conversion 
       sbi(ADCSRA, ADIF);                  // reset interrupt flag from ADC
-      lo = ADCL;
+      lo = ADCL;    
       hi = ADCH;
 
       // combine the two bytes
