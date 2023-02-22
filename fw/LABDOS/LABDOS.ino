@@ -222,16 +222,22 @@ void setup()
     ADCSRB = 0;               // Switching ADC to Free Running mode
     sbi(ADCSRA, ADATE);       // ADC autotrigger enable (mandatory for free running mode)
     sbi(ADCSRA, ADSC);        // ADC start the first conversions
+#if F_CPU==8000000L
+    cbi(ADCSRA, 2);           // 0x111 = clock divided by 64
+    sbi(ADCSRA, 1);        
+    sbi(ADCSRA, 0);        
+#else
     sbi(ADCSRA, 2);           // 0x111 = clock divided by 128
     sbi(ADCSRA, 1);        
     sbi(ADCSRA, 0);        
+#endif  
     sbi(ADCSRA, ADIF);                  // reset interrupt flag from ADC
     while (bit_is_clear(ADCSRA, ADIF)); // wait for the first conversion 
     sbi(ADCSRA, ADIF);                  // reset interrupt flag from ADC
     for (uint8_t n=0; n<8; n++) 
     { 
       // measurement of ADC offset
-      while (bit_is_clear(ADCSRA, ADIF)); // wait for the first conversion 
+      while (bit_is_clear(ADCSRA, ADIF)); // wait for conversion 
       sbi(ADCSRA, ADIF);                  // reset interrupt flag from ADC
       lo = ADCL;    
       hi = ADCH;
@@ -376,10 +382,15 @@ void loop()
   ADCSRB = 0;               // Switching ADC to Free Running mode
   sbi(ADCSRA, ADATE);       // ADC autotrigger enable (mandatory for free running mode)
   sbi(ADCSRA, ADSC);        // ADC start the first conversions
+#if F_CPU==8000000L
+  cbi(ADCSRA, 2);           // 0x111 = clock divided by 64
+  sbi(ADCSRA, 1);        
+  sbi(ADCSRA, 0);        
+#else
   sbi(ADCSRA, 2);           // 0x111 = clock divided by 128
   sbi(ADCSRA, 1);        
   sbi(ADCSRA, 0);        
-  
+#endif  
   PORTB = 1;                          // Set reset output for peak detector to H
   sbi(ADCSRA, ADIF);                  // reset interrupt flag from ADC
   while (bit_is_clear(ADCSRA, ADIF)); // wait for the first dummy conversion 
@@ -393,15 +404,12 @@ void loop()
     
   while (bit_is_clear(ADCSRA, ADIF)); // wait for dummy conversion 
   DDRB = 0b10011111;                  // Reset peak detector
-  asm("NOP");                         // cca 6 us for 2k2 resistor and 1k capacitor in peak detector
-  asm("NOP");                         
-  asm("NOP");                         
-  asm("NOP");                         
-  asm("NOP");                         
+  delayMicroseconds(7);               // cca 7 us for 2k2 resistor and 100n capacitor in peak detector
   DDRB = 0b10011110;
   sbi(ADCSRA, ADIF);                  // reset interrupt flag from ADC
   
   uint8_t previous_sample = 1; // ignore the first ADC
+
   // dosimeter integration
   for (uint16_t i=0; i<(65535); i++)    // cca 7 s
   {
