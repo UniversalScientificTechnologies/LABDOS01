@@ -38,16 +38,6 @@ jobs:
             fqbn: clock=16MHz_external
             channels: 1024
             
-          - name: LABDOS512
-            type: LABDOS512
-            fqbn: clock=8MHz_external
-            channels: 0
-            
-          - name: LABDOS512_SD
-            type: LABDOS512_SD
-            fqbn: clock=8MHz_external
-            channels: 0
-            
           - name: UAVDOS
             type: UAVDOS
             fqbn: clock=8MHz_external
