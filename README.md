@@ -105,4 +105,4 @@ For computers with windows, you will need to install a driver for [FTDI USB](htt
 The device contains an SD card, which could be used do data logging in stand-alone use. In that case, the LABDOS01 needs an external power supply.
 That mode could be used for short-term demonstrating of SPACEDOS, AIRDOS, or GEODOS variants of that device.
 
-* * Note: Ony industrial SLC SD cards with properrly implemented SPI interface are supported.  
+* Note: Ony industrial SLC SD cards with properrly implemented SPI interface are supported. * 
