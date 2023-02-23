@@ -18,6 +18,13 @@ Also correct name of ttyUSB interface has to be provided.
 
 Then run avrdude.
 
+For 8MHz version
+```
+avrdude -v -patmega1284p -carduino -P/dev/ttyUSB0 -b68600 -D -Uflash:w:./LABDOS.hex:i
+```
+
+For 16MHz version
 ```
 avrdude -v -patmega1284p -carduino -P/dev/ttyUSB0 -b115200 -D -Uflash:w:./LABDOS.hex:i
 ```
+
