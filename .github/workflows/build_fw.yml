@@ -58,7 +58,7 @@ jobs:
         - name: Compile all examples
           uses: ArminJo/arduino-test-compile@v3
           with:
-            arduino-board-fqbn: MightyCore:avr:1284:BOD=disabled,LTO=Os,${{ matrix.fqbn }},variant=modelP --build-property "compiler.cpp.extra_flags=\"-DCHANNELS=${{ matrix.channels }} -DBUILD=${{ github.run_number }}\""
+            arduino-board-fqbn: MightyCore:avr:1284:BOD=disabled,LTO=Os,${{ matrix.fqbn }},variant=modelP --build-property "compiler.cpp.extra_flags=-DCHANNELS=${{ matrix.channels }} -DBUILD=${{ github.run_number }}"
             platform-url:  https://mcudude.github.io/MiniCore/package_MCUdude_MiniCore_index.json https://mcudude.github.io/MightyCore/package_MCUdude_MightyCore_index.json
             sketch-names-find-start: fw/${{ matrix.type }}
             set-build-path: true
