@@ -17,9 +17,9 @@
 #define RANGE ZERO-12
 
 #if CHANNELS==1024
-  String FWversion = "MAJOR.MINOR.RELEASE-BUILD.L500_"; // 500 effective channels for 1024 ADC channels
+  String FWversion = MAJOR"."MINOR"."RELEASE"-"BUILD".L500_"; // 500 effective channels for 1024 ADC channels
 #else
-  String FWversion = "MAJOR.MINOR.RELEASE-BUILD.L244_"; // 244 effective channels for 512 ADC channels
+  String FWversion = MAJOR"."MINOR"."RELEASE"-"BUILD".L244_"; // 244 effective channels for 512 ADC channels
 #endif
 
 #define MAXFILESIZE MAX_MEASUREMENTS * BYTES_MEASUREMENT // in bytes, 4 MB per day, 28 MB per week, 122 MB per month
