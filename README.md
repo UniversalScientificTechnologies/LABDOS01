@@ -50,16 +50,20 @@ This usage case is especially suitable for interactive testing of silicon-based 
 The output message types are described in the following paragraphs. The exact format of each message depends on application-specific firmware. The firmware could be tuned to specific usage cases by modifying the [arduino code](https://github.com/UniversalScientificTechnologies/LABDOS01/tree/LABDOS01A/fw). The firmware itself could be updated using the bootloader.
 The baudrate used by USB port by default is 115200. 
 
-#### Initial message
+#### Initial messages
 
 ```
+#Cvak...
 #Hmmm...
+#Filesize,2173540
+#Filename,3.txt
 ```
-The initial message is sent as soon as the processor is restarted, and reading it correctly indicates that the connection is well set up.
+The initial messages is sent as soon as the processor is restarted, and reading it correctly indicates that the connection is well set up.
+Filesize and Filename is information about a file in case a proper SD card is inserted.
 
 #### About message
 
-As a second message, when turned on, a string is sent that uniquely identifies the device.
+As a next message, when turned on, a string is sent that uniquely identifies the device.
 
 ```
 $DOS,LABDOS01A,L02,256,379276a,1290c00806a200914056a000a0000086
@@ -67,23 +71,22 @@ $DOS,LABDOS01A,L02,256,379276a,1290c00806a200914056a000a0000086
 * `$DOS` - is the first character of the message string
 * `LABDOS01A` - Name of the device. In this case, it is LABDOS
 * `L02`- FW version
-* `256` - ADC offset
+* `256` - ADC DC offset
 * `379276a` - Hash of commit with this firmware
 * `1290c00806a200914056a000a0000086` - Unique serial number of LABDOS dosemeters
 
 #### Data message
 
 ```
-$HIST,47,521,46077,0,256,0,45922,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+$HIST,0,7.94,517,1,13297,48790,2914,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0```
 ```
 
-* `$HIST` - Marking a message with spectrums
-* `count` - Message number since restart or power-up
+* `$HIST` - Marking a message with spectrums (histograms)
+* `count` - Meassuring number since restart or power-up; Restart can be andled by toggling of DTR signal on an asynchronnous interface
 * `time` - Time in seconds from power-up
-* `suppress` -
-* `dose` - Number of detected particles
-* `offset` - ADC offset. Specifies the zero channel position.
-* `energetic channels` - All remaining values indicate a certain energy channel. From the smallest to the largest. The third value is 1st channel. 
+* `suppress` - Number of filtered (omitted) ionizing radiation events, prevention of double detections caused by asynchronous sampling 
+* `flux` - Number of detected particles per meassuring interval (6.88 s)
+* `energetic channels` - All remaining values indicate a certain energy channel from the smallest to the largest deposited energy; The 4th value is 1st channel without noise 
 
 ### Data logging
 
@@ -100,4 +103,6 @@ For computers with windows, you will need to install a driver for [FTDI USB](htt
 #### Stand-alone use
 
 The device contains an SD card, which could be used do data logging in stand-alone use. In that case, the LABDOS01 needs an external power supply.
-That mode could be used for short-term demonstrating of SPACEDOS, AIRDOS, or GEODOS variants of that device.  
+That mode could be used for short-term demonstrating of SPACEDOS, AIRDOS, or GEODOS variants of that device.
+
+* * Note: Ony industrial SLC SD cards with properrly implemented SPI interface are supported.  
