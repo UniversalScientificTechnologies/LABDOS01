@@ -54,16 +54,32 @@ jobs:
           run: |
             echo "// This file is overwritten by github actions, do not update it manually" > fw/githash.h
             echo "String githash = \"${{ github.sha }},CI_action\";" >> fw/githash.h
+        
+        - name: Compile all examples 
+#          env:
+#              sketch-names-find-start: fw/${{ matrix.type }}
+#             set-build-path: true
+#             #build-properties: compiler.cpp.extra_flags="-DCHANNELS=${{ matrix.channels }}"
+#             # build-properties: "build.extra_flags=\"-DCHANNELS=100\"" .. tohle z nejakeho duvodu nefunguje, ackoliv by to mela byt spravna cesta 
+          run: |
+            snap install arduino-cli
+            arduino-cli core update-index --additional-urls https://mcudude.github.io/MiniCore/package_MCUdude_MiniCore_index.json,https://mcudude.github.io/MightyCore/package_MCUdude_MightyCore_index.json > /dev/null
+            arduino-cli core install MightyCore:avr --additional-urls https://mcudude.github.io/MiniCore/package_MCUdude_MiniCore_index.json,https://mcudude.github.io/MightyCore/package_MCUdude_MightyCore_index.json > /dev/null
             
-        - name: Compile all examples
-          uses: ArminJo/arduino-test-compile@v3
-          with:
-            arduino-board-fqbn: MightyCore:avr:1284:BOD=disabled,LTO=Os,${{ matrix.fqbn }},variant=modelP --build-property build.extra_flags=-DCHANNELS=${{ matrix.channels }}\ -DBUILD=${{ github.run_number }}
-            platform-url:  https://mcudude.github.io/MiniCore/package_MCUdude_MiniCore_index.json https://mcudude.github.io/MightyCore/package_MCUdude_MightyCore_index.json
-            sketch-names-find-start: fw/${{ matrix.type }}
-            set-build-path: true
-            #build-properties: compiler.cpp.extra_flags="-DCHANNELS=${{ matrix.channels }}"
-            # build-properties: "build.extra_flags=\"-DCHANNELS=100\"" .. tohle z nejakeho duvodu nefunguje, ackoliv by to mela byt spravna cesta
+            PLATFORM=MightyCore:avr
+            arduino-cli compile --verbose --warnings all --fqbn MightyCore:avr:1284:BOD=disabled,LTO=Os,${{ matrix.fqbn }},variant=modelP --build-property compiler.cpp.extra_flags="-DCHANNELS={{ matrix.channels }} -DBUILD={{ github.build_number }}" --build-path fw/LABDOS/build/  fw/LABDOS
+            
+   
+            
+#         - name: Compile all examples
+#           uses: ArminJo/arduino-test-compile@v3
+#           with:
+#             arduino-board-fqbn: MightyCore:avr:1284:BOD=disabled,LTO=Os,${{ matrix.fqbn }},variant=modelP --build-property build.extra_flags=-DCHANNELS=${{ matrix.channels }}\ -DBUILD=${{ github.run_number }}
+#             platform-url:  https://mcudude.github.io/MiniCore/package_MCUdude_MiniCore_index.json https://mcudude.github.io/MightyCore/package_MCUdude_MightyCore_index.json
+#             sketch-names-find-start: fw/${{ matrix.type }}
+#             set-build-path: true
+#             #build-properties: compiler.cpp.extra_flags="-DCHANNELS=${{ matrix.channels }}"
+#             # build-properties: "build.extra_flags=\"-DCHANNELS=100\"" .. tohle z nejakeho duvodu nefunguje, ackoliv by to mela byt spravna cesta
   
         #- name: Move to right place
         # # run: |
