@@ -1,4 +1,4 @@
-#define VERSION "06" 
+#define VERSION "07" 
 #ifndef CHANNELS
   #define CHANNELS 1024 // number of channels in buffer for histogram, including negative numbers (512 or 1024)
 #endif
@@ -181,14 +181,6 @@ void setup()
 
   Serial.println("#Cvak...");
   
-  ADMUX = (analog_reference << 6) | ((PIN | 0x10) & 0x1F);
-  ADCSRB = 0;               // Switching ADC to Free Running mode
-  sbi(ADCSRA, ADATE);       // ADC autotrigger enable (mandatory for free running mode)
-  sbi(ADCSRA, ADSC);        // ADC start the first conversions
-  sbi(ADCSRA, 2);           // 0x111 = clock divided by 128, 125 kHz, 104 us for 13 cycles of one AD conversion, 12 us for 1.5 cycle for sample-hold
-  sbi(ADCSRA, 1);        
-  sbi(ADCSRA, 0);        
-
   pinMode(RESET, OUTPUT);   // reset for peak detetor
 
   //pinMode(SDpower1, OUTPUT);  // SDcard interface
@@ -223,9 +215,9 @@ void setup()
     sbi(ADCSRA, ADATE);       // ADC autotrigger enable (mandatory for free running mode)
     sbi(ADCSRA, ADSC);        // ADC start the first conversions
 #if F_CPU==8000000L
-    cbi(ADCSRA, 2);           // 0x111 = clock divided by 64
+    sbi(ADCSRA, 2);           // 0x110 = clock divided by 64
     sbi(ADCSRA, 1);        
-    sbi(ADCSRA, 0);        
+    cbi(ADCSRA, 0);        
 #else
     sbi(ADCSRA, 2);           // 0x111 = clock divided by 128
     sbi(ADCSRA, 1);        
@@ -383,9 +375,9 @@ void loop()
   sbi(ADCSRA, ADATE);       // ADC autotrigger enable (mandatory for free running mode)
   sbi(ADCSRA, ADSC);        // ADC start the first conversions
 #if F_CPU==8000000L
-  cbi(ADCSRA, 2);           // 0x111 = clock divided by 64
+  sbi(ADCSRA, 2);           // 0x110 = clock divided by 64
   sbi(ADCSRA, 1);        
-  sbi(ADCSRA, 0);        
+  cbi(ADCSRA, 0);        
 #else
   sbi(ADCSRA, 2);           // 0x111 = clock divided by 128
   sbi(ADCSRA, 1);        
