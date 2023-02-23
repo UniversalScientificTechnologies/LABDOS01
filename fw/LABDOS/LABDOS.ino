@@ -1,4 +1,15 @@
-#define VERSION "07" 
+#define VERSION "07"
+#define MAJOR 7
+#define MINOR 4 // parser version ??
+#ifndef RELEASE
+  #define RELEASE 0
+#endif
+#ifndef BUILD
+  #define BUILD 0 // 0 - means manual 
+#endif
+
+
+
 #ifndef CHANNELS
   #define CHANNELS 1024 // number of channels in buffer for histogram, including negative numbers (512 or 1024)
 #endif
