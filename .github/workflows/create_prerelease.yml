@@ -1,0 +1,62 @@
+name: Create LABDOS Pre-Release (BETA)
+
+on:
+  workflow_dispatch:
+
+jobs:
+
+  build:
+    uses: ./.github/workflows/build_fw.yml
+    with:
+      build_type: B
+    secrets: inherit
+
+  release:  
+    runs-on: ubuntu-latest
+    needs: [build]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          ref: LABDOS01A
+
+      - name: Gen Release Name and preare assets
+        id: gen_release_name
+        run: |
+          MAJOR=`cat fw/LABDOS/nextversion|grep MAJOR|cut -d ' ' -f 2`
+          MINOR=`cat fw/LABDOS/nextversion|grep MINOR|cut -d ' ' -f 2`
+          NEXTRELEASE=`cat fw/LABDOS/nextversion|grep RELEASE|cut -d ' ' -f 2`
+          RELEASE=`echo $NEXTRELEASE"-1"|bc`
+
+          echo "tagname=LABDOS-${MAJOR}.${MINOR}.${RELEASE}.BETA"  >> $GITHUB_OUTPUT
+
+      - name: Create TAG
+        run: |
+          echo "${{ steps.gen_release_name.outputs.tagname }}"
+          git config user.name "${GITHUB_ACTOR}"
+          git config user.email "${GITHUB_ACTOR}@users.noreply.github.com"
+          git tag -a ${{ steps.gen_release_name.outputs.tagname }} -m "Release ${{ steps.gen_release_name.outputs.tagname }}"
+          git push origin ${{ steps.gen_release_name.outputs.tagname }}
+
+      - name: Create Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ steps.gen_release_name.outputs.tagname }}
+          release_name: BETA ${{ steps.gen_release_name.outputs.tagname }}
+          draft: false
+          prerelease: true
+        
+      - name: Upload Release Assets
+        id: upload-release-assets
+        uses: dwenegar/upload-release-assets@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          release_id: ${{ steps.create_release.outputs.id }}
+          assets_path: fw/build/*.hex
+
+        
+
