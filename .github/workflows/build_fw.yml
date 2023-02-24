@@ -136,7 +136,7 @@ jobs:
 
       - name: Update git hash
         run: |
-          mv fw/build/*/nextversion fw/LABDOS/
+          mv -f fw/build/*/nextversion fw/LABDOS/
           echo "// This file is overwritten by github actions, do not update it manually" > fw/githash.h
           echo "String githash = \"${{ github.sha }},user_build\";" >> fw/githash.h
           echo -n "  #define RELEASE " >> fw/githash.h
