@@ -142,7 +142,9 @@ jobs:
 
       - name: Update git hash
         run: |
-          cp -R fw/artifacts/*/* . || true
+          ls fw/artifacts/*/
+          ls fw/artifacts/*/*
+          cp -R fw/artifacts/*/ . || true
                     
           echo "// This file is overwritten by github actions, do not update it manually" > fw/githash.h
           echo "String githash = \"${{ github.sha }},user_build\";" >> fw/githash.h
