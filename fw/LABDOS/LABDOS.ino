@@ -2,7 +2,7 @@
 #define STR(s) #s
 #define VERSION "07"
 #define MAJOR 7
-#define MINOR 4 
+#define MINOR 5 
 
 
 
