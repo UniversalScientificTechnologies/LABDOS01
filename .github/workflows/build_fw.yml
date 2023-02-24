@@ -45,10 +45,6 @@ jobs:
             channels: 0
 
     steps:
-        - name: Check paramters
-          run: |
-            echo ${{ inputs.build_type }}
-  
         - name: Checkout
           uses: actions/checkout@v3
           continue-on-error: true
@@ -62,6 +58,18 @@ jobs:
         
         - name: Compile all examples 
           run: |
+            BUILD_TYPE="${{ inputs.build_type }}"
+            BT="CIBuild"
+            if [ "$BUILD_TYPE" = "B" ]; then
+              BT="Beta"
+            fi
+            if [ "$BUILD_TYPE" = "R" ]; then
+              BT="Release"
+            fi 
+
+            echo "$BUILD_TYPE"
+            echo "$BT"
+
             sudo snap install arduino-cli
             arduino-cli core update-index --additional-urls https://mcudude.github.io/MiniCore/package_MCUdude_MiniCore_index.json,https://mcudude.github.io/MightyCore/package_MCUdude_MightyCore_index.json > /dev/null
             arduino-cli core install MightyCore:avr --additional-urls https://mcudude.github.io/MiniCore/package_MCUdude_MiniCore_index.json,https://mcudude.github.io/MightyCore/package_MCUdude_MightyCore_index.json > /dev/null

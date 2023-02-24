@@ -8,7 +8,7 @@ jobs:
   build:
     uses: ./.github/workflows/build_fw.yml
     with:
-      build_type: Release
+      build_type: R
     secrets: inherit
 
   release:  
