@@ -1,4 +1,4 @@
-name: Create Release
+name: Create LABDOS Release
 
 on:
   workflow_dispatch:
@@ -28,12 +28,7 @@ jobs:
           NEXTRELEASE=`cat fw/LABDOS/nextversion|grep RELEASE|cut -d ' ' -f 2`
           RELEASE=`echo $NEXTRELEASE"-1"|bc`
 
-          echo "tagname=${MAJOR}.${MINOR}.${RELEASE}"  >> $GITHUB_OUTPUT
-
-          cd fw/build;
-          find -type f -exec bash -c 'cp $0 $(echo $0|sed "s/\//_/2g"|sed 's/ino/${MAJOR}.${MINOR}.${RELEASE}/g')' {} \;
-          cd ../..;
-
+          echo "tagname=LABDOS-${MAJOR}.${MINOR}.${RELEASE}"  >> $GITHUB_OUTPUT
 
       - name: Create TAG
         run: |
