@@ -5,13 +5,16 @@ on:
 
 jobs:
   build:
+    uses: ./.github/workflows/build_fw.yml
+  
+  release:  
     runs-on: ubuntu-latest
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
-
+    steps:   
       - name: Test build
-        uses: ./.github/workflows/build_fw.yml
+      run: |
+        echo "Ahoj"
+
+        
 #          with:
 #            name: LABDOS01_GOLOG
 
