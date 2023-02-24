@@ -1,3 +1,5 @@
+<a href="https://certification.oshwa.org/cz000008.html" title="Open Source Hardware Association Certificate"><img align="right" src="https://raw.githubusercontent.com/oshwa/certification-mark-generator/gh-pages/premade/certification-template.svg" alt="Open Source Hardware Association Certificate"></a>
+
 # LABDOS01 - Scientific, semiconductor-based ionizing radiation spectrometer
 
 [![Build firmware](https://github.com/UniversalScientificTechnologies/LABDOS01/actions/workflows/build_fw.yml/badge.svg)](https://github.com/UniversalScientificTechnologies/LABDOS01/actions/workflows/build_fw.yml)
