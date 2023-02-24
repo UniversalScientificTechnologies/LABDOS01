@@ -64,16 +64,10 @@ jobs:
 
             PREVMAJOR=`cat fw/LABDOS/nextversion|grep MAJOR|cut -d ' ' -f 2`
             PREVMINOR=`cat fw/LABDOS/nextversion|grep MINOR|cut -d ' ' -f 2`
-            NEXTRELEASE=`cat fw/LABDOS/nextversion|grep MINOR|cut -d ' ' -f 2`
+            NEXTRELEASE=`cat fw/LABDOS/nextversion|grep RELEASE|cut -d ' ' -f 2`
 
             CURMAJOR=`cat fw/LABDOS/LABDOS.ino|grep MAJOR|head -n 1|cut -d ' ' -f 3`
             CURMINOR=`cat fw/LABDOS/LABDOS.ino|grep MINOR|head -n 1|cut -d ' ' -f 3`
-
-            echo $PREVMAJOR
-            echo $PREVMINOR
-            echo $NEXTRELEASE
-            echo $CURMAJOR
-            echo $CURMINOR
 
             if [ "$CURMAJOR" = "$PREVMAJOR" ] && [ "$CURMINOR" = "$PREVMINOR" ]; then
               echo "Same version"
@@ -140,11 +134,11 @@ jobs:
           rm fw/build/*/nextversion
           echo "// This file is overwritten by github actions, do not update it manually" > fw/githash.h
           echo "String githash = \"${{ github.sha }},user_build\";" >> fw/githash.h
-          echo -n "  #define RELEASE " >> fw/githash.h
+          echo -n "#define RELEASE " >> fw/githash.h
           cat fw/LABDOS/nextversion|grep RELEASE|cut -d ' ' -f 2 >>fw/githash.h
           echo "" >> fw/githash.h
-          echo "  #define BUILD 0" >> fw/githash.h
-          echo "  #define BUILDTYPE User" >> fw/githash.h
+          echo "#define BUILD 0" >> fw/githash.h
+          echo "#define BUILDTYPE User" >> fw/githash.h
       
       - name: Get last commit message
         id: last-commit-message
