@@ -11,8 +11,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:   
       - name: Test build
-      run: |
-        echo "Ahoj"
+        run: |
+          echo "Ahoj"
 
         
 #          with:
