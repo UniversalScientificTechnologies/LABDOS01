@@ -51,7 +51,7 @@ jobs:
           with:
             submodules: True
         
-        - name: Update git hash and Compile all examples 
+        - name: Update githash.h and compile  
           run: |
             BUILD_TYPE="${{ inputs.build_type }}"
             BT="CIBuild"
@@ -89,16 +89,24 @@ jobs:
             PLATFORM=MightyCore:avr
             arduino-cli compile --verbose --warnings all --fqbn MightyCore:avr:1284:BOD=disabled,LTO=Os,${{ matrix.fqbn }},variant=modelP --build-property compiler.cpp.extra_flags="-DCHANNELS=${{ matrix.channels }} -DBUILD=${{ github.build_number }}" --build-path fw/${{ matrix.type }}/build/  fw/${{ matrix.type }}
 
+            cd fw/${{ matrix.type }}/build/
+            find -type f -exec bash -c 'mv $0 fw_${{ matrix.type }}_${{ matrix.name }}${0}' {} \;
+            cd ../../..
+
+            rm fw/build -r || true
+            mkdir fw/build
+            mv fw/${{ matrix.type }}/build/ fw/build
+
             if [ "$BUILD_TYPE" = "R" ]; then
               NEXTRELEASE=`echo $NEXTRELEASE"+1"|bc`
             fi
-            
             echo "#this file is maintained by github actions" > nextversion
             echo "MAJOR ${CURMAJOR}" >> nextversion 
             echo "MINOR ${CURMINOR}" >> nextversion 
             echo "RELEASE ${NEXTRELEASE}" >> nextversion 
-            mkdir fw/${{ matrix.type }}/build/${{ matrix.type }}
-            cp nextversion fw/${{ matrix.type }}/build/${{ matrix.type }}
+
+            mv nextversion fw/${{ matrix.type }}/
+            touch root
 
         - name: Store data
           uses: actions/upload-artifact@v3
@@ -106,7 +114,8 @@ jobs:
             name: fw_${{ matrix.type }}_${{ matrix.name }}
             path: |
               fw/${{ matrix.type }}/build/*.hex
-              fw/${{ matrix.type }}/build/${{ matrix.type }}/nextversion
+              fw/${{ matrix.type }}/nextversion
+              root
             retention-days: 1
 
   commit:
@@ -123,18 +132,18 @@ jobs:
       - run: |
           rm fw/build -r || true
           mkdir fw/build
+          mkdir fw/artifacts
 
       - name: Download a Build Artifact
         uses: actions/download-artifact@v3.0.2
         with:
-          path: 'fw/build/'
+          path: 'fw/artifacts/'
 
 
       - name: Update git hash
         run: |
-          ls fw/build          
-          mv fw/build/nextversion fw/LABDOS/
-          rm fw/build/*/nextversion
+          cp -R fw/artifacts/*/* .          
+
           echo "// This file is overwritten by github actions, do not update it manually" > fw/githash.h
           echo "String githash = \"${{ github.sha }},user_build\";" >> fw/githash.h
           echo -n "#define RELEASE " >> fw/githash.h
@@ -151,7 +160,7 @@ jobs:
       - uses: stefanzweifel/git-auto-commit-action@v4
         with:
           commit_message: ${{ steps.last-commit-message.outputs.msg }}, extended build
-          file_pattern: 'fw/build/* fw/githash.h fw/LABDOS/nextversion'
+          file_pattern: 'fw/build/* fw/githash.h fw/LABDOS/nextversion fw/UAVDOS/nextversion'
           #commit_options: '--amend --no-edit'
           #push_options: '--force'
           skip_fetch: true
