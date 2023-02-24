@@ -65,6 +65,7 @@ jobs:
             PREVMAJOR=`cat fw/${{ matrix.type }}/nextversion|grep MAJOR|cut -d ' ' -f 2`
             PREVMINOR=`cat fw/${{ matrix.type }}/nextversion|grep MINOR|cut -d ' ' -f 2`
             NEXTRELEASE=`cat fw/${{ matrix.type }}/nextversion|grep RELEASE|cut -d ' ' -f 2`
+            NEXTBUILD=`cat fw/${{ matrix.type }}/nextversion|grep BUILD|cut -d ' ' -f 2`
 
             CURMAJOR=`cat fw/${{ matrix.type }}/${{ matrix.type }}.ino|grep MAJOR|head -n 1|cut -d ' ' -f 3`
             CURMINOR=`cat fw/${{ matrix.type }}/${{ matrix.type }}.ino|grep MINOR|head -n 1|cut -d ' ' -f 3`
@@ -79,7 +80,7 @@ jobs:
             echo "// This file is overwritten by github actions, do not update it manually" > githash.h
             echo "String githash = \"${{ github.sha }},${BT}\";" >> githash.h
             echo "#define RELEASE ${NEXTRELEASE}" >> githash.h
-            echo "#define BUILD ${{ github.build_number }}" >> githash.h
+            echo "#define BUILD ${NEXTBUILD}" >> githash.h
             echo "#define BUILDTYPE ${BT}" >> githash.h
 
             mv githash.h fw/${{ matrix.type }}/
@@ -89,14 +90,16 @@ jobs:
             arduino-cli core install MightyCore:avr --additional-urls https://mcudude.github.io/MiniCore/package_MCUdude_MiniCore_index.json,https://mcudude.github.io/MightyCore/package_MCUdude_MightyCore_index.json > /dev/null
             
             PLATFORM=MightyCore:avr
-            arduino-cli compile --verbose --warnings all --fqbn MightyCore:avr:1284:BOD=disabled,LTO=Os,${{ matrix.fqbn }},variant=modelP --build-property compiler.cpp.extra_flags="-DCHANNELS=${{ matrix.channels }} -DBUILD=${{ github.build_number }}" --build-path fw/${{ matrix.type }}/build/  fw/${{ matrix.type }}
+            arduino-cli compile --verbose --warnings all --fqbn MightyCore:avr:1284:BOD=disabled,LTO=Os,${{ matrix.fqbn }},variant=modelP --build-property compiler.cpp.extra_flags="-DCHANNELS=${{ matrix.channels }}" --build-path fw/${{ matrix.type }}/build/  fw/${{ matrix.type }}
 
             cd fw/${{ matrix.type }}/build/
-            find -type f -name "*.hex" -exec bash -c 'mv $0 fw_${{ matrix.type }}_${{ matrix.name }}$(echo $0|sed -e "s/\.\///1"|sed -e "s/${{ matrix.type }}\.ino//g")' {} \;
+            find -type f -name "*.hex" -exec bash -c 'mv $0 fw_${{ matrix.type }}_${{ matrix.name }}_${NEXTBUILD}_$(echo $0|sed -e "s/\.\///1"|sed -e "s/${{ matrix.type }}\.ino//g")' {} \;
             cd ../../..
 
             rm fw/build -r || true
             mv fw/${{ matrix.type }}/build fw/build
+
+            NEXTBUILD=`echo $NEXTBUILD"+1"|bc`
 
             if [ "$BUILD_TYPE" = "R" ]; then
               NEXTRELEASE=`echo $NEXTRELEASE"+1"|bc`
@@ -105,6 +108,7 @@ jobs:
             echo "MAJOR ${CURMAJOR}" >> nextversion 
             echo "MINOR ${CURMINOR}" >> nextversion 
             echo "RELEASE ${NEXTRELEASE}" >> nextversion 
+            echo "BUILD ${NEXTBUILD}" >> nextversion 
 
             echo "// This file is overwritten by github actions, do not update it manually" > githash.h
             echo "String githash = \"${{ github.sha }},User\";" >> githash.h
