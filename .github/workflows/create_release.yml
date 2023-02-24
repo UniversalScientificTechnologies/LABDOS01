@@ -1,9 +1,6 @@
 name: Create Release
 
 on:
-  push:
-    branches:
-      - action_tests
   workflow_dispatch:
 
 jobs:
@@ -11,10 +8,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Test build
-        run: |
-          echo "Ahoj"
-#        with:
-#          name: LABDOS01_GOLOG
+        uses: ./build_fw.yml
+#          with:
+#            name: LABDOS01_GOLOG
 
  
 #jobs:
