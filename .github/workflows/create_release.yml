@@ -32,6 +32,8 @@ jobs:
       - name: Create TAG
         run: |
           echo "${{ steps.gen_release_name.outputs.tagname }}"
+          git tag -a ${{ steps.gen_release_name.outputs.tagname }} -m "Release ${{ steps.gen_release_name.outputs.tagname }}"
+          git push
 
 #      - name: Create Release
 #        id: create_release
