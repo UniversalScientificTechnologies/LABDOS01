@@ -62,12 +62,12 @@ jobs:
               BT="Release"
             fi 
 
-            PREVMAJOR=`cat fw/LABDOS/nextversion|grep MAJOR|cut -d ' ' -f 2`
-            PREVMINOR=`cat fw/LABDOS/nextversion|grep MINOR|cut -d ' ' -f 2`
-            NEXTRELEASE=`cat fw/LABDOS/nextversion|grep RELEASE|cut -d ' ' -f 2`
+            PREVMAJOR=`cat fw/${{ matrix.type }}/nextversion|grep MAJOR|cut -d ' ' -f 2`
+            PREVMINOR=`cat fw/${{ matrix.type }}/nextversion|grep MINOR|cut -d ' ' -f 2`
+            NEXTRELEASE=`cat fw/${{ matrix.type }}/nextversion|grep RELEASE|cut -d ' ' -f 2`
 
-            CURMAJOR=`cat fw/LABDOS/LABDOS.ino|grep MAJOR|head -n 1|cut -d ' ' -f 3`
-            CURMINOR=`cat fw/LABDOS/LABDOS.ino|grep MINOR|head -n 1|cut -d ' ' -f 3`
+            CURMAJOR=`cat fw/${{ matrix.type }}/${{ matrix.type }}.ino|grep MAJOR|head -n 1|cut -d ' ' -f 3`
+            CURMINOR=`cat fw/${{ matrix.type }}/${{ matrix.type }}.ino|grep MINOR|head -n 1|cut -d ' ' -f 3`
 
             if [ "$CURMAJOR" = "$PREVMAJOR" ] && [ "$CURMINOR" = "$PREVMINOR" ]; then
               echo "Same version"
@@ -87,16 +87,18 @@ jobs:
             arduino-cli core install MightyCore:avr --additional-urls https://mcudude.github.io/MiniCore/package_MCUdude_MiniCore_index.json,https://mcudude.github.io/MightyCore/package_MCUdude_MightyCore_index.json > /dev/null
             
             PLATFORM=MightyCore:avr
-            arduino-cli compile --verbose --warnings all --fqbn MightyCore:avr:1284:BOD=disabled,LTO=Os,${{ matrix.fqbn }},variant=modelP --build-property compiler.cpp.extra_flags="-DCHANNELS=${{ matrix.channels }} -DBUILD=${{ github.build_number }}" --build-path fw/LABDOS/build/  fw/LABDOS
+            arduino-cli compile --verbose --warnings all --fqbn MightyCore:avr:1284:BOD=disabled,LTO=Os,${{ matrix.fqbn }},variant=modelP --build-property compiler.cpp.extra_flags="-DCHANNELS=${{ matrix.channels }} -DBUILD=${{ github.build_number }}" --build-path fw/${{ matrix.type }}/build/  fw/${{ matrix.type }}
 
             if [ "$BUILD_TYPE" = "R" ]; then
               NEXTRELEASE=`echo $NEXTRELEASE"+1"|bc`
             fi
             
-            echo "#this file is maintained by github actions" > fw/LABDOS/nextversion
-            echo "MAJOR ${CURMAJOR}" >> fw/LABDOS/nextversion 
-            echo "MINOR ${CURMINOR}" >> fw/LABDOS/nextversion 
-            echo "RELEASE ${NEXTRELEASE}" >> fw/LABDOS/nextversion 
+            echo "#this file is maintained by github actions" > nextversion
+            echo "MAJOR ${CURMAJOR}" >> nextversion 
+            echo "MINOR ${CURMINOR}" >> nextversion 
+            echo "RELEASE ${NEXTRELEASE}" >> nextversion 
+            mkdir fw/${{ matrix.type }}/build/${{ matrix.type }}
+            cp nextversion fw/${{ matrix.type }}/build/${{ matrix.type }}
 
         - name: Store data
           uses: actions/upload-artifact@v3
@@ -104,7 +106,7 @@ jobs:
             name: fw_${{ matrix.type }}_${{ matrix.name }}
             path: |
               fw/${{ matrix.type }}/build/*.hex
-              fw/LABDOS/nextversion
+              fw/${{ matrix.type }}/build/${{ matrix.type }}/nextversion
             retention-days: 1
 
   commit:
@@ -130,7 +132,8 @@ jobs:
 
       - name: Update git hash
         run: |
-          mv fw/build/fw_LABDOS_LABDOS_1024_16Mhz/nextversion fw/LABDOS/
+          ls fw/build          
+          mv fw/build/nextversion fw/LABDOS/
           rm fw/build/*/nextversion
           echo "// This file is overwritten by github actions, do not update it manually" > fw/githash.h
           echo "String githash = \"${{ github.sha }},user_build\";" >> fw/githash.h

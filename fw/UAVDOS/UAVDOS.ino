@@ -1,6 +1,9 @@
 String FWversion = "UAV00"; // 8 MHz crystal
 #define ZERO 256 // 3th channel is channel 1 (ussually DCoffset or DCoffset+1, for version with noise reduction transistor)
 
+#define MAJOR 0
+#define MINOR 1
+
 /*
   SIPIN for UAV
  
