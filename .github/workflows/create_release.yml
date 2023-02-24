@@ -28,10 +28,12 @@ jobs:
           NEXTRELEASE=`cat fw/LABDOS/nextversion|grep RELEASE|cut -d ' ' -f 2`
           RELEASE=`echo $NEXTRELEASE"-1"|bc`
 
-          mkdir assets
-          cp fw/build/*/build/*.hex assets
-
           echo "tagname=${MAJOR}.${MINOR}.${RELEASE}"  >> $GITHUB_OUTPUT
+
+          cd build;
+          find -type f -exec bash -c 'mv $0 $(echo $0|sed "s/\//_/2"|sed 's/\./${MAJOR}\.${MINOR}\.${RELEASE}\./g')' {} \;
+          cd ..;
+
 
       - name: Create TAG
         run: |
@@ -59,7 +61,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           release_id: ${{ steps.create_release.outputs.id }}
-          assets_path: assets/*.hex
+          assets_path: build/*.hex
 
         
 
