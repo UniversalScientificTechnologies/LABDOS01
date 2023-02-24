@@ -8,7 +8,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Test build
-        uses: ./build_fw.yml
+        uses: ./.github/workflows/build_fw.yml
 #          with:
 #            name: LABDOS01_GOLOG
 
