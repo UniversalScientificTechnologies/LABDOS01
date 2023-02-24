@@ -84,7 +84,7 @@ jobs:
 
             echo "// This file is overwritten by github actions, do not update it manually" > fw/githash.h
             echo "String githash = \"${{ github.sha }},${BT}\";" >> fw/githash.h
-            echo -n "#define RELEASE ${NEXTRELEASE}" >> fw/githash.h
+            echo "#define RELEASE ${NEXTRELEASE}" >> fw/githash.h
             echo "#define BUILD ${{ github.build_number }}" >> fw/githash.h
             echo "#define BUILDTYPE ${BT}" >> fw/githash.h
 
@@ -95,7 +95,7 @@ jobs:
             PLATFORM=MightyCore:avr
             arduino-cli compile --verbose --warnings all --fqbn MightyCore:avr:1284:BOD=disabled,LTO=Os,${{ matrix.fqbn }},variant=modelP --build-property compiler.cpp.extra_flags="-DCHANNELS=${{ matrix.channels }} -DBUILD=${{ github.build_number }}" --build-path fw/LABDOS/build/  fw/LABDOS
 
-            if [ "$BUILD_TYPE" = "R" ];
+            if [ "$BUILD_TYPE" = "R" ]; then
               NEXTRELEASE=`echo $NEXTRELEASE"+1"|bc`
             fi
             

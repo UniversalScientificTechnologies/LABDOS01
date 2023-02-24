@@ -2,13 +2,8 @@
 #define STR(s) #s
 #define VERSION "07"
 #define MAJOR 7
-#define MINOR 4 // parser version ??
-#ifndef RELEASE
-  #define RELEASE 0
-#endif
-#ifndef BUILD
-  #define BUILD 0 // 0 - means manual 
-#endif
+#define MINOR 4 
+
 
 
 
