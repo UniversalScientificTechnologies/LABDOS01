@@ -76,11 +76,13 @@ jobs:
               NEXTRELEASE=0
             fi
 
-            echo "// This file is overwritten by github actions, do not update it manually" > fw/githash.h
-            echo "String githash = \"${{ github.sha }},${BT}\";" >> fw/githash.h
-            echo "#define RELEASE ${NEXTRELEASE}" >> fw/githash.h
-            echo "#define BUILD ${{ github.build_number }}" >> fw/githash.h
-            echo "#define BUILDTYPE ${BT}" >> fw/githash.h
+            echo "// This file is overwritten by github actions, do not update it manually" > githash.h
+            echo "String githash = \"${{ github.sha }},${BT}\";" >> githash.h
+            echo "#define RELEASE ${NEXTRELEASE}" >> githash.h
+            echo "#define BUILD ${{ github.build_number }}" >> githash.h
+            echo "#define BUILDTYPE ${BT}" >> githash.h
+
+            mv githash.h fw/${{ matrix.type }}/
 
             sudo snap install arduino-cli
             arduino-cli core update-index --additional-urls https://mcudude.github.io/MiniCore/package_MCUdude_MiniCore_index.json,https://mcudude.github.io/MightyCore/package_MCUdude_MightyCore_index.json > /dev/null
@@ -90,7 +92,7 @@ jobs:
             arduino-cli compile --verbose --warnings all --fqbn MightyCore:avr:1284:BOD=disabled,LTO=Os,${{ matrix.fqbn }},variant=modelP --build-property compiler.cpp.extra_flags="-DCHANNELS=${{ matrix.channels }} -DBUILD=${{ github.build_number }}" --build-path fw/${{ matrix.type }}/build/  fw/${{ matrix.type }}
 
             cd fw/${{ matrix.type }}/build/
-            find -type f -name "*.hex" -exec bash -c 'mv $0 fw_${{ matrix.type }}_${{ matrix.name }}_$(echo $0|sed -e "s/\.\///1"|sed -e "s/${{ matrix.type }}\.ino//g")' {} \;
+            find -type f -name "*.hex" -exec bash -c 'mv $0 fw_${{ matrix.type }}_${{ matrix.name }}$(echo $0|sed -e "s/\.\///1"|sed -e "s/${{ matrix.type }}\.ino//g")' {} \;
             cd ../../..
 
             rm fw/build -r || true
@@ -104,7 +106,14 @@ jobs:
             echo "MINOR ${CURMINOR}" >> nextversion 
             echo "RELEASE ${NEXTRELEASE}" >> nextversion 
 
+            echo "// This file is overwritten by github actions, do not update it manually" > githash.h
+            echo "String githash = \"${{ github.sha }},User\";" >> githash.h
+            echo "#define RELEASE ${NEXTRELEASE}" >> githash.h
+            echo "#define BUILD 0" >> githash.h
+            echo "#define BUILDTYPE User" >> githash.h
+      
             mv nextversion fw/${{ matrix.type }}/
+            mv githash.h fw/${{ matrix.type }}/
             touch root
 
         - name: Store data
@@ -114,6 +123,7 @@ jobs:
             path: |
               fw/build/*.hex
               fw/${{ matrix.type }}/nextversion
+              fw/${{ matrix.type }}/githash.h
               root
             retention-days: 1
 
@@ -145,15 +155,10 @@ jobs:
           do
             cp -R fw/artifacts/$d/* ./ ||true
           done
-                    
-          echo "// This file is overwritten by github actions, do not update it manually" > fw/githash.h
-          echo "String githash = \"${{ github.sha }},user_build\";" >> fw/githash.h
-          echo -n "#define RELEASE " >> fw/githash.h
-          cat fw/LABDOS/nextversion|grep RELEASE|cut -d ' ' -f 2 >>fw/githash.h
-          echo "" >> fw/githash.h
-          echo "#define BUILD 0" >> fw/githash.h
-          echo "#define BUILDTYPE User" >> fw/githash.h
-      
+
+          rm -rf fw/artifacts
+          rm -rf root
+                          
           git status
 
       - name: Get last commit message
@@ -164,7 +169,7 @@ jobs:
       - uses: stefanzweifel/git-auto-commit-action@v4
         with:
           commit_message: ${{ steps.last-commit-message.outputs.msg }}, extended build
-          file_pattern: 'fw/build/* fw/githash.h fw/LABDOS/nextversion fw/UAVDOS/nextversion'
+          file_pattern: 'fw/build/* fw/LABDOS/githash.h fw/LABDOS/nextversion fw/UAVDOS/githash.h fw/UAVDOS/nextversion'
           #commit_options: '--amend --no-edit'
           #push_options: '--force'
           skip_fetch: true
