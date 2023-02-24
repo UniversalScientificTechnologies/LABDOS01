@@ -2,6 +2,7 @@
 
 [![Build firmware](https://github.com/UniversalScientificTechnologies/LABDOS01/actions/workflows/build_fw.yml/badge.svg)](https://github.com/UniversalScientificTechnologies/LABDOS01/actions/workflows/build_fw.yml)
 
+
 ![LABDOS01 back panel](/doc/LABDOS01.jpg "LABDOS01A on table")
 
 LABDOS01 is an open-source spectrometer-dosimeter based on a silicon PIN diode and is intended for scientific research and experimental purposes. Power and communication are secured by a USB-C port or JST-GH connector. The device can be used statically (located in a specific place e.g. laboratory or base) or in mobile applications (such as cars or UAVs). The spectrometer is housed in a 3D printed box, which brings basic mechanical resistance and allows future development of user enclosures and integrations.
@@ -108,3 +109,6 @@ The device contains an SD card, which could be used do data logging in stand-alo
 That mode could be used for short-term demonstrating of SPACEDOS, AIRDOS, or GEODOS variants of that device.
 
 *Note: Ony industrial SLC SD cards with properly implemented SPI interface are supported.* 
+
+
+[![Open Source Hardware Association Certificate](https://raw.githubusercontent.com/oshwa/certification-mark-generator/gh-pages/premade/certification-template.svg)](https://certification.oshwa.org/cz000008.html)
