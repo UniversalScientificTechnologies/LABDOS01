@@ -1,6 +1,9 @@
 name: Create Release
 
 on:
+  push:
+    branches:
+      - action_tests
   workflow_dispatch:
 
 jobs:
