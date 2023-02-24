@@ -6,11 +6,10 @@ on:
     #branches: [ "LABDOS01A" ]
     paths:
     - 'fw/**'
-    - '*/*.yml'
-  release:
-    types: [created]
-    
+    - '*/*.yml'    
   workflow_dispatch:
+  workflow_call:
+    secrets: inherit
 
 jobs:
   build:
@@ -56,11 +55,6 @@ jobs:
             echo "String githash = \"${{ github.sha }},CI_action\";" >> fw/githash.h
         
         - name: Compile all examples 
-#          env:
-#              sketch-names-find-start: fw/${{ matrix.type }}
-#             set-build-path: true
-#             #build-properties: compiler.cpp.extra_flags="-DCHANNELS=${{ matrix.channels }}"
-#             # build-properties: "build.extra_flags=\"-DCHANNELS=100\"" .. tohle z nejakeho duvodu nefunguje, ackoliv by to mela byt spravna cesta 
           run: |
             sudo snap install arduino-cli
             arduino-cli core update-index --additional-urls https://mcudude.github.io/MiniCore/package_MCUdude_MiniCore_index.json,https://mcudude.github.io/MightyCore/package_MCUdude_MightyCore_index.json > /dev/null
@@ -69,23 +63,6 @@ jobs:
             PLATFORM=MightyCore:avr
             arduino-cli compile --verbose --warnings all --fqbn MightyCore:avr:1284:BOD=disabled,LTO=Os,${{ matrix.fqbn }},variant=modelP --build-property compiler.cpp.extra_flags="-DCHANNELS=${{ matrix.channels }} -DBUILD=${{ github.build_number }}" --build-path fw/LABDOS/build/  fw/LABDOS
             
-   
-            
-#         - name: Compile all examples
-#           uses: ArminJo/arduino-test-compile@v3
-#           with:
-#             arduino-board-fqbn: MightyCore:avr:1284:BOD=disabled,LTO=Os,${{ matrix.fqbn }},variant=modelP --build-property build.extra_flags=-DCHANNELS=${{ matrix.channels }}\ -DBUILD=${{ github.run_number }}
-#             platform-url:  https://mcudude.github.io/MiniCore/package_MCUdude_MiniCore_index.json https://mcudude.github.io/MightyCore/package_MCUdude_MightyCore_index.json
-#             sketch-names-find-start: fw/${{ matrix.type }}
-#             set-build-path: true
-#             #build-properties: compiler.cpp.extra_flags="-DCHANNELS=${{ matrix.channels }}"
-#             # build-properties: "build.extra_flags=\"-DCHANNELS=100\"" .. tohle z nejakeho duvodu nefunguje, ackoliv by to mela byt spravna cesta
-  
-        #- name: Move to right place
-        # # run: |
-        #    mkdir fw/${{ matrix.type }}/build_${{ matrix.name }}
-        #    mv fw/${{ matrix.type }}/build/* fw/${{ matrix.type }}/build_${{ matrix.name }}/
-
         - name: Store data
           uses: actions/upload-artifact@v3
           with:
@@ -130,31 +107,31 @@ jobs:
           #push_options: '--force'
           skip_fetch: true
 
-  release-job:
-    name: Releasing
-    needs: [build]
-    runs-on: ubuntu-latest
-    if: github.event_name == 'release' #&& github.event.action == 'created'
-    steps:
-      - name: Get release
-        id: get_release
-        uses: bruceadams/get-release@v1.3.2
-        env:
-          GITHUB_TOKEN: ${{ github.token }}
-
-      - run: |
-          mkdir build
-          
-      - name: Download a Build Artifact
-        uses: actions/download-artifact@v3.0.2
-        with:
-          path: 'build/'
-          
-      - run: |
-          cd build;
-          find -type f -exec bash -c 'mv $0 $(echo $0|sed "s/\//_/2"|sed 's/\./${{github.build_number}}./g')' {} \;
-          cd ..;
-    
+#  release-job:
+#    name: Releasing
+#    needs: [build]
+#    runs-on: ubuntu-latest
+#    if: github.event_name == 'release' #&& github.event.action == 'created'
+#    steps:
+#      - name: Get release
+#        id: get_release
+#        uses: bruceadams/get-release@v1.3.2
+#        env:
+#          GITHUB_TOKEN: ${{ github.token }}
+#
+#      - run: |
+#          mkdir build
+#          
+#      - name: Download a Build Artifact
+#        uses: actions/download-artifact@v3.0.2
+#        with:
+#          path: 'build/'
+#          
+#      - run: |
+#          cd build;
+#          find -type f -exec bash -c 'mv $0 $(echo $0|sed "s/\//_/2"|sed 's/\./${{github.build_number}}./g')' {} \;
+#          cd ..;
+#    
 #       - name: Upload Release Asset
 #         id: upload-release-asset 
 #         uses: NBTX/upload-release-assets@v1
@@ -162,11 +139,11 @@ jobs:
 #           upload_url: ${{ steps.get_release.outputs.upload_url }}
 #           targets: build/**/*.hex
 
-      - name: Upload Release Assets
-        id: upload-release-assets
-        uses: dwenegar/upload-release-assets@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          release_id: ${{ steps.get_release.outputs.id }}
-          assets_path: build/*.hex
+#      - name: Upload Release Assets
+#        id: upload-release-assets
+#        uses: dwenegar/upload-release-assets@v1
+#        env:
+#          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+#        with:
+#          release_id: ${{ steps.get_release.outputs.id }}
+#          assets_path: build/*.hex
