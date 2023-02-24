@@ -11,6 +11,7 @@ on:
   workflow_call:
     inputs:
       build_type:
+        default: CIbuild
         required: false
         type: string
 jobs:
