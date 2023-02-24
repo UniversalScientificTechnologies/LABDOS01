@@ -21,11 +21,15 @@ jobs:
       - name: Gen Release Name
         id: gen_release_name
         run: |
-          echo "name=Tralala"
+          MAJOR=`cat fw/LABDOS/nextversion|grep MAJOR|cut -d ' ' -f 2`
+          MINOR=`cat fw/LABDOS/nextversion|grep MINOR|cut -d ' ' -f 2`
+          NEXTRELEASE=`cat fw/LABDOS/nextversion|grep RELEASE|cut -d ' ' -f 2`
+          RELEASE=`echo $NEXTRELEASE"-1"|bc`
+          echo "tagname=${MAJOR}.${MINOR}.${RELEASE}"  >> $GITHUB_OUTPUT
 
       - name: Create TAG
         run: |
-          echo "${{ steps.gen_release_name.outputs.name }}"
+          echo "${{ steps.gen_release_name.outputs.tagname }}"
 
 #      - name: Create Release
 #        id: create_release
