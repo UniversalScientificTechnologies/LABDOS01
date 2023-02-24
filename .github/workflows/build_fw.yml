@@ -90,7 +90,7 @@ jobs:
             arduino-cli compile --verbose --warnings all --fqbn MightyCore:avr:1284:BOD=disabled,LTO=Os,${{ matrix.fqbn }},variant=modelP --build-property compiler.cpp.extra_flags="-DCHANNELS=${{ matrix.channels }} -DBUILD=${{ github.build_number }}" --build-path fw/${{ matrix.type }}/build/  fw/${{ matrix.type }}
 
             cd fw/${{ matrix.type }}/build/
-            find -type f -name "*.hex" -exec bash -c 'mv $0 fw_${{ matrix.type }}_${{ matrix.name }}$(echo $0|sed -e "s/\.\///1")' {} \;
+            find -type f -name "*.hex" -exec bash -c 'mv $0 fw_${{ matrix.type }}_${{ matrix.name }}$(echo $0|sed -e "s/\.\///1"|sed -e "s/${{ matrix.type }}\.ino//g' {} \;
             cd ../../..
 
             rm fw/build -r || true
@@ -143,7 +143,7 @@ jobs:
         run: |
           for d in `ls fw/artifacts`;
           do
-            cp -R $d/* ./ ||true
+            cp -R fw/artifacts/$d/* ./ ||true
           done
                     
           echo "// This file is overwritten by github actions, do not update it manually" > fw/githash.h
