@@ -50,13 +50,8 @@ jobs:
           continue-on-error: true
           with:
             submodules: True
-
-        - name: Update git hash
-          run: |
-            echo "// This file is overwritten by github actions, do not update it manually" > fw/githash.h
-            echo "String githash = \"${{ github.sha }},CI_action\";" >> fw/githash.h
         
-        - name: Compile all examples 
+        - name: Update git hash and Compile all examples 
           run: |
             BUILD_TYPE="${{ inputs.build_type }}"
             BT="CIBuild"
@@ -67,8 +62,31 @@ jobs:
               BT="Release"
             fi 
 
-            echo "$BUILD_TYPE"
-            echo "$BT"
+            PREVMAJOR=`cat fw/LABDOS/nextversion|grep MAJOR|cut -d ' ' -f 2`
+            PREVMINOR=`cat fw/LABDOS/nextversion|grep MINOR|cut -d ' ' -f 2`
+            NEXTRELEASE=`cat fw/LABDOS/nextversion|grep MINOR|cut -d ' ' -f 2`
+
+            CURMAJOR=`cat fw/LABDOS/LABDOS.ino|grep MAJOR|head -n 1|cut -d ' ' -f 3`
+            CURMINOR=`cat fw/LABDOS/LABDOS.ino|grep MINOR|head -n 1|cut -d ' ' -f 3`
+
+            echo $PREVMAJOR
+            echo $PREVMINOR
+            echo $NEXTRELEASE
+            echo $CURMAJOR
+            echo $CURMINOR
+
+            if [ "$CURMAJOR" = "$PREVMAJOR" ] && [ "$CURMINOR" = "$PREVMINOR" ]; then
+              echo "Same version"
+            else
+              echo "New version, set release to 0"
+              NEXTRELEASE=0
+            fi
+
+            echo "// This file is overwritten by github actions, do not update it manually" > fw/githash.h
+            echo "String githash = \"${{ github.sha }},${BT}\";" >> fw/githash.h
+            echo -n "#define RELEASE ${NEXTRELEASE}" >> fw/githash.h
+            echo "#define BUILD ${{ github.build_number }}" >> fw/githash.h
+            echo "#define BUILDTYPE ${BT}" >> fw/githash.h
 
             sudo snap install arduino-cli
             arduino-cli core update-index --additional-urls https://mcudude.github.io/MiniCore/package_MCUdude_MiniCore_index.json,https://mcudude.github.io/MightyCore/package_MCUdude_MightyCore_index.json > /dev/null
@@ -76,12 +94,23 @@ jobs:
             
             PLATFORM=MightyCore:avr
             arduino-cli compile --verbose --warnings all --fqbn MightyCore:avr:1284:BOD=disabled,LTO=Os,${{ matrix.fqbn }},variant=modelP --build-property compiler.cpp.extra_flags="-DCHANNELS=${{ matrix.channels }} -DBUILD=${{ github.build_number }}" --build-path fw/LABDOS/build/  fw/LABDOS
+
+            if [ "$BUILD_TYPE" = "R" ];
+              NEXTRELEASE=`echo $NEXTRELEASE"+1"|bc`
+            fi
             
+            echo "#this file is maintained by github actions" > fw/LABDOS/nextversion
+            echo "MAJOR ${CURMAJOR}" >> fw/LABDOS/nextversion 
+            echo "MINOR ${CURMINOR}" >> fw/LABDOS/nextversion 
+            echo "RELEASE ${NEXTRELEASE}" >> fw/LABDOS/nextversion 
+
         - name: Store data
           uses: actions/upload-artifact@v3
           with:
             name: fw_${{ matrix.type }}_${{ matrix.name }}
-            path: fw/${{ matrix.type }}/build/*.hex
+            path: |
+              fw/${{ matrix.type }}/build/*.hex
+              fw/LABDOS/nextversion
             retention-days: 1
 
   commit:
@@ -95,18 +124,26 @@ jobs:
         with:
           submodules: True
 
-      - name: Update git hash
-        run: |
-          echo "// This file is overwritten by github actions, do not update it manually" > fw/githash.h
-          echo "String githash = \"${{ github.sha }},user_build\";" >> fw/githash.h
-          
       - run: |
           rm fw/build -r || true
           mkdir fw/build
+
       - name: Download a Build Artifact
         uses: actions/download-artifact@v3.0.2
         with:
           path: 'fw/build/'
+
+
+      - name: Update git hash
+        run: |
+          mv fw/build/nextversion fw/LABDOS/
+          echo "// This file is overwritten by github actions, do not update it manually" > fw/githash.h
+          echo "String githash = \"${{ github.sha }},user_build\";" >> fw/githash.h
+          echo -n "  #define RELEASE " >> fw/githash.h
+          cat fw/LABDOS/nextversion|grep RELEASE|cut -d ' ' -f 2 >>fw/githash.h
+          echo "" >> fw/githash.h
+          echo "  #define BUILD 0" >> fw/githash.h
+          echo "  #define BUILDTYPE User" >> fw/githash.h
       
       - name: Get last commit message
         id: last-commit-message
@@ -116,7 +153,7 @@ jobs:
       - uses: stefanzweifel/git-auto-commit-action@v4
         with:
           commit_message: ${{ steps.last-commit-message.outputs.msg }}, extended build
-          file_pattern: 'fw/build/* fw/githash.h'
+          file_pattern: 'fw/build/* fw/githash.h fw/LABDOS/nextversion'
           #commit_options: '--amend --no-edit'
           #push_options: '--force'
           skip_fetch: true
