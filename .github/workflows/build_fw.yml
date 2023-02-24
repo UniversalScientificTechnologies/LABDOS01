@@ -113,7 +113,7 @@ jobs:
           with:
             name: fw_${{ matrix.type }}_${{ matrix.name }}
             path: |
-              fw/${{ matrix.type }}/build/*.hex
+              fw/build/*.hex
               fw/${{ matrix.type }}/nextversion
               root
             retention-days: 1
@@ -142,8 +142,8 @@ jobs:
 
       - name: Update git hash
         run: |
-          cp -R fw/artifacts/*/* .          
-
+          cp -R fw/artifacts/*/* . || true
+                    
           echo "// This file is overwritten by github actions, do not update it manually" > fw/githash.h
           echo "String githash = \"${{ github.sha }},user_build\";" >> fw/githash.h
           echo -n "#define RELEASE " >> fw/githash.h
@@ -152,6 +152,8 @@ jobs:
           echo "#define BUILD 0" >> fw/githash.h
           echo "#define BUILDTYPE User" >> fw/githash.h
       
+          git status
+
       - name: Get last commit message
         id: last-commit-message
         run: |
