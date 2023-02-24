@@ -4,7 +4,7 @@ on:
   push:
     branches:
       - action_tests
-  workflow_dispatch:
+  workflow_dispatch
 
 jobs:
   build:
