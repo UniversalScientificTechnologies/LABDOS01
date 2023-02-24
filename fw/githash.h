@@ -1,6 +1,6 @@
 // This file is overwritten by github actions, do not update it manually
-String githash = "2f6ea190f9a5dc2a352d2774c15ec269985ce0d7,user_build";
-  #define RELEASE 5
+String githash = "123036324e9823819a3eddfd9d7dbb2bc13f7208,user_build";
+#define RELEASE 6
 
-  #define BUILD 0
-  #define BUILDTYPE User
+#define BUILD 0
+#define BUILDTYPE User
