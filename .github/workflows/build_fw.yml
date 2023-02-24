@@ -94,8 +94,7 @@ jobs:
             cd ../../..
 
             rm fw/build -r || true
-            mkdir fw/build
-            mv fw/${{ matrix.type }}/build/ fw/build
+            mv fw/${{ matrix.type }}/build fw/build
 
             if [ "$BUILD_TYPE" = "R" ]; then
               NEXTRELEASE=`echo $NEXTRELEASE"+1"|bc`
@@ -142,9 +141,10 @@ jobs:
 
       - name: Update git hash
         run: |
-          ls fw/artifacts/*/
-          ls fw/artifacts/*/*
-          cp -R fw/artifacts/*/ . || true
+          for d in `ls fw/artifacts`;
+          do
+            cp -R $d/* ./ ||true
+          done
                     
           echo "// This file is overwritten by github actions, do not update it manually" > fw/githash.h
           echo "String githash = \"${{ github.sha }},user_build\";" >> fw/githash.h
