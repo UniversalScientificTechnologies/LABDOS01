@@ -30,9 +30,9 @@ jobs:
 
           echo "tagname=${MAJOR}.${MINOR}.${RELEASE}"  >> $GITHUB_OUTPUT
 
-          cd build;
+          cd fw/build;
           find -type f -exec bash -c 'cp $0 $(echo $0|sed "s/\//_/2g"|sed 's/ino/${MAJOR}.${MINOR}.${RELEASE}/g')' {} \;
-          cd ..;
+          cd ../..;
 
 
       - name: Create TAG
