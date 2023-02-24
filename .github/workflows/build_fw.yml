@@ -19,15 +19,15 @@ jobs:
     strategy:
       matrix:
         include:
-#          - name: LABDOS_512
-#            type: LABDOS
-#            channels: 512
-#            fqbn: clock=8MHz_external
+          - name: LABDOS_512
+            type: LABDOS
+            channels: 512
+            fqbn: clock=8MHz_external
             
-#          - name: LABDOS_1024
-#            type: LABDOS
-#            channels: 1024
-#            fqbn: clock=8MHz_external
+          - name: LABDOS_1024
+            type: LABDOS
+            channels: 1024
+            fqbn: clock=8MHz_external
     
           - name: LABDOS_512_16Mhz
             type: LABDOS
@@ -39,10 +39,10 @@ jobs:
             fqbn: clock=16MHz_external
             channels: 1024
             
-#          - name: UAVDOS
-#            type: UAVDOS
-#            fqbn: clock=8MHz_external
-#            channels: 0
+          - name: UAVDOS
+            type: UAVDOS
+            fqbn: clock=8MHz_external
+            channels: 0
 
     steps:
         - name: Checkout

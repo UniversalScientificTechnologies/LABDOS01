@@ -1,8 +1,8 @@
 #define XSTR(s) STR(s)
 #define STR(s) #s
 #define VERSION "07"
-#define MAJOR 8
-#define MINOR 5 
+#define MAJOR 7
+#define MINOR 1 
 
 
 
