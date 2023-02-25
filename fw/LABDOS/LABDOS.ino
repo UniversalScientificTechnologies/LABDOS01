@@ -1,10 +1,11 @@
-#define XSTR(s) STR(s)
-#define STR(s) #s
+
 #define VERSION "07"
 #define MAJOR 7
-#define MINOR 1 
+#define MINOR 1
+#include "githash.h"
 
-
+#define XSTR(s) STR(s)
+#define STR(s) #s
 
 
 #ifndef CHANNELS
@@ -14,9 +15,9 @@
 #define RANGE ZERO-12
 
 #if CHANNELS==1024
-  String FWversion = XSTR(MAJOR)"."XSTR(MINOR)"."XSTR(GHRELEASE)"-"XSTR(GHBUILD)"-.L500_"; // 500 effective channels for 1024 ADC channels
+  String FWversion = XSTR(MAJOR)"."XSTR(MINOR)".GHRELEASE-GHBUILD-GHBUILDTYPE.L500_"; // 500 effective channels for 1024 ADC channels
 #else
-  String FWversion = XSTR(MAJOR)"."XSTR(MINOR)"."XSTR(GHRELEASE)"-"XSTR(GHBUILD)"-.L244_"; // 244 effective channels for 512 ADC channels
+  String FWversion = XSTR(MAJOR)"."XSTR(MINOR)".GHRELEASE-GHBUILD-GHBUILDTYPE-.L244_"; // 244 effective channels for 512 ADC channels
 #endif
 
 #define MAXFILESIZE MAX_MEASUREMENTS * BYTES_MEASUREMENT // in bytes, 4 MB per day, 28 MB per week, 122 MB per month
@@ -83,7 +84,6 @@ TX1/INT1 (D 11) PD3 17|        |24 PC2 (D 18) TCK
 #include <Wire.h>           
 #include <SD.h>             
 #include <SPI.h>
-#include "githash.h"
 
 #define RESET       0    // PB0
 #define SDpower1    1    // PB1
