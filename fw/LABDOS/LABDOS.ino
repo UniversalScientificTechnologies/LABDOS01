@@ -14,9 +14,9 @@
 #define RANGE ZERO-12
 
 #if CHANNELS==1024
-  String FWversion = XSTR(MAJOR)"."XSTR(MINOR)"."XSTR(RELEASE)"-"XSTR(BUILD)".L500_"; // 500 effective channels for 1024 ADC channels
+  String FWversion = XSTR(MAJOR)"."XSTR(MINOR)"."XSTR(GHRELEASE)"-"XSTR(GHBUILD)"-.L500_"; // 500 effective channels for 1024 ADC channels
 #else
-  String FWversion = XSTR(MAJOR)"."XSTR(MINOR)"."XSTR(RELEASE)"-"XSTR(BUILD)".L244_"; // 244 effective channels for 512 ADC channels
+  String FWversion = XSTR(MAJOR)"."XSTR(MINOR)"."XSTR(GHRELEASE)"-"XSTR(GHBUILD)"-.L244_"; // 244 effective channels for 512 ADC channels
 #endif
 
 #define MAXFILESIZE MAX_MEASUREMENTS * BYTES_MEASUREMENT // in bytes, 4 MB per day, 28 MB per week, 122 MB per month

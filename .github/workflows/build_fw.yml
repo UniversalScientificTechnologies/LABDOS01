@@ -79,9 +79,9 @@ jobs:
 
             echo "// This file is overwritten by github actions, do not update it manually" > githash.h
             echo "String githash = \"${{ github.sha }},${BT}\";" >> githash.h
-            echo "#define RELEASE ${NEXTRELEASE}" >> githash.h
-            echo "#define BUILD ${NEXTBUILD}" >> githash.h
-            echo "#define BUILDTYPE ${BT}" >> githash.h
+            echo "#define GHRELEASE ${NEXTRELEASE}" >> githash.h
+            echo "#define GHBUILD ${NEXTBUILD}" >> githash.h
+            echo "#define GHBUILDTYPE ${BT}" >> githash.h
 
             mv githash.h fw/${{ matrix.type }}/
 
@@ -112,9 +112,9 @@ jobs:
 
             echo "// This file is overwritten by github actions, do not update it manually" > githash.h
             echo "String githash = \"${{ github.sha }},User\";" >> githash.h
-            echo "#define RELEASE ${NEXTRELEASE}" >> githash.h
-            echo "#define BUILD 0" >> githash.h
-            echo "#define BUILDTYPE User" >> githash.h
+            echo "#define GHRELEASE ${NEXTRELEASE}" >> githash.h
+            echo "#define GHBUILD 0" >> githash.h
+            echo "#define GHBUILDTYPE User" >> githash.h
       
             mv nextversion fw/${{ matrix.type }}/
             mv githash.h fw/${{ matrix.type }}/
