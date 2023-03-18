@@ -1,5 +1,5 @@
 
-#define VERSION "07"
+#define VERSION "RADON"
 #define MAJOR 7
 #define MINOR 1
 #include "githash.h"
@@ -95,9 +95,9 @@ TX1/INT1 (D 11) PD3 17|        |24 PC2 (D 18) TCK
 #define SCK         7    // PB7
 #define INT         20   // PC4
 #define ANALOG_ON   15   // PD7
-#define LED1        21 // PC5
-#define LED2        22 // PC6
-#define LED3        23 // PC7
+#define LED1        21//26//21 // PC5
+#define LED2        27//22 // PC6
+#define LED3        28//23 // PC7
 
 String filename = "";
 uint16_t fn;
@@ -128,7 +128,7 @@ boolean SDinserted = true;
 //  14  | A14     | A9      | 1x
 //  15  | A15     | A9      | 1x
 #define PIN 0
-uint8_t analog_reference = INTERNAL2V56; // DEFAULT, INTERNAL, INTERNAL1V1, INTERNAL2V56, or EXTERNAL
+uint8_t analog_reference = DEFAULT; //INTERNAL2V56; // DEFAULT, INTERNAL, INTERNAL1V1, INTERNAL2V56, or EXTERNAL
 
 
 uint8_t bcdToDec(uint8_t b)
