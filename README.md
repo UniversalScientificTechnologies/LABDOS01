@@ -1,3 +1,5 @@
+<a href="https://certification.oshwa.org/cz000008.html" title="Open Source Hardware Association Certificate"><img align="right" src="https://raw.githubusercontent.com/oshwa/certification-mark-generator/gh-pages/premade/certification-template.svg" alt="Open Source Hardware Association Certificate"></a>
+
 # LABDOS01 - Scientific, semiconductor-based ionizing radiation spectrometer
 
 [![Build firmware](https://github.com/UniversalScientificTechnologies/LABDOS01/actions/workflows/build_fw.yml/badge.svg)](https://github.com/UniversalScientificTechnologies/LABDOS01/actions/workflows/build_fw.yml)
@@ -109,6 +111,3 @@ The device contains an SD card, which could be used do data logging in stand-alo
 That mode could be used for short-term demonstrating of SPACEDOS, AIRDOS, or GEODOS variants of that device.
 
 *Note: Ony industrial SLC SD cards with properly implemented SPI interface are supported.* 
-
-
-[![Open Source Hardware Association Certificate](https://raw.githubusercontent.com/oshwa/certification-mark-generator/gh-pages/premade/certification-template.svg)](https://certification.oshwa.org/cz000008.html)
