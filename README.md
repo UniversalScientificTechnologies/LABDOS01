@@ -40,6 +40,21 @@ The device is designed as open-source hardware and software and is released unde
 
 The device uses [USTSIPIN02](https://github.com/ust-modules/USTSIPIN02) which is the core of a range of UST dosimeters specialized to the specific application like AIRDOS or SPACEDOS.
 
+## Usage examples
+
+### Dosemeter for frequent-flyers
+
+The LABDOS could be easily used as a cosmic radiation dosemeter on board aircraft. In this use case, the LABDOS measures the secondary cosmic radiation generated in the atmosphere or the aircraft fuselage. There is a calculation of the dose rate in silicon for the example flight.
+
+![LABDOS01 smartphone connection](/doc/img/altitude_doserate_LABDOS01.png)
+
+The measured data could be compared with a CARI numerical model, as could be seen in the following graph. 
+
+![LABDOS01 smartphone connection](/doc/img/LABDOS01_CARI.png)
+
+The sum is photons+electrons+protons+positrons. The difference between the sum value and the total value is mostly caused by muons.
+If we consider some shielding (the LABDOS sensor is covered by 35 um of copper foil) the agreement is clear. It is also visible that the measured data contains some more information on the fluctuations, which is missing in the numerical model.
+
 ## Connection
 
 Simply plug the LABDOS01A into your computer or tablet USB port using a USB-C cable. The device should appear as a virtual serial line. On a Linux computer, the device should connect without any external drivers. For computers with windows, you will need to install a driver for [FTDI USB](https://ftdichip.com/drivers/) converter.
