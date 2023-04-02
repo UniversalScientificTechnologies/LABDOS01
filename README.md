@@ -11,7 +11,7 @@ LABDOS01 is an open-source spectrometer-dosimeter based on a silicon PIN diode a
 
 LABDOS01 aims to make an open-source, accessible, high-quality, reliable, and simple measuring device - a radiation energy spectrometer for the scientific community.
 
-LABDOS01 to function on its own. It requires a computer to visualize recorded measured data. At least it requires an external powering unit. The device is not intended for outdoor use (it is not waterproof).
+LABDOS01 can function on its own but requires an external power supply. A computer is only required to visualize the recorded data. The device is not intended for outdoor use (it is not waterproof).
 Instead of that, it is intended to be used as an experimental device with the same internals as its application-specific variants like:
 
  * [GEODOS01](https://github.com/UniversalScientificTechnologies/GEODOS01) - Outdoor and stand-alone ionizing radiation detector
@@ -19,7 +19,7 @@ Instead of that, it is intended to be used as an experimental device with the sa
  * [SPACEDOS02](https://github.com/UniversalScientificTechnologies/SPACEDOS02) - PIN diode dosimeter for manned spacecraft
  * [SPACEDOS01](https://github.com/UniversalScientificTechnologies/SPACEDOS01) - CubeSat cosmic radiation dosimeter and spectrometer
 
-LABDOS01 is therefore the all-in-one solution for generic semiconductor-based ionizing radiation measurement. It should be used as a universal testing device before using an application-specific design.
+LABDOS01 is therefore the all-in-one solution for generic semiconductor-based ionizing radiation measurement. It should be used as a universal experiment testing device before using an application-specific design.
 
 ## Where to get it?
 
