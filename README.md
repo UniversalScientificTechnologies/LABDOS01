@@ -42,10 +42,10 @@ The device is designed as open-source hardware and software and is released unde
 
 * AeroSpace or Terrestrial Radiation Monitoring
 * Aircraft Onboard Radiation Monitoring
-* Scientific High Altitude Balloons
-* Educational Toolkit, Pfotzer Maximum Monitoring
+* Scientific High Altitude Balloons, e.g. [Pfotzer Maximum measurement](https://en.wikipedia.org/wiki/Georg_Pfotzer)
+* Educational Toolkit, [cosmic ray monitoring](https://en.wikipedia.org/wiki/Cosmic_ray) 
 * Radiation Mapping in 3D together with GNSS and UAV
-* Space Weather Monitoring
+* Space Weather Monitoring e.g on high altitude observatories 
 * [Citizen science](https://en.wikipedia.org/wiki/Citizen_science)
 
 The device uses [USTSIPIN02](https://github.com/ust-modules/USTSIPIN02) which is the core of a range of UST dosimeters specialized to the specific application like [AIRDOS](https://www.ust.cz/UST-dosimeters/AIRDOS/) or [SPACEDOS](https://www.ust.cz/UST-dosimeters/SPACEDOS/) or [GEODOS](https://www.ust.cz/UST-dosimeters/GEODOS/).
