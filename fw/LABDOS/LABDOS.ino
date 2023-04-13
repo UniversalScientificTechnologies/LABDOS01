@@ -1,7 +1,6 @@
 
-#define VERSION "07"
-#define MAJOR 7
-#define MINOR 1
+#define MAJOR 7   // Data format
+#define MINOR 2   // Features
 #include "githash.h"
 
 #define XSTR(s) STR(s)
@@ -15,9 +14,9 @@
 #define RANGE ZERO-12
 
 #if CHANNELS==1024
-  String FWversion = XSTR(MAJOR)"."XSTR(MINOR)"."XSTR(GHRELEASE)"-"XSTR(GHBUILD)"-"XSTR(GHBUILDTYPE)".L500_"; // 500 effective channels for 1024 ADC channels
+  String FWversion = XSTR(MAJOR)"."XSTR(MINOR)"."XSTR(GHRELEASE)"-"XSTR(GHBUILD)"-"XSTR(GHBUILDTYPE)".L500"; // 500 effective channels for 1024 ADC channels
 #else
-  String FWversion = XSTR(MAJOR)"."XSTR(MINOR)"."XSTR(GHRELEASE)"-"XSTR(GHBUILD)"-"XSTR(GHBUILDTYPE)".L244_"; // 244 effective channels for 512 ADC channels
+  String FWversion = XSTR(MAJOR)"."XSTR(MINOR)"."XSTR(GHRELEASE)"-"XSTR(GHBUILD)"-"XSTR(GHBUILDTYPE)".L244"; // 244 effective channels for 512 ADC channels
 #endif
 
 #define MAXFILESIZE MAX_MEASUREMENTS * BYTES_MEASUREMENT // in bytes, 4 MB per day, 28 MB per week, 122 MB per month
@@ -105,7 +104,7 @@ uint16_t count = 0;
 uint32_t serialhash = 0;
 uint16_t base_offset = ZERO;
 uint8_t lo, hi;
-uint16_t u_sensor;
+uint16_t u_sensor, maximum;
 boolean SDinserted = true;
 
 // Read Analog Differential without gain (read datashet of ATMega1280 and ATMega2560 for refference)
@@ -287,7 +286,7 @@ void setup()
   Wire.endTransmission();
   
   // make a string for device identification output
-  String dataString = "$DOS,LABDOS01A," + FWversion + VERSION + "," + String(base_offset) + "," + githash + ","; // FW version and Git hash
+  String dataString = "$DOS,LABDOS01A," + FWversion + "," + String(base_offset) + "," + githash + ","; // FW version and Git hash
   
   Wire.beginTransmission(0x58);                   // request SN from EEPROM
   Wire.write((int)0x08); // MSB
@@ -383,9 +382,12 @@ void loop()
   sbi(ADCSRA, ADATE);       // ADC autotrigger enable (mandatory for free running mode)
   sbi(ADCSRA, ADSC);        // ADC start the first conversions
 #if F_CPU==8000000L
-  sbi(ADCSRA, 2);           // 0x110 = clock divided by 64
+//  sbi(ADCSRA, 2);           // 0x110 = clock divided by 64
+//  sbi(ADCSRA, 1);        
+//  cbi(ADCSRA, 0);        
+  sbi(ADCSRA, 2);           // 0x110 = clock divided by 128
   sbi(ADCSRA, 1);        
-  cbi(ADCSRA, 0);        
+  sbi(ADCSRA, 0);        
 #else
   sbi(ADCSRA, 2);           // 0x111 = clock divided by 128
   sbi(ADCSRA, 1);        
@@ -408,15 +410,13 @@ void loop()
   DDRB = 0b10011110;
   sbi(ADCSRA, ADIF);                  // reset interrupt flag from ADC
   
-  uint8_t previous_sample = 1; // ignore the first ADC
-
+  maximum = 0;
   // dosimeter integration
-  for (uint16_t i=0; i<(65535); i++)    // 7.34 s (6.88 s integration time excluding dead time)
+  for (uint16_t i=0; i<(65535/2); i++)    // 7.34 s (6.88 s integration time excluding dead time)
   {
     // 112 us fo 14 cycles of conversion; it includes cca 7 us of death time
     while (bit_is_clear(ADCSRA, ADIF)); // wait for end of conversion 
     delayMicroseconds(12);            // 12 us wait for 1.5 cycle of 125 kHz ADC clock for sample/hold for next conversion
-    uint8_t raising_edge = PINB; // peak of pulse was before S/H? H = raising edge; L = falling edge
     
     DDRB = 0b10011111;                  // Reset peak detector
     delayMicroseconds(7);               // cca 7 us for 2k2 resistor and 100n capacitor in peak detector
@@ -439,21 +439,21 @@ void loop()
     // manage negative values
     if (u_sensor <= (CHANNELS/2)-1 ) {u_sensor += (CHANNELS/2);} else {u_sensor -= (CHANNELS/2);}
               
-    if (previous_sample & 1) 
+    if (u_sensor > maximum) // filter double detection for pulses between two samples
     {
+      maximum = u_sensor;
       suppress++;
     }
     else
     {
-      histogram[u_sensor]++;
+      histogram[maximum]++;
+      maximum = 0;
     }
-
-    previous_sample = raising_edge;
   }  
   
   // Data out
   {
-    uint16_t noise = base_offset+2;
+    uint16_t noise = base_offset+3;
     uint32_t flux=0;
 
     for(int n=noise; n<(base_offset+RANGE); n++)  
