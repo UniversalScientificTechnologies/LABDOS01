@@ -1,6 +1,6 @@
 
 #define MAJOR 7   // Data format
-#define MINOR 2   // Features
+#define MINOR 3   // Features
 #include "githash.h"
 
 #define XSTR(s) STR(s)
@@ -221,15 +221,11 @@ void setup()
     ADCSRB = 0;               // Switching ADC to Free Running mode
     sbi(ADCSRA, ADATE);       // ADC autotrigger enable (mandatory for free running mode)
     sbi(ADCSRA, ADSC);        // ADC start the first conversions
-#if F_CPU==8000000L
-    sbi(ADCSRA, 2);           // 0x110 = clock divided by 64
-    sbi(ADCSRA, 1);        
-    cbi(ADCSRA, 0);        
-#else
+
     sbi(ADCSRA, 2);           // 0x111 = clock divided by 128
     sbi(ADCSRA, 1);        
     sbi(ADCSRA, 0);        
-#endif  
+
     sbi(ADCSRA, ADIF);                  // reset interrupt flag from ADC
     while (bit_is_clear(ADCSRA, ADIF)); // wait for the first conversion 
     sbi(ADCSRA, ADIF);                  // reset interrupt flag from ADC
@@ -381,18 +377,11 @@ void loop()
   ADCSRB = 0;               // Switching ADC to Free Running mode
   sbi(ADCSRA, ADATE);       // ADC autotrigger enable (mandatory for free running mode)
   sbi(ADCSRA, ADSC);        // ADC start the first conversions
-#if F_CPU==8000000L
-//  sbi(ADCSRA, 2);           // 0x110 = clock divided by 64
-//  sbi(ADCSRA, 1);        
-//  cbi(ADCSRA, 0);        
-  sbi(ADCSRA, 2);           // 0x110 = clock divided by 128
-  sbi(ADCSRA, 1);        
-  sbi(ADCSRA, 0);        
-#else
-  sbi(ADCSRA, 2);           // 0x111 = clock divided by 128
-  sbi(ADCSRA, 1);        
-  sbi(ADCSRA, 0);        
-#endif  
+
+  sbi(ADCSRA, 2);           // * 0x111 = 8 MHz clock divided by 128 = 62.5 kHz *
+  sbi(ADCSRA, 1);           //   0x111 = 16 MHz clock divided by 128 = 125 kHz
+  sbi(ADCSRA, 0);           //   0x110 = 8 MHz clock divided by 64 = 125 kHz
+
   PORTB = 1;                          // Set reset output for peak detector to H
   sbi(ADCSRA, ADIF);                  // reset interrupt flag from ADC
   while (bit_is_clear(ADCSRA, ADIF)); // wait for the first dummy conversion 
@@ -412,11 +401,22 @@ void loop()
   
   maximum = 0;
   // dosimeter integration
-  for (uint16_t i=0; i<(65535/2); i++)    // 7.34 s (6.88 s integration time excluding dead time)
+#if F_CPU==8000000L
+  // 46083 cycles = 10.3 s (10 s integration time excluding dead time) for 62.5 kHz
+  for (uint16_t i=0; i<46083; i++)    
+#else
+  // 65535 cycles = 7.34 s (6.88 s integration time excluding dead time) for 125 kHz
+  for (uint16_t i=0; i<65535; i++)    
+#endif  
   {
-    // 112 us fo 14 cycles of conversion; it includes cca 7 us of death time
+    // 112 us fo 14 cycles of conversion for 125 kHz; it includes cca 7 us of death time
+    // 224 us fo 14 cycles of conversion for 62.5 kHz; it includes cca 7 us of death time (217 us of integration)
     while (bit_is_clear(ADCSRA, ADIF)); // wait for end of conversion 
+#if F_CPU==8000000L
+    delayMicroseconds(24);            // 24 us wait for 1.5 cycle of 62.5 kHz ADC clock for sample/hold for next conversion
+#else
     delayMicroseconds(12);            // 12 us wait for 1.5 cycle of 125 kHz ADC clock for sample/hold for next conversion
+#endif  
     
     DDRB = 0b10011111;                  // Reset peak detector
     delayMicroseconds(7);               // cca 7 us for 2k2 resistor and 100n capacitor in peak detector
@@ -439,14 +439,16 @@ void loop()
     // manage negative values
     if (u_sensor <= (CHANNELS/2)-1 ) {u_sensor += (CHANNELS/2);} else {u_sensor -= (CHANNELS/2);}
               
-    if (u_sensor > maximum) // filter double detection for pulses between two samples
+    if (u_sensor > maximum) // filter for suppresing double detection of pulses in two samples
     {
       maximum = u_sensor;
-      suppress++;
+      histogram[maximum]++;
+      //suppress++;
     }
     else
     {
-      histogram[maximum]++;
+      //histogram[maximum]++;
+      suppress++;
       maximum = 0;
     }
   }  
