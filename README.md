@@ -11,7 +11,7 @@ LABDOS01 is an open-source spectrometer-dosimeter based on a silicon PIN diode a
 
 LABDOS01 aims to make an open-source, accessible, high-quality, reliable, and simple measuring device - a radiation energy spectrometer for the scientific community.
 
-LABDOS01 to function on its own. It requires a computer to visualize recorded measured data. At least it requires an external powering unit. The device is not intended for outdoor use (it is not waterproof).
+LABDOS01 can function on its own but requires an external power supply. A computer is only required to visualize the recorded data. The device is not intended for outdoor use (it is not waterproof).
 Instead of that, it is intended to be used as an experimental device with the same internals as its application-specific variants like:
 
  * [GEODOS01](https://github.com/UniversalScientificTechnologies/GEODOS01) - Outdoor and stand-alone ionizing radiation detector
@@ -19,7 +19,7 @@ Instead of that, it is intended to be used as an experimental device with the sa
  * [SPACEDOS02](https://github.com/UniversalScientificTechnologies/SPACEDOS02) - PIN diode dosimeter for manned spacecraft
  * [SPACEDOS01](https://github.com/UniversalScientificTechnologies/SPACEDOS01) - CubeSat cosmic radiation dosimeter and spectrometer
 
-LABDOS01 is therefore the all-in-one solution for generic semiconductor-based ionizing radiation measurement. It should be used as a universal testing device before using an application-specific design.
+LABDOS01 is therefore the all-in-one solution for generic semiconductor-based ionizing radiation measurement. It should be used as a universal experiment testing device before using an application-specific design.
 
 ## Where to get it?
 
@@ -38,7 +38,18 @@ The device is designed as open-source hardware and software and is released unde
  * Dimensions - 96 x 56 x 19 mm
  * Weight - 74 grams
 
-The device uses [USTSIPIN02](https://github.com/ust-modules/USTSIPIN02) which is the core of a range of UST dosimeters specialized to the specific application like AIRDOS or SPACEDOS.
+## Applications
+
+* AeroSpace or Terrestrial Radiation Monitoring
+* Aircraft Onboard Radiation Monitoring
+* Scientific High Altitude Balloons, e.g. [Pfotzer Maximum measurement](https://en.wikipedia.org/wiki/Georg_Pfotzer)
+* Educational Toolkit, [cosmic ray monitoring](https://en.wikipedia.org/wiki/Cosmic_ray) 
+* Radiation Mapping in 3D together with GNSS and UAV
+* Space Weather Monitoring e.g on high altitude observatories
+* [Open science](https://en.wikipedia.org/wiki/Open_science)
+* [Citizen science](https://en.wikipedia.org/wiki/Citizen_science)
+
+The device uses [USTSIPIN02](https://github.com/ust-modules/USTSIPIN02) which is the core of a range of UST dosimeters specialized to the specific application like [AIRDOS](https://www.ust.cz/UST-dosimeters/AIRDOS/) or [SPACEDOS](https://www.ust.cz/UST-dosimeters/SPACEDOS/) or [GEODOS](https://www.ust.cz/UST-dosimeters/GEODOS/).
 
 ## Usage examples
 
