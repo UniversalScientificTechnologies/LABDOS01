@@ -1,39 +1,39 @@
-## What LABDOS01 is? 
+## Introducing LABDOS01A: The Ionizing Radiation Dosimeter and Spectrometer
 
-LABDOS01A is an ionizing radiation dosimeter and spectrometer based on a [c-Si](https://en.wikipedia.org/wiki/Crystalline_silicon) semiconductor detector. LABDOS01 is designed for use in laboratory and experimental conditions.
+LABDOS01A is a versatile ionizing radiation dosimeter and spectrometer built on a [crystalline silicon (c-Si)](https://en.wikipedia.org/wiki/Crystalline_silicon) semiconductor detector. It's designed for laboratory and experimental settings, offering a wide range of applications.
 
-### The main features
+### Key Features:
 
-  * Spectrometry measurement simultaneously with accurate dosimetric data
-  * High sensitivity to ionizing radiation particles
-  * Data logging to Smartphone or SDcard
-  * Extremely low power consumption
-  * Open-source firmware customizable in Arduino IDE
+* Simultaneous spectrometry and accurate dosimetric measurements
+* High sensitivity to ionizing radiation particles
+* Data logging via smartphone or SD card
+* Extremely low power consumption
+* Customizable open-source firmware through Arduino IDE
 
-[LABDOS01 is an open-source](https://certification.oshwa.org/cz000008.html) dosimeter and ionizing radiation spectroscope developed for scientific use. LABDOS01A is a part of our successful open-source [UST dosimeters](https://www.ust.cz/UST-dosimeters/) series. The series involves the [SPACEDOS](https://www.ust.cz/UST-dosimeters/SPACEDOS/), [AIRDOS](https://www.ust.cz/UST-dosimeters/AIRDOS/), and [GEODOS](https://www.ust.cz/UST-dosimeters/GEODOS/) dosimeters. These devices have specific applications and the LABDOS01A complements the UST dosimeters series with a portable device designed for preliminary or laboratory experiments.
+LABDOS01A is an [open-source](https://certification.oshwa.org/cz000008.html) dosimeter and ionizing radiation spectrometer developed for scientific use. It's part of our successful open-source [UST dosimeters](https://www.ust.cz/UST-dosimeters/) series, including the [SPACEDOS](https://www.ust.cz/UST-dosimeters/SPACEDOS/), [AIRDOS](https://www.ust.cz/UST-dosimeters/AIRDOS/), and [GEODOS](https://www.ust.cz/UST-dosimeters/GEODOS/) dosimeters. LABDOS01A complements the UST dosimeters series with a portable device designed for preliminary or laboratory experiments.
 
 ![Cosmic Rays radiation measured by SPACEDOS02 onboard ISS](https://raw.githubusercontent.com/UniversalScientificTechnologies/SPACEDOS02/SPACEDOS02A/doc/src/img/ISS_radiation_map.png "Cosmic Rays radiation measured by SPACEDOS02 onboard ISS")
 
-LABDOS01 is an ionizing radiation detector, dosimeter-spectrometer, which works on the principle of collecting ions created by deposited energy in a semiconductor PIN diode. LABDOS01 can be classified as a [Liulin-type](https://en.wikipedia.org/wiki/Liulin_type_instruments) detector. Semiconductor based detection principle ensures sensitivity to almost all types of ionizing radiation forms except high-energy gamma and neutrons.
+LABDOS01A operates as an ionizing radiation detector, dosimeter-spectrometer, using a semiconductor PIN diode to collect ions created by deposited energy. It's classified as a [Liulin-type](https://en.wikipedia.org/wiki/Liulin_type_instruments) detector. The semiconductor-based detection principle ensures sensitivity to almost all types of ionizing radiation, except high-energy gamma and neutrons.
 
-### What could it be used for?
+### Versatile Applications:
 
-* AeroSpace or Terrestrial Radiation Monitoring
-* Aircraft Onboard Radiation Monitoring
-* Scientific High Altitude Balloons, e.g. [Pfotzer Maximum measurement](https://en.wikipedia.org/wiki/Georg_Pfotzer)
-* Educational Toolkit, [cosmic ray monitoring](https://en.wikipedia.org/wiki/Cosmic_ray) 
-* Radiation Mapping in 3D together with GNSS and UAV
-* Space Weather Monitoring e.g on high-altitude observatories
-* [Open science](https://en.wikipedia.org/wiki/Open_science) 
+* Aerospace or terrestrial radiation monitoring
+* Aircraft onboard radiation monitoring
+* Scientific high-altitude balloons (e.g., [Pfotzer Maximum measurement](https://en.wikipedia.org/wiki/Georg_Pfotzer))
+* Educational toolkit for [cosmic ray monitoring](https://en.wikipedia.org/wiki/Cosmic_ray)
+* 3D radiation mapping with GNSS and UAV
+* Space weather monitoring at high-altitude observatories
+* [Open science](https://en.wikipedia.org/wiki/Open_science)
 * [Citizen science](https://en.wikipedia.org/wiki/Citizen_science)
 
-The device uses [USTSIPIN02](https://github.com/ust-modules/USTSIPIN02) which is the core of a range of UST dosimeters specialized to the specific application like [AIRDOS](https://www.ust.cz/UST-dosimeters/AIRDOS/) or [SPACEDOS](https://www.ust.cz/UST-dosimeters/SPACEDOS/) or [GEODOS](https://www.ust.cz/UST-dosimeters/GEODOS/).
+LABDOS01A is built on the [USTSIPIN02](https://github.com/ust-modules/USTSIPIN02) core, which is also used in other UST dosimeters specialized for specific applications like [AIRDOS](https://www.ust.cz/UST-dosimeters/AIRDOS/), [SPACEDOS](https://www.ust.cz/UST-dosimeters/SPACEDOS/), and [GEODOS](https://www.ust.cz/UST-dosimeters/GEODOS/).
 
-Since the semiconductor detector-based spectrometer and dosimeter combined in one device, is a unique instrument we have created a few examples of their use cases. Please see the [LABDOS documentation](https://github.com/UniversalScientificTechnologies/LABDOS01) for additional examples or more details. 
+Please refer to the [LABDOS documentation](https://github.com/UniversalScientificTechnologies/LABDOS01) for additional examples and details.
 
-#### Aircraft fly-crew cosmic ray dosimeter
+#### Aircraft Fly-Crew Cosmic Ray Dosimeter
 
-Secondary cosmic rays at higher altitudes in the atmosphere are a typical example of a mixed radiation field. A silicon semiconductor detector is an almost ideal device for measuring the parameters of such ionizing radiation. In addition, LABDOS can be easily connected to a smartphone, allowing data recording and visualization during the entire flight.
+LABDOS01A is perfect for measuring mixed radiation fields caused by secondary cosmic rays at higher altitudes. Flight altitudes in the atmosphere are a typical example of a mixed radiation field. A silicon semiconductor detector is an almost ideal device for measuring the parameters of such ionizing radiation. In addition, LABDOS can be easily connected to a smartphone, allowing data recording and visualization during the entire flight.
 
 ![Doserate measured on-board of an aircraft](https://raw.githubusercontent.com/UniversalScientificTechnologies/AIRDOS02/AIRDOS02A/doc/src/img/airdos_flight_doserate.png "Doserate measured on-board of an aircraft")
 
