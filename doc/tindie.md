@@ -1,6 +1,6 @@
-## Introducing LABDOS01A: The Ionizing Radiation Dosimeter and Spectrometer
+## Introducing LABDOS01: The Ionizing Radiation Dosimeter and Spectrometer
 
-LABDOS01A is a versatile ionizing radiation dosimeter and spectrometer built on a [crystalline silicon (c-Si)](https://en.wikipedia.org/wiki/Crystalline_silicon) semiconductor detector. It's designed for laboratory and experimental settings, offering a wide range of applications.
+LABDOS01 is a versatile ionizing radiation dosimeter and spectrometer built on a [crystalline silicon (c-Si)](https://en.wikipedia.org/wiki/Crystalline_silicon) semiconductor detector. It's designed for laboratory and experimental settings, offering a wide range of applications.
 
 ### Key Features:
 
@@ -10,7 +10,7 @@ LABDOS01A is a versatile ionizing radiation dosimeter and spectrometer built on 
 * Extremely low power consumption
 * Customizable open-source firmware through Arduino IDE
 
-LABDOS01A is an [open-source](https://certification.oshwa.org/cz000008.html) dosimeter and ionizing radiation spectrometer developed for scientific use. It's part of our successful open-source [UST dosimeters](https://www.ust.cz/UST-dosimeters/) series, including the [SPACEDOS](https://www.ust.cz/UST-dosimeters/SPACEDOS/), [AIRDOS](https://www.ust.cz/UST-dosimeters/AIRDOS/), and [GEODOS](https://www.ust.cz/UST-dosimeters/GEODOS/) dosimeters. LABDOS01A complements the UST dosimeters series with a portable device designed for preliminary or laboratory experiments.
+LABDOS01 is an [open-source](https://certification.oshwa.org/cz000008.html) dosimeter and ionizing radiation spectrometer developed for scientific use. It's part of our successful open-source [UST dosimeters](https://www.ust.cz/UST-dosimeters/) series, including the [SPACEDOS](https://www.ust.cz/UST-dosimeters/SPACEDOS/), [AIRDOS](https://www.ust.cz/UST-dosimeters/AIRDOS/), and [GEODOS](https://www.ust.cz/UST-dosimeters/GEODOS/) dosimeters. LABDOS01A complements the UST dosimeters series with a portable device designed for preliminary or laboratory experiments.
 
 ![Cosmic Rays radiation measured by SPACEDOS02 onboard ISS](https://raw.githubusercontent.com/UniversalScientificTechnologies/SPACEDOS02/SPACEDOS02A/doc/src/img/ISS_radiation_map.png "Cosmic Rays radiation measured by SPACEDOS02 onboard ISS")
 
