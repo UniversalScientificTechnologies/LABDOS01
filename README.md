@@ -20,6 +20,7 @@ Instead of that, it is intended to be used as an experimental device with the sa
  * [SPACEDOS01](https://github.com/UniversalScientificTechnologies/SPACEDOS01) - CubeSat cosmic radiation dosimeter and spectrometer
 
 LABDOS01 is therefore the all-in-one solution for generic semiconductor-based ionizing radiation measurement. It should be used as a universal experiment testing device before using an application-specific design.
+Concerning the development of the detectors, Universal Scientific Technologies s.r.o. have established a long term cooperation with the Nuclear Physics Institute of the CAS ([Department of Radiation Dosimetry](http://www.ujf.cas.cz/en/departments/department-of-radiation-dosimetry/)), in the framework of project [CRREAT](http://www.ujf.cas.cz/en/research-development/large-research-infrastructures-and-centres/crreat/objectives/).
 
 ## Where to get it?
 
