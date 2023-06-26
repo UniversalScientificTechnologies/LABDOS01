@@ -20,12 +20,12 @@ Instead of that, it is intended to be used as an experimental device with the sa
  * [SPACEDOS01](https://github.com/UniversalScientificTechnologies/SPACEDOS01) - CubeSat cosmic radiation dosimeter and spectrometer
 
 LABDOS01 is therefore the all-in-one solution for generic semiconductor-based ionizing radiation measurement. It should be used as a universal experiment testing device before using an application-specific design.
-Concerning the development of the detectors, Universal Scientific Technologies s.r.o. have established a long term cooperation with the Nuclear Physics Institute of the CAS ([Department of Radiation Dosimetry](http://www.ujf.cas.cz/en/departments/department-of-radiation-dosimetry/)), in the framework of project [CRREAT](http://www.ujf.cas.cz/en/research-development/large-research-infrastructures-and-centres/crreat/objectives/).
+Concerning the development of the detectors, Universal Scientific Technologies s.r.o. has established long-term cooperation with the Nuclear Physics Institute of the CAS ([Department of Radiation Dosimetry](http://www.ujf.cas.cz/en/departments/department-of-radiation-dosimetry/)), in the framework of project [CRREAT](http://www.ujf.cas.cz/en/research-development/large-research-infrastructures-and-centres/crreat/objectives/).
 
 ## Where to get it?
 
 LABDOS01 is commercially available from [Universal Scientific Technologies s.r.o.](https://www.ust.cz/), write an email to sale@ust.cz or shop at [Tindie store](https://www.tindie.com/products/ust/labdos01-open-source-laboratory-dosimeter/).
-The device is designed as open-source hardware and software and is released under the GPLv3 license. The device is originally developed and maintained by [UST (Universal Scientific Technologies s.r.o.)](https://www.ust.cz) company, which sells it commercially and offers technical support.
+The device is designed as open-source hardware and software and is released under the GPLv3 license. The device was originally developed and maintained by [UST (Universal Scientific Technologies s.r.o.)](https://www.ust.cz) company, which sells it commercially and offers technical support.
 
 ## Parameters
 
@@ -46,7 +46,7 @@ The device is designed as open-source hardware and software and is released unde
 * Scientific High Altitude Balloons, e.g. [Pfotzer Maximum measurement](https://en.wikipedia.org/wiki/Georg_Pfotzer)
 * Educational Toolkit, [cosmic ray monitoring](https://en.wikipedia.org/wiki/Cosmic_ray) 
 * Radiation Mapping in 3D together with GNSS and UAV
-* Space Weather Monitoring e.g on high altitude observatories
+* Space Weather Monitoring e.g on high-altitude observatories
 * [Open science](https://en.wikipedia.org/wiki/Open_science)
 * [Citizen science](https://en.wikipedia.org/wiki/Citizen_science)
 
@@ -65,11 +65,11 @@ The measured data could be compared with a CARI numerical model, as could be see
 ![LABDOS01 smartphone connection](/doc/img/LABDOS01_CARI.png)
 
 The sum is photons+electrons+protons+positrons. The difference between the sum value and the total value is mostly caused by muons.
-If we consider some shielding (the LABDOS sensor is covered by 35 um of copper foil) the agreement is clear. It is also visible that the measured data contains some more information on the fluctuations, which is missing in the numerical model.
+If we consider some shielding (the LABDOS sensor is covered by 35 um of copper foil) the agreement is clear. It is also visible that the measured data contains more information on the fluctuations, which is missing in the numerical model.
 
 ## Connection
 
-Simply plug the LABDOS01A into your computer or tablet USB port using a USB-C cable. The device should appear as a virtual serial line. On a Linux computer, the device should connect without any external drivers. For computers with windows, you will need to install a driver for [FTDI USB](https://ftdichip.com/drivers/) converter.
+Simply plug the LABDOS01A into your computer or tablet USB port using a USB-C cable. The device should appear as a virtual serial line. On a Linux computer, the device should connect without any external drivers. For computers with Windows, you will need to install a driver for [FTDI USB](https://ftdichip.com/drivers/) converter.
 
 
 ![LABDOS01 smartphone connection](/doc/LABDOS01A_smartphone-tablet_connection.jpg
@@ -80,7 +80,7 @@ This usage case is especially suitable for interactive testing of silicon-based 
 ### Output data format
 
 The output message types are described in the following paragraphs. The exact format of each message depends on application-specific firmware. The firmware could be tuned to specific usage cases by modifying the [arduino code](https://github.com/UniversalScientificTechnologies/LABDOS01/tree/LABDOS01A/fw). The firmware itself could be updated using the bootloader.
-The baudrate used by USB port by default is 115200. 
+The baud rate used by the USB port by default is 115200. 
 
 #### Initial messages
 
@@ -90,12 +90,12 @@ The baudrate used by USB port by default is 115200.
 #Filesize,2173540
 #Filename,3.txt
 ```
-The initial messages is sent as soon as the processor is restarted, and reading it correctly indicates that the connection is well set up.
-Filesize and Filename is information about a file in case a proper SD card is inserted.
+The initial messages are sent as soon as the processor is restarted, and reading it correctly indicates that the connection is well set up.
+Filesize and Filename are information about a file in case a proper SD card is inserted.
 
 #### About message
 
-As a next message, when turned on, a string is sent that uniquely identifies the device.
+As can be seen in the following example, when LABDOS is turned on, a string is sent that uniquely identifies the device.
 
 ```
 $DOS,LABDOS01A,L02,256,379276a,1290c00806a200914056a000a0000086
@@ -104,7 +104,7 @@ $DOS,LABDOS01A,L02,256,379276a,1290c00806a200914056a000a0000086
 * `LABDOS01A` - Name of the device. In this case, it is LABDOS
 * `L02`- FW version
 * `256` - ADC DC offset
-* `379276a` - Hash of commit with this firmware
+* `379276a` - Hash of identifying the commit of firmware
 * `1290c00806a200914056a000a0000086` - Unique serial number of LABDOS dosemeters
 
 #### Data message
@@ -114,10 +114,10 @@ $HIST,0,7.94,517,1,13297,48790,2914,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 ```
 
 * `$HIST` - Marking a message with spectrums (histograms)
-* `count` - Meassuring number since restart or power-up; Restart can be andled by toggling of DTR signal on an asynchronnous interface
+* `count` - Meassuring number since restart or power-up; Restart can be handled by toggling of DTR signal on an asynchronous interface
 * `time` - Time in seconds from power-up
 * `suppress` - Number of filtered (omitted) ionizing radiation events, prevention of double detections caused by asynchronous sampling 
-* `flux` - Number of detected particles per meassuring interval (6.88 s)
+* `flux` - Number of detected particles per measuring interval (6.88 s)
 * `energetic channels` - All remaining values indicate a certain energy channel from the smallest to the largest deposited energy; The 4th value is 1st channel without noise 
 
 ### Data logging
@@ -130,7 +130,7 @@ The device should appear as a virtual serial line without any external drivers. 
 
 #### Windows
 
-For computers with windows, you will need to install a driver for [FTDI USB](https://ftdichip.com/drivers/) converter. Then you could use the [putty](https://www.putty.org/) which is a program that can be used for logging. One of the tutorials on how to set up data logging using putty is [here](https://my.kualo.com/knowledgebase/?kbcat=0&article=888) for example.
+For computers with Windows, you will need to install a driver for [FTDI USB](https://ftdichip.com/drivers/) converter. Then you could use the [putty](https://www.putty.org/) which is a program that can be used for logging. One of the tutorials on how to set up data logging using Putty is [here](https://my.kualo.com/knowledgebase/?kbcat=0&article=888) for example.
 
 #### Stand-alone use
 
