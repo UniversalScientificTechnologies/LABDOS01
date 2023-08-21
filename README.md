@@ -11,7 +11,7 @@ LABDOS01 is an open-source spectrometer-dosimeter based on a silicon PIN diode a
 
 LABDOS01 aims to make an open-source, accessible, high-quality, reliable, and simple measuring device - a radiation energy spectrometer for the scientific community.
 
-LABDOS01 can function on its own but requires an external power supply. A computer is only required to visualize the recorded data. The device is not intended for outdoor use (it is not waterproof).
+LABDOS01 can function on its own but requires an external power supply. A computer is only needed to visualize the recorded data. The device is not intended for outdoor use (it is not waterproof).
 Instead of that, it is intended to be used as an experimental device with the same internals as its application-specific variants like:
 
  * [GEODOS01](https://github.com/UniversalScientificTechnologies/GEODOS01) - Outdoor and stand-alone ionizing radiation detector
@@ -25,16 +25,16 @@ Concerning the development of the detectors, Universal Scientific Technologies s
 ## Where to get it?
 
 LABDOS01 is commercially available from [Universal Scientific Technologies s.r.o.](https://www.ust.cz/), write an email to sale@ust.cz or shop at [Tindie store](https://www.tindie.com/products/ust/labdos01-open-source-laboratory-dosimeter/).
-The device is designed as open-source hardware and software and is released under the GPLv3 license. The device was originally developed and maintained by [UST (Universal Scientific Technologies s.r.o.)](https://www.ust.cz) company, which sells it commercially and offers technical support.
+The device is designed as open-source hardware and software and is released under the GPLv3 license. The device was initially developed and maintained by [UST (Universal Scientific Technologies s.r.o.)](https://www.ust.cz) company, which sells it commercially and offers technical support.
 
 ## Parameters
 
  * Silicon PIN diode detector with 12.5 mm³ detection volume
- * Number of energy channels 250, but configurable by firmware in range
- * Deposited energy range from 200 keV to 12 MeV
- * Energy measurement resolution up to 50 keV/channel but the exact value depends on firmware and analog front-end setup.
+ * Effective number of energy channels 470 ±3
+ * Deposited energy range from 60 keV to 7 MeV
+ * Energy measurement resolution 15 ±2 keV (depending on calibration method and type of particles)
  * Power supply 5V (by using the USB port or JST-GH connectors)
- * Integration time depends on firmware setup
+ * Integration time depends on firmware setup 10 seconds is the default
  * Interface - USB 2.0, USB-C connector or 3.3V UART link on JST-GH connector ([Pixhawk telemetry port](https://github.com/pixhawk/Pixhawk-Standards/blob/master/DS-009%20Pixhawk%20Connector%20Standard.pdf)).
  * Dimensions - 96 x 56 x 19 mm
  * Weight - 76 grams
@@ -64,7 +64,7 @@ The measured data could be compared with a CARI numerical model, as could be see
 
 ![LABDOS01 smartphone connection](/doc/img/LABDOS01_CARI.png)
 
-The sum is photons+electrons+protons+positrons. The difference between the sum value and the total value is mostly caused by muons.
+The sum is photons+electrons+protons+positrons. The difference between the sum value and the total value is mainly caused by muons.
 If we consider some shielding (the LABDOS sensor is covered by 35 um of copper foil) the agreement is clear. It is also visible that the measured data contains more information on the fluctuations, which is missing in the numerical model.
 
 ## Connection
@@ -137,12 +137,12 @@ For computers with Windows, you will need to install a driver for [FTDI USB](htt
 The device contains an SD card, which could be used do data logging in stand-alone use. In that case, the LABDOS01 needs an external power supply.
 That mode could be used for short-term demonstrating of SPACEDOS, AIRDOS, or GEODOS variants of that device.
 
-*Note: Ony industrial SLC SD cards with properly implemented SPI interface are supported.* 
+*Note: Only industrial SLC or SLC mode SD cards with properly implemented SPI interface are supported.* 
 
 
 ### Splitting Individual Records of Energy Spectra from LABDOS01 SDcard log file
 
-The LABDOS01 device performs measurements of energy spectra and stores them in a single file on an SD card, typically named "0.TXT". To efficiently process and analyze this data, it is desirable to split the file into individual records. For this purpose, the `csplit` command can be used, allowing for automated splitting of the logging file into smaller parts based on a specified line containing a desired pattern.
+The LABDOS01 device performs measurements of energy spectra and stores them in a single file on an SD card, typically named "0.TXT". To efficiently process and analyze this data, it is desirable to split the file into individual records. For this purpose, the `csplit` command can be used, allowing for the automated splitting of the logging file into smaller parts based on a specified line containing a desired pattern.
 
 Description:
 The `csplit` command is used to split the logging file of the LABDOS01 device, which contains partial records of energy spectra, into individual measurements. This command enables automated and efficient division of the input file into smaller sections based on a specified line with the desired pattern.
