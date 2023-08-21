@@ -52,16 +52,16 @@ The detector is equipped with indication LEDs that show the status of the device
 | Parameter | Value |
 |---|----|
 | Detection element | Si PIN diode, 12.5 mm³ detection volume |
-| Number of energy channels | 500 energy channels; depends on firmware |
-| Deposited energy range | 160 keV to 8 MeV, can be changed by modification in analog front-end.  |
-| Energy measurement resolution | up to 50 keV/channel, but the exact value depends on firmware and analog front-end setup.|
-| Power supply |  5V, 3.3V; by using USB-C port or Pixhawk compatible JST-GH connectors |
+| Number of energy channels | Effective number of energy channels is 470 ±3; depends on firmware |
+| Deposited energy range | 60 keV to 7 MeV, can be changed by modification in analog front-end.  |
+| Energy measurement resolution | 15 ±2 keV (depending on calibration method and type of particles)|
+| Power supply |  primarily +5V, optionally 3.3V; by using USB-C port or Pixhawk compatible JST-GH connectors |
 | Power |  A few mA RMS. The consumption current is dominated by LED blinking and SDcard writing. |
-| Integration time | 10s, depends on firmware setup |
-| Dead-time | depends on firmware setup, 10ms with shipped firmware|
-| Interface | USB-C, 3.3V PWR, UART |
+| Integration time | 10s, could be changed by firmware |
+| Dead-time | depends on firmware setup, 10 ms with shipped firmware|
+| Interface | USB-C, 3.3V PWR, Pixhawk serial (UART) |
 | Dimensions | 96 x 56 x 19 mm; External dimensions of enclosure |
-| Weight | 74 grams; including the enclosure |
+| Weight | 76 grams; including the enclosure and screws |
 
 The default energy range is selected to best match the alpha particle radiation of [radon progenies](https://en.wikipedia.org/wiki/Radon). 
 
