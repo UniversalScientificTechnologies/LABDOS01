@@ -51,7 +51,7 @@ The detector is equipped with indication LEDs that show the status of the device
 
 | Parameter | Value |
 |---|----|
-| Detection element | Si PIN diode, 12.5 mm³ detection volume |
+| Detection element | Si PIN diode, 44 mm³ detection volume |
 | Number of energy channels | Effective number of energy channels is 470 ±3; depends on firmware |
 | Deposited energy range | 60 keV to 7 MeV, can be changed by modification in analog front-end.  |
 | Energy measurement resolution | 15 ±2 keV (depending on calibration method and type of particles)|
