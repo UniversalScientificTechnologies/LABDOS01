@@ -29,9 +29,9 @@ The device is designed as open-source hardware and software and is released unde
 
 ## Parameters
 
- * Silicon PIN diode detector with 12.5 mm³ detection volume
+ * Silicon PIN diode detector with 44 mm³ detection volume
  * Effective number of energy channels 470 ±3
- * Deposited energy range from 60 keV to 7 MeV
+ * Deposited energy ranges from 60 keV to 7 MeV
  * Energy measurement resolution 15 ±2 keV (depending on calibration method and type of particles)
  * Power supply 5V (by using the USB port or JST-GH connectors)
  * Integration time depends on firmware setup 10 seconds is the default
@@ -46,7 +46,7 @@ The device is designed as open-source hardware and software and is released unde
 * Scientific High Altitude Balloons, e.g. [Pfotzer Maximum measurement](https://en.wikipedia.org/wiki/Georg_Pfotzer)
 * Educational Toolkit, [cosmic ray monitoring](https://en.wikipedia.org/wiki/Cosmic_ray) 
 * Radiation Mapping in 3D together with GNSS and UAV
-* Space Weather Monitoring e.g on high-altitude observatories
+* Space Weather Monitoring e.g. on high-altitude observatories
 * [Open science](https://en.wikipedia.org/wiki/Open_science)
 * [Citizen science](https://en.wikipedia.org/wiki/Citizen_science)
 
@@ -79,7 +79,7 @@ This usage case is especially suitable for interactive testing of silicon-based 
 
 ### Output data format
 
-The output message types are described in the following paragraphs. The exact format of each message depends on application-specific firmware. The firmware could be tuned to specific usage cases by modifying the [arduino code](https://github.com/UniversalScientificTechnologies/LABDOS01/tree/LABDOS01A/fw). The firmware itself could be updated using the bootloader.
+The output message types are described in the following paragraphs. The exact format of each message depends on application-specific firmware. The firmware could be tuned to specific usage cases by modifying the [Arduino code](https://github.com/UniversalScientificTechnologies/LABDOS01/tree/LABDOS01A/fw). The firmware itself could be updated using the bootloader.
 The baud rate used by the USB port by default is 115200. 
 
 #### Initial messages
