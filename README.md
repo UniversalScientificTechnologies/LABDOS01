@@ -35,6 +35,7 @@ The device is designed as open-source hardware and software and is released unde
  * Energy measurement resolution 15 ±2 keV (depending on calibration method and type of particles)
  * Power supply 5V (by using the USB port or JST-GH connectors)
  * Integration time depends on firmware setup 10 seconds is the default
+ * Deadtime 1 second in case of writing to SDcard, 100 ms in case of data output to USB
  * Interface - USB 2.0, USB-C connector or 3.3V UART link on JST-GH connector ([Pixhawk telemetry port](https://github.com/pixhawk/Pixhawk-Standards/blob/master/DS-009%20Pixhawk%20Connector%20Standard.pdf)).
  * Dimensions - 96 x 56 x 19 mm
  * Weight - 76 grams
