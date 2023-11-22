@@ -115,7 +115,7 @@ $HIST,0,7.94,517,1,13297,48790,2914,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 ```
 
 * `$HIST` - Marking a message with spectrums (histograms)
-* `count` - Meassuring number since restart or power-up; Restart can be handled by toggling of DTR signal on an asynchronous interface
+* `count` - Measuring number since restart or power-up; Restart can be handled by toggling of DTR signal on an asynchronous interface
 * `time` - Time in seconds from power-up
 * `suppress` - Number of filtered (omitted) ionizing radiation events, prevention of double detections caused by asynchronous sampling 
 * `flux` - Number of detected particles per measuring interval (6.88 s)
@@ -140,10 +140,15 @@ That mode could be used for short-term demonstrating of SPACEDOS, AIRDOS, or GEO
 
 *Note: Only industrial SLC or SLC mode SD cards with properly implemented SPI interface are supported.* 
 
+## FAQ
 
-### Splitting Individual Records of Energy Spectra from LABDOS01 SDcard log file
+### How to reset the LABDOS connected over the USB serial link? 
 
-The LABDOS01 device performs measurements of energy spectra and stores them in a single file on an SD card, typically named "0.TXT". To efficiently process and analyze this data, it is desirable to split the file into individual records. For this purpose, the `csplit` command can be used, allowing for the automated splitting of the logging file into smaller parts based on a specified line containing a desired pattern.
+The reset could be requested by toggling the DTR signal. The exact implementation of how the DTR UART signal could be accessed depends on the implementation of serial communication software. For example in [picocom](https://linux.die.net/man/8/picocom) is asserted by Ctrl+A and Ctrl+P. 
+
+### How to split Individual file Records of Energy Spectra from the LABDOS01 SDcard log file
+
+The LABDOS01 device performs measurements of energy spectra and stores them in a single file on an SD card, typically named "0.TXT". It is desirable to split the file into individual records to efficiently process and analyze this data. For this purpose, the `csplit` command can be used, allowing for the automated splitting of the logging file into smaller parts based on a specified line containing a desired pattern.
 
 Description:
 The `csplit` command is used to split the logging file of the LABDOS01 device, which contains partial records of energy spectra, into individual measurements. This command enables automated and efficient division of the input file into smaller sections based on a specified line with the desired pattern.
@@ -163,3 +168,7 @@ Usage:
    The `csplit` command utilizes the regular expression `/\$DOS,LABDOS01/` to identify the line that separates the individual energy spectra records. The output files will be stored in the "split" folder with the prefix "0_" and assigned sequential numbers.
 
    Upon executing this command, output files containing the individual energy spectra records from the "0.TXT" logging file will be created. These files can be further processed or analyzed independently.
+
+
+
+   
