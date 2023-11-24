@@ -3,6 +3,8 @@
 #define MINOR 3   // Features
 #include "githash.h"
 
+//#define CALIBRATION
+
 #define XSTR(s) STR(s)
 #define STR(s) #s
 
@@ -127,7 +129,7 @@ boolean SDinserted = true;
 //  14  | A14     | A9      | 1x
 //  15  | A15     | A9      | 1x
 #define PIN 0
-uint8_t analog_reference = INTERNAL2V56; // DEFAULT, INTERNAL, INTERNAL1V1, INTERNAL2V56, or EXTERNAL
+uint8_t analog_reference = EXTERNAL; // DEFAULT, INTERNAL, INTERNAL1V1, INTERNAL2V56, or EXTERNAL
 
 
 uint8_t bcdToDec(uint8_t b)
@@ -484,7 +486,13 @@ void loop()
     
     for(int n=base_offset-1; n<(base_offset-1+RANGE); n++)  
     {
+#ifdef CALIBRATION
+      dataString += "\t,";
+      dataString += String(n);
+      dataString += "\t*";      
+#else
       dataString += ",";
+#endif      
       dataString += String(histogram[n]); 
     }
 
