@@ -203,7 +203,7 @@ void setup()
   DDRB = 0b10011110;
   PORTB = 0b00000000;  // SDcard Power OFF
 
-  DDRA = 0b11111100;
+  DDRA = 0b11111000;
   PORTA = 0b00000000;  // SDcard Power OFF
   DDRC = 0b11101100;
   PORTC = 0b00000000;  // SDcard Power OFF
