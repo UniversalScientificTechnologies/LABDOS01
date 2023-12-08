@@ -1,6 +1,6 @@
-
+#define TYPE "LABDOS01B"
 #define MAJOR 7   // Data format
-#define MINOR 3   // Features
+#define MINOR 4   // Features
 #include "githash.h"
 
 //#define CALIBRATION
@@ -284,7 +284,7 @@ void setup()
   Wire.endTransmission();
   
   // make a string for device identification output
-  String dataString = "$DOS,LABDOS01A," + FWversion + "," + String(base_offset) + "," + githash + ","; // FW version and Git hash
+  String dataString = "$DOS,"TYPE"," + FWversion + "," + String(base_offset) + "," + githash + ","; // FW version and Git hash
   
   Wire.beginTransmission(0x58);                   // request SN from EEPROM
   Wire.write((int)0x08); // MSB
