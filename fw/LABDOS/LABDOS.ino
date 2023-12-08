@@ -1,6 +1,6 @@
 #define TYPE "LABDOS01B"
-#define MAJOR 7   // Data format
-#define MINOR 4   // Features
+#define MAJOR 8   // Data format
+#define MINOR 0   // Features
 #include "githash.h"
 
 //#define CALIBRATION
@@ -27,7 +27,7 @@
 #define MAXFILES 200 // maximal number of files on SD card
 
 /*
-  LABDOS
+  LABDOSDatasheet
  
 ISP
 ---
@@ -484,7 +484,7 @@ void loop()
     dataString += ",";
     dataString += String(flux);
     
-    for(int n=base_offset-1; n<(base_offset-1+RANGE); n++)  
+    for(uint16_t n=base_offset-1; n<CHANNELS; n++)  
     {
 #ifdef CALIBRATION
       dataString += "\t,";
