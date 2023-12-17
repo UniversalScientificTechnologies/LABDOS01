@@ -11,7 +11,7 @@ LABDOS01 is an open-source spectrometer-dosimeter based on a silicon PIN diode a
 
 LABDOS01 aims to make an open-source, accessible, high-quality, reliable, and simple measuring device - a radiation energy spectrometer for the scientific community.
 
-LABDOS01 can function on its own but requires an external power supply. A computer is only required to visualize the recorded data. The device is not intended for outdoor use (it is not waterproof).
+LABDOS01 can function on its own but requires an external power supply. A computer is only needed to visualize the recorded data. The device is not intended for outdoor use (it is not waterproof).
 Instead of that, it is intended to be used as an experimental device with the same internals as its application-specific variants like:
 
  * [GEODOS01](https://github.com/UniversalScientificTechnologies/GEODOS01) - Outdoor and stand-alone ionizing radiation detector
@@ -25,19 +25,20 @@ Concerning the development of the detectors, Universal Scientific Technologies s
 ## Where to get it?
 
 LABDOS01 is commercially available from [Universal Scientific Technologies s.r.o.](https://www.ust.cz/), write an email to sale@ust.cz or shop at [Tindie store](https://www.tindie.com/products/ust/labdos01-open-source-laboratory-dosimeter/).
-The device is designed as open-source hardware and software and is released under the GPLv3 license. The device was originally developed and maintained by [UST (Universal Scientific Technologies s.r.o.)](https://www.ust.cz) company, which sells it commercially and offers technical support.
+The device is designed as open-source hardware and software and is released under the GPLv3 license. The device was initially developed and maintained by [UST (Universal Scientific Technologies s.r.o.)](https://www.ust.cz) company, which sells it commercially and offers technical support.
 
 ## Parameters
 
- * Silicon PIN diode detector with 12.5 mm³ detection volume
- * Number of energy channels 250, but configurable by firmware in range
- * Deposited energy range from 200 keV to 12 MeV
- * Energy measurement resolution up to 50 keV/channel but the exact value depends on firmware and analog front-end setup.
+ * Silicon PIN diode detector with 44 mm³ detection volume
+ * Effective number of energy channels 470 ±3
+ * Deposited energy ranges from 60 keV to 7 MeV
+ * Energy measurement resolution 15 ±2 keV (depending on calibration method and type of particles)
  * Power supply 5V (by using the USB port or JST-GH connectors)
- * Integration time depends on firmware setup
+ * Integration time depends on firmware setup 10 seconds is the default
+ * Deadtime 1 second in case of writing to SDcard, 100 ms in case of data output to USB
  * Interface - USB 2.0, USB-C connector or 3.3V UART link on JST-GH connector ([Pixhawk telemetry port](https://github.com/pixhawk/Pixhawk-Standards/blob/master/DS-009%20Pixhawk%20Connector%20Standard.pdf)).
  * Dimensions - 96 x 56 x 19 mm
- * Weight - 74 grams
+ * Weight - 76 grams
 
 ## Applications
 
@@ -46,7 +47,7 @@ The device is designed as open-source hardware and software and is released unde
 * Scientific High Altitude Balloons, e.g. [Pfotzer Maximum measurement](https://en.wikipedia.org/wiki/Georg_Pfotzer)
 * Educational Toolkit, [cosmic ray monitoring](https://en.wikipedia.org/wiki/Cosmic_ray) 
 * Radiation Mapping in 3D together with GNSS and UAV
-* Space Weather Monitoring e.g on high-altitude observatories
+* Space Weather Monitoring e.g. on high-altitude observatories
 * [Open science](https://en.wikipedia.org/wiki/Open_science)
 * [Citizen science](https://en.wikipedia.org/wiki/Citizen_science)
 
@@ -64,7 +65,7 @@ The measured data could be compared with a CARI numerical model, as could be see
 
 ![LABDOS01 smartphone connection](/doc/img/LABDOS01_CARI.png)
 
-The sum is photons+electrons+protons+positrons. The difference between the sum value and the total value is mostly caused by muons.
+The sum is photons+electrons+protons+positrons. The difference between the sum value and the total value is mainly caused by muons.
 If we consider some shielding (the LABDOS sensor is covered by 35 um of copper foil) the agreement is clear. It is also visible that the measured data contains more information on the fluctuations, which is missing in the numerical model.
 
 ## Connection
@@ -79,7 +80,7 @@ This usage case is especially suitable for interactive testing of silicon-based 
 
 ### Output data format
 
-The output message types are described in the following paragraphs. The exact format of each message depends on application-specific firmware. The firmware could be tuned to specific usage cases by modifying the [arduino code](https://github.com/UniversalScientificTechnologies/LABDOS01/tree/LABDOS01A/fw). The firmware itself could be updated using the bootloader.
+The output message types are described in the following paragraphs. The exact format of each message depends on application-specific firmware. The firmware could be tuned to specific usage cases by modifying the [Arduino code](https://github.com/UniversalScientificTechnologies/LABDOS01/tree/LABDOS01A/fw). The firmware itself could be updated using the bootloader.
 The baud rate used by the USB port by default is 115200. 
 
 #### Initial messages
@@ -114,7 +115,7 @@ $HIST,0,7.94,517,1,13297,48790,2914,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 ```
 
 * `$HIST` - Marking a message with spectrums (histograms)
-* `count` - Meassuring number since restart or power-up; Restart can be handled by toggling of DTR signal on an asynchronous interface
+* `count` - Measuring number since restart or power-up; Restart can be handled by toggling of DTR signal on an asynchronous interface
 * `time` - Time in seconds from power-up
 * `suppress` - Number of filtered (omitted) ionizing radiation events, prevention of double detections caused by asynchronous sampling 
 * `flux` - Number of detected particles per measuring interval (6.88 s)
@@ -137,12 +138,17 @@ For computers with Windows, you will need to install a driver for [FTDI USB](htt
 The device contains an SD card, which could be used do data logging in stand-alone use. In that case, the LABDOS01 needs an external power supply.
 That mode could be used for short-term demonstrating of SPACEDOS, AIRDOS, or GEODOS variants of that device.
 
-*Note: Ony industrial SLC SD cards with properly implemented SPI interface are supported.* 
+*Note: Only industrial SLC or SLC mode SD cards with properly implemented SPI interface are supported.* 
 
+## FAQ
 
-### Splitting Individual Records of Energy Spectra from LABDOS01 SDcard log file
+### How to reset the LABDOS connected over the USB serial link? 
 
-The LABDOS01 device performs measurements of energy spectra and stores them in a single file on an SD card, typically named "0.TXT". To efficiently process and analyze this data, it is desirable to split the file into individual records. For this purpose, the `csplit` command can be used, allowing for automated splitting of the logging file into smaller parts based on a specified line containing a desired pattern.
+The reset could be requested by toggling the DTR signal. The exact implementation of how the DTR UART signal could be accessed depends on the implementation of serial communication software. For example in [picocom](https://linux.die.net/man/8/picocom) is asserted by Ctrl+A and Ctrl+P. 
+
+### How to split Individual file Records of Energy Spectra from the LABDOS01 SDcard log file
+
+The LABDOS01 device performs measurements of energy spectra and stores them in a single file on an SD card, typically named "0.TXT". It is desirable to split the file into individual records to efficiently process and analyze this data. For this purpose, the `csplit` command can be used, allowing for the automated splitting of the logging file into smaller parts based on a specified line containing a desired pattern.
 
 Description:
 The `csplit` command is used to split the logging file of the LABDOS01 device, which contains partial records of energy spectra, into individual measurements. This command enables automated and efficient division of the input file into smaller sections based on a specified line with the desired pattern.
@@ -162,3 +168,7 @@ Usage:
    The `csplit` command utilizes the regular expression `/\$DOS,LABDOS01/` to identify the line that separates the individual energy spectra records. The output files will be stored in the "split" folder with the prefix "0_" and assigned sequential numbers.
 
    Upon executing this command, output files containing the individual energy spectra records from the "0.TXT" logging file will be created. These files can be further processed or analyzed independently.
+
+
+
+   

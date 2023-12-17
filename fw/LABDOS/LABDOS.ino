@@ -1,7 +1,9 @@
-
-#define MAJOR 7   // Data format
-#define MINOR 3   // Features
+#define TYPE "LABDOS01B"
+#define MAJOR 8   // Data format
+#define MINOR 0   // Features
 #include "githash.h"
+
+//#define CALIBRATION
 
 #define XSTR(s) STR(s)
 #define STR(s) #s
@@ -25,7 +27,7 @@
 #define MAXFILES 200 // maximal number of files on SD card
 
 /*
-  LABDOS
+  LABDOSDatasheet
  
 ISP
 ---
@@ -127,7 +129,7 @@ boolean SDinserted = true;
 //  14  | A14     | A9      | 1x
 //  15  | A15     | A9      | 1x
 #define PIN 0
-uint8_t analog_reference = INTERNAL2V56; // DEFAULT, INTERNAL, INTERNAL1V1, INTERNAL2V56, or EXTERNAL
+uint8_t analog_reference = EXTERNAL; // DEFAULT, INTERNAL, INTERNAL1V1, INTERNAL2V56, or EXTERNAL
 
 
 uint8_t bcdToDec(uint8_t b)
@@ -201,7 +203,7 @@ void setup()
   DDRB = 0b10011110;
   PORTB = 0b00000000;  // SDcard Power OFF
 
-  DDRA = 0b11111100;
+  DDRA = 0b11111000;
   PORTA = 0b00000000;  // SDcard Power OFF
   DDRC = 0b11101100;
   PORTC = 0b00000000;  // SDcard Power OFF
@@ -282,7 +284,7 @@ void setup()
   Wire.endTransmission();
   
   // make a string for device identification output
-  String dataString = "$DOS,LABDOS01A," + FWversion + "," + String(base_offset) + "," + githash + ","; // FW version and Git hash
+  String dataString = "$DOS,"TYPE"," + FWversion + "," + String(base_offset) + "," + githash + ","; // FW version and Git hash
   
   Wire.beginTransmission(0x58);                   // request SN from EEPROM
   Wire.write((int)0x08); // MSB
@@ -482,9 +484,15 @@ void loop()
     dataString += ",";
     dataString += String(flux);
     
-    for(int n=base_offset-1; n<(base_offset-1+RANGE); n++)  
+    for(uint16_t n=base_offset-1; n<CHANNELS; n++)  
     {
+#ifdef CALIBRATION
+      dataString += "\t,";
+      dataString += String(n);
+      dataString += "\t*";      
+#else
       dataString += ",";
+#endif      
       dataString += String(histogram[n]); 
     }
 
