@@ -22,6 +22,8 @@ Instead of that, it is intended to be used as an experimental device with the sa
 LABDOS01 is therefore the all-in-one solution for generic semiconductor-based ionizing radiation measurement. It should be used as a universal experiment testing device before using an application-specific design.
 Concerning the development of the detectors, Universal Scientific Technologies s.r.o. has established long-term cooperation with the Nuclear Physics Institute of the CAS ([Department of Radiation Dosimetry](http://www.ujf.cas.cz/en/departments/department-of-radiation-dosimetry/)), in the framework of project [CRREAT](http://www.ujf.cas.cz/en/research-development/large-research-infrastructures-and-centres/crreat/objectives/).
 
+The detailed manual is available at [UST docs website](https://docs.dos.ust.cz/labdos/LABDOS01)
+
 ## Where to get it?
 
 LABDOS01 is commercially available from [Universal Scientific Technologies s.r.o.](https://www.ust.cz/), write an email to sale@ust.cz or shop at [Tindie store](https://www.tindie.com/products/ust/labdos01-open-source-laboratory-dosimeter/).
