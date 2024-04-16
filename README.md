@@ -173,4 +173,10 @@ Usage:
 
 
 
+## Inline variant of command with creation of output folder and composing each subrecord file
+
+```
+mkdir -p split && cat *.TXT > compose.txt && csplit -b "%04d.dos" -f split/ compose.txt '/$DOS,LABDOS01/' {*}
+```
+
    
