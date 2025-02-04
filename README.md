@@ -142,41 +142,4 @@ That mode could be used for short-term demonstrating of SPACEDOS, AIRDOS, or GEO
 
 *Note: Only industrial SLC or SLC mode SD cards with properly implemented SPI interface are supported.* 
 
-## FAQ
-
-### How to reset the LABDOS connected over the USB serial link? 
-
-The reset could be requested by toggling the DTR signal. The exact implementation of how the DTR UART signal could be accessed depends on the implementation of serial communication software. For example in [picocom](https://linux.die.net/man/8/picocom) is asserted by Ctrl+A and Ctrl+P. 
-
-### How to split Individual file Records of Energy Spectra from the LABDOS01 SDcard log file
-
-The LABDOS01 device performs measurements of energy spectra and stores them in a single file on an SD card, typically named "0.TXT". It is desirable to split the file into individual records to efficiently process and analyze this data. For this purpose, the `csplit` command can be used, allowing for the automated splitting of the logging file into smaller parts based on a specified line containing a desired pattern.
-
-Description:
-The `csplit` command is used to split the logging file of the LABDOS01 device, which contains partial records of energy spectra, into individual measurements. This command enables automated and efficient division of the input file into smaller sections based on a specified line with the desired pattern.
-
-Usage:
-
-1. Create a folder for the output files:
-   ```
-   mkdir split
-   ```
-
-2. Use the `csplit` command to split the logging file "0.TXT" into individual records:
-   ```
-   csplit -f split/0_ 0.TXT '/\$DOS,LABDOS01/' {*}
-   ```
-
-   The `csplit` command utilizes the regular expression `/\$DOS,LABDOS01/` to identify the line that separates the individual energy spectra records. The output files will be stored in the "split" folder with the prefix "0_" and assigned sequential numbers.
-
-   Upon executing this command, output files containing the individual energy spectra records from the "0.TXT" logging file will be created. These files can be further processed or analyzed independently.
-
-
-
-## Inline variant of command with creation of output folder and composing each subrecord file
-
-```
-mkdir -p split && cat *.TXT > compose.txt && csplit -b "%04d.dos" -f split/ compose.txt '/$DOS,LABDOS01/' {*}
-```
-
    
