@@ -142,4 +142,6 @@ That mode could be used for short-term demonstrating of SPACEDOS, AIRDOS, or GEO
 
 *Note: Only industrial SLC or SLC mode SD cards with properly implemented SPI interface are supported.* 
 
-   
+## Relevant publications
+
+  * [Performance of the LABDOS01 spectrometer in dosimetric measurements](https://arxiv.org/abs/2412.01515)
