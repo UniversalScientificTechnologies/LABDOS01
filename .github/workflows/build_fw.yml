@@ -29,24 +29,24 @@ jobs:
             channels: 1024
             fqbn: clock=8MHz_external
     
-          - name: LABDOS_512_16Mhz
-            type: LABDOS
-            fqbn: clock=16MHz_external
-            channels: 512
+#          - name: LABDOS_512_16Mhz
+#            type: LABDOS
+#            fqbn: clock=16MHz_external
+#            channels: 512
+#            
+#          - name: LABDOS_1024_16Mhz
+#            type: LABDOS
+#            fqbn: clock=16MHz_external
+#            channels: 1024
             
-          - name: LABDOS_1024_16Mhz
-            type: LABDOS
-            fqbn: clock=16MHz_external
-            channels: 1024
-            
-          - name: UAVDOS
-            type: UAVDOS
-            fqbn: clock=8MHz_external
-            channels: 0
+#          - name: UAVDOS
+#            type: UAVDOS
+#            fqbn: clock=8MHz_external
+#            channels: 0
 
     steps:
         - name: Checkout
-          uses: actions/checkout@v3
+          uses: actions/checkout@v4
           continue-on-error: true
           with:
             submodules: True
@@ -121,7 +121,7 @@ jobs:
             touch root
 
         - name: Store data
-          uses: actions/upload-artifact@v3
+          uses: actions/upload-artifact@v4
           with:
             name: fw_${{ matrix.type }}_${{ matrix.name }}
             path: |
@@ -137,7 +137,7 @@ jobs:
     needs: [build]
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         continue-on-error: true
         with:
           submodules: True
@@ -148,7 +148,7 @@ jobs:
           mkdir fw/artifacts
 
       - name: Download a Build Artifact
-        uses: actions/download-artifact@v3.0.2
+        uses: actions/download-artifact@v4
         with:
           path: 'fw/artifacts/'
 

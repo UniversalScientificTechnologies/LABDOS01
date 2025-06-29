@@ -11,7 +11,7 @@ jobs:
   
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Set up Go
         run: |
           wget https://go.dev/dl/go1.19.3.linux-amd64.tar.gz
@@ -30,7 +30,7 @@ jobs:
 
 
       - name: Upload Go test results
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: LABDOS01_GOLOG
           path: sw/golog/
